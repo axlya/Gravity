@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 namespace GravityWebExt.Models
 {
     /// <summary>
-    /// Рассчитанные данные
+    /// Параметры
     /// </summary>
-    /// 
-    public class CalculatedData
+    public class OptionsData
     {
         public int Id { get; set; }
-        double Data1 { get; set; }
+        public double OptionsData1 { get; set; }
+        public double OptionsData2 { get; set; }
     }
 }

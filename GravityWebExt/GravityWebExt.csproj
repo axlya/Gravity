@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GravityCalc\GravityCalc.csproj" />
     <ProjectReference Include="..\GravityData\GravityData.csproj" />
   </ItemGroup>
 

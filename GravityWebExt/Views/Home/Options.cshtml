@@ -1,0 +1,18 @@
+﻿@model IEnumerable<GravityWebExt.Models.OptionsData>
+@{
+    ViewData["Title"] = "Настройки";
+}
+<h3>Параметры</h3>
+<form method="post">
+    <table class="table-condensed">
+        <tr>
+            <td><label class="form-label">Данные 1: </label></td>
+            <td><input type="text" class ="form-control input" name="OptionsData1" value="@Model?.ElementAt(0)?.OptionsData1.ToString()" /></td>
+        </tr>
+        <tr>
+            <td><label class="form-label">Данные 2: </label></td>
+            <td><input type="text" class="form-control input" name="OptionsData2" value="@Model?.ElementAt(0)?.OptionsData2.ToString()" /></td>
+        </tr>
+    </table>
+</form>
+

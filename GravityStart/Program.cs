@@ -15,8 +15,8 @@ namespace GravityStart
         static void Main(string[] args)
         {
             DataProvider provider = new DataProvider();
-            DataReporter calcReporter = new DataReporter("Calculator reporter");
-            DataReporter webReporter = new DataReporter("Web repoter");
+            CalcDataReporter calcReporter = new CalcDataReporter("Calculator reporter");
+            CalcDataReporter webReporter = new CalcDataReporter("Web repoter");
             calcReporter.Subscribe(provider);
             webReporter.Subscribe(provider);
 

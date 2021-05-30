@@ -11,12 +11,12 @@ namespace GravityCalc
     /// <summary>
     /// Получение данных от издателя
     /// </summary>
-    public class DataReporter : IObserver<Data>
+    public class CalcDataReporter : IObserver<Data>
     {
         private IDisposable unsubscriber;
         private string instName;
 
-        public DataReporter(string name)
+        public CalcDataReporter(string name)
         {
             this.instName = name;
         }
