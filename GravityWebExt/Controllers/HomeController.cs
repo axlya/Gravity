@@ -30,10 +30,25 @@ namespace GravityWebExt.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Options()
         {
             return View(_db.Options.ToList());
         }
+        [HttpPost]
+        public IActionResult Options(OptionsData optionsData)
+        {
+            OptionsData _findData = _db.Options.Find(optionsData.Id);
+            if(_findData != null)
+            {
+                _db.Options.Remove(_findData);
+                _db.Options.Add(optionsData);
+                _db.SaveChanges();
+            }
+
+            return View(_db.Options.ToList());
+        }
+            
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,18 +1,41 @@
 ﻿@model IEnumerable<GravityWebExt.Models.OptionsData>
 @{
-    ViewData["Title"] = "Настройки";
+    ViewData["Title"] = "Паспортные параметры";
+    OptionsData optData = Model?.ElementAt(0); //Пока поддержка только одной конфигурации
 }
-<h3>Параметры</h3>
-<form method="post">
-    <table class="table-condensed">
-        <tr>
-            <td><label class="form-label">Данные 1: </label></td>
-            <td><input type="text" class ="form-control input" name="OptionsData1" value="@Model?.ElementAt(0)?.OptionsData1.ToString()" /></td>
-        </tr>
-        <tr>
-            <td><label class="form-label">Данные 2: </label></td>
-            <td><input type="text" class="form-control input" name="OptionsData2" value="@Model?.ElementAt(0)?.OptionsData2.ToString()" /></td>
-        </tr>
-    </table>
-</form>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="container">
+    <form method="post">
+        <input type="hidden" value="@optData?.Id" name="Id" />
+        <h4>Параметры стенда</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Геометрические параметры стенда </td>
+                    <td>S</td>
+                    <td><input type="text" class="form-control input" name="OptionsData1" value="@optData?.S.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение геометрических параметров стенда </td>
+                    <td>(±Δ)S</td>
+                    <td><input type="text" class="form-control input" name="OptionsData2" value="@optData?.deltaS.ToString()" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <input type="submit" class="form-control input" value="Сохранить" />
+        </div>
+    </form>
+</div>
 

@@ -11,7 +11,13 @@ namespace GravityWebExt.Models
     public class OptionsData
     {
         public int Id { get; set; }
-        public double OptionsData1 { get; set; }
-        public double OptionsData2 { get; set; }
+        /// <summary>
+        /// Геометрические параметры стенда
+        /// </summary>
+        public double S { get; set; }
+        /// <summary>
+        /// Допустимое отклонение геометрических параметров стенда
+        /// </summary>
+        public double deltaS { get; set; }
     }
 }

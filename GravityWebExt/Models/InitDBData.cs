@@ -18,8 +18,8 @@ namespace GravityWebExt.Models
                 context.Options.Add(
                     new OptionsData
                     {
-                        OptionsData1 = 1,
-                        OptionsData2 = 2
+                        S = 1,
+                        deltaS = 2
                     }
                 );
                 context.SaveChanges();

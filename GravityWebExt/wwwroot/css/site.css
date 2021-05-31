@@ -72,4 +72,6 @@ body {
 .input{
     width: 100px;
 }
-
+.label {
+    width: 300px;
+}
