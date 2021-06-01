@@ -35,9 +35,101 @@
                     <td><input type="text" class="form-control input" name="H" value="@passData?.H.ToString()" /></td>
                 </tr>
                 <tr>
-                    <td>(±Δ)H - допустимое отклонение геометрических параметров стенда </td>
+                    <td>Допустимое отклонение геометрических параметров стенда </td>
                     <td>(±Δ)H</td>
                     <td><input type="text" class="form-control input" name="DevH" value="@passData?.DevH.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Горизонтальное расстояния от оси наклона до оси ролика в системе координат стола </td>
+                    <td>L</td>
+                    <td><input type="text" class="form-control input" name="L" value="@passData?.L.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение горизонтального расстояния от оси наклона до оси ролика в системе координат стола </td>
+                    <td>(±Δ)L</td>
+                    <td><input type="text" class="form-control input" name="DevL" value="@passData?.DevL.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Вертикальное расстояния от оси наклона до оси ролика в системе координат стола </td>
+                    <td>Q</td>
+                    <td><input type="text" class="form-control input" name="Q" value="@passData?.Q.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение вертикального расстояния от оси наклона до оси ролика в системе координат стола </td>
+                    <td>(±Δ)Q</td>
+                    <td><input type="text" class="form-control input" name="DevQ" value="@passData?.DevQ.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Погрешность измерения усилия датчиком дисбаланса </td>
+                    <td>±ΔР</td>
+                    <td><input type="text" class="form-control input" name="DevP" value="@passData?.DevP.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Погрешность определения угла наклона  </td>
+                    <td>±Δξ</td>
+                    <td><input type="text" class="form-control input" name="DevEpsilon" value="@passData?.DevEpsilon.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Неисключенная систематическая погрешность (НСП) углов поворота платформы </td>
+                    <td>±Δφ</td>
+                    <td><input type="text" class="form-control input" name="DevFi" value="@passData?.DevFi.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Груз разгрузки (корректирующий противовес)  </td>
+                    <td>Mm</td>
+                    <td><input type="text" class="form-control input" name="Pasport_mm" value="@passData?.Pasport_mm.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение противовеса  </td>
+                    <td>(±Δ)Mm</td>
+                    <td><input type="text" class="form-control input" name="DevPas_mm" value="@passData?.DevPas_mm.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Расстояние установки эталонного груза от оси наклона </td>
+                    <td>D</td>
+                    <td><input type="text" class="form-control input" name="D" value="@passData?.D.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение расстояния установки эталонного груза от оси наклона </td>
+                    <td>(±Δ)D</td>
+                    <td><input type="text" class="form-control input" name="DevD" value="@passData?.DevD.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Геометрические параметры стенда </td>
+                    <td>E</td>
+                    <td><input type="text" class="form-control input" name="E" value="@passData?.E.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение геометрических параметров стенда </td>
+                    <td>(±Δ)E</td>
+                    <td><input type="text" class="form-control input" name="DevE" value="@passData?.DevE.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Подвижный груз </td>
+                    <td>Mmпг</td>
+                    <td><input type="text" class="form-control input" name="Pasport_ma" value="@passData?.Pasport_ma.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Допустимое отклонение подвижного груза </td>
+                    <td>(±Δ)Mmпг</td>
+                    <td><input type="text" class="form-control input" name="DevPasport_ma" value="@passData?.DevPasport_ma.ToString()" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Параметры переходника</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Координаты центра масс (КЦМ) переходника в системе координат переходника </td>
+                    <td>X</td>
+                    <td><input type="text" class="form-control input" name="Xper" value="@passData?.Xper.ToString()" /></td>
                 </tr>
             </tbody>
         </table>

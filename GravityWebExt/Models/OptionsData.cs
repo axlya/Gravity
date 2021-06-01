@@ -45,7 +45,7 @@ namespace GravityWebExt.Models
         /// </summary>
         public double DevQ { get; set; }
         /// <summary>
-        /// ±ΔР - погрешность измерение усилия датчиком дисбаланса
+        /// ±ΔР - погрешность измерения усилия датчиком дисбаланса
         /// </summary>
         public double DevP { get; set; }
         /// <summary>
@@ -65,7 +65,7 @@ namespace GravityWebExt.Models
         /// </summary>
         public double DevPas_mm { get; set; }
         /// <summary>
-        /// Расстоянии установки эталонного груза от оси наклона
+        /// Расстояние установки эталонного груза от оси наклона
         /// </summary>
         public double D { get; set; }
         /// <summary>
