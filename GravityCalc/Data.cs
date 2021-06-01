@@ -1,17 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using GravityCalc;
 
-namespace GravityWebExt.Models
+namespace GravityCalc
 {
     /// <summary>
-    /// Параметры - копия данных структуры PassportData (GravityCalc)
+    /// Паспортные данные
     /// </summary>
-    public class OptionsData
+    public struct PasportData
     {
-        public int Id { get; set; }
+        public void DefaultInit()
+        {
+            S = 1;
+            DevS = 2;
+            H = 3;
+            DevH = 4;
+            L = 5;
+            DevL = 6;
+            Q = 7;
+            DevQ = 8;
+            DevP = 9;
+            DevEpsilon = 10;
+            DevFi = 11;
+            Pasport_mm = 12;
+            DevPas_mm = 13;
+            D = 14;
+            DevD = 15;
+            E = 16;
+            DevE = 17;
+            Pasport_ma = 18;
+            DevPasport_ma = 19;
+            Xper = 20;
+            DevХper = 21;
+            Yper = 22;
+            DevYper = 23;
+            Zper = 24;
+            DevZper = 25;
+            MassPer = 26;
+            DevMassPer = 27;
+            HPer = 28;
+            DevHPer = 29;
+            Xkp = 30;
+            DevXkp = 31;
+            Ykp = 32;
+            DevYkp = 33;
+            Zkp = 34;
+            DevZkp = 35;
+            MassKp = 36;
+            DevMassKp = 37;
+            MassProd = 38;
+            Xprod = 39;
+            Yprod = 40;
+            Zprod = 41;
+        }
         /// <summary>
         /// Геометрические параметры стенда
         /// </summary>

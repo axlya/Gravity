@@ -36,14 +36,14 @@ namespace GravityWebExt.Controllers
             return View(_db.Options.ToList());
         }
         [HttpPost]
-        public IActionResult Options(OptionsData optionsData)
+        public IActionResult Options(OptionsData optData)
         {
-            OptionsData _findData = _db.Options.Find(optionsData.Id);
+            OptionsData _findData = _db.Options.Find(optData.Id);
             if(_findData != null)
             {
-                _db.Options.Remove(_findData);
-                _db.Options.Add(optionsData);
-                _db.SaveChanges();
+                 _db.Options.Remove(_findData);
+                 _db.Options.Add(optData);
+                 _db.SaveChanges();
             }
 
             return View(_db.Options.ToList());

@@ -16,12 +16,13 @@ namespace GravityWebExt.Models
             if (!context.Options.Any())
             {
                 context.Options.Add(
-                    new OptionsData
+                    new OptionsData()
                     {
                         S = 1,
-                        deltaS = 2
+                        DevS = 2,
+                        H = 3
                     }
-                );
+                ) ;
                 context.SaveChanges();
             }
         }

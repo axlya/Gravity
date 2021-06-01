@@ -1,16 +1,14 @@
 ﻿@model IEnumerable<GravityWebExt.Models.OptionsData>
 @{
     ViewData["Title"] = "Паспортные параметры";
-    OptionsData optData = Model?.ElementAt(0); //Пока поддержка только одной конфигурации
+    OptionsData passData = Model?.ElementAt(0); //Пока поддержка только одной конфигурации
 }
-
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <div class="container">
     <form method="post">
-        <input type="hidden" value="@optData?.Id" name="Id" />
+        <input type="hidden" value="@passData?.Id" name="Id" />
         <h4>Параметры стенда</h4>
         <table class="table table-striped">
             <thead>
@@ -24,12 +22,22 @@
                 <tr>
                     <td>Геометрические параметры стенда </td>
                     <td>S</td>
-                    <td><input type="text" class="form-control input" name="OptionsData1" value="@optData?.S.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="S" value="@passData?.S.ToString()" /></td>
                 </tr>
                 <tr>
                     <td>Допустимое отклонение геометрических параметров стенда </td>
                     <td>(±Δ)S</td>
-                    <td><input type="text" class="form-control input" name="OptionsData2" value="@optData?.deltaS.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevS" value="@passData?.DevS.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>Геометрические параметры стенда </td>
+                    <td>H</td>
+                    <td><input type="text" class="form-control input" name="H" value="@passData?.H.ToString()" /></td>
+                </tr>
+                <tr>
+                    <td>(±Δ)H - допустимое отклонение геометрических параметров стенда </td>
+                    <td>(±Δ)H</td>
+                    <td><input type="text" class="form-control input" name="DevH" value="@passData?.DevH.ToString()" /></td>
                 </tr>
             </tbody>
         </table>
