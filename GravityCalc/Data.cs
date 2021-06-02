@@ -13,50 +13,72 @@ namespace GravityCalc
     {
         public void DefaultInit()
         {
-            S = 1;
-            DevS = 2;
-            H = 3;
-            DevH = 4;
-            L = 5;
-            DevL = 6;
-            Q = 7;
-            DevQ = 8;
-            DevP = 9;
-            DevEpsilon = 10;
-            DevFi = 11;
-            Pasport_mm = 12;
-            DevPas_mm = 13;
-            D = 14;
-            DevD = 15;
-            E = 16;
-            DevE = 17;
-            Pasport_ma = 18;
-            DevPasport_ma = 19;
-            Xper = 20;
-            DevХper = 21;
-            Yper = 22;
-            DevYper = 23;
-            Zper = 24;
-            DevZper = 25;
-            MassPer = 26;
-            DevMassPer = 27;
-            HPer = 28;
-            DevHPer = 29;
-            Xkp = 30;
-            DevXkp = 31;
-            Ykp = 32;
-            DevYkp = 33;
-            Zkp = 34;
-            DevZkp = 35;
-            MassKp = 36;
-            DevMassKp = 37;
-            MassProd = 38;
-            Xprod = 39;
-            Yprod = 40;
-            Zprod = 41;
+            /////////////////////////////////////////////////////////////////////////StandParameters
+            S = 449.2;
+            DevS = 0.02;
+            H = 386;
+            DevH = 0.02;
+            L = 1349;
+            DevL = 0.02;
+            Q = 238;
+            DevQ = 0.02;
+            DevP = 0.001;
+            DevEpsilon = 5;
+            DevFi = 1;
+            Pasport_mm = 443.8;
+            DevPas_mm = 0;
+            D = 1779;
+            DevD = 0.02;
+            E = -41;
+            DevE = 0.02;
+            Pasport_ma = 0;
+            DevPasport_ma = 0;
+
+            /////////////////////////////////////////////////////////////////////////AdapterParametrs
+            Xper = 2000;
+            DevХper = 0.02;
+            Yper = 0;
+            DevYper = 0.02;
+            Zper = 0;
+            DevZper = 0.02;
+            MassPer = 2000;
+            DevMassPer = 0.012;
+            Hper = 1800.01;
+            DevHPer = 0.02;
+
+            /////////////////////////////////////////////////////////////////////////AdapterParametrs
+            Xkp = 500;
+            DevXkp = 0.04;
+            Ykp = 0;
+            DevYkp = 0.04;
+            Zkp = 0;
+            DevZkp = 0.04;
+            MassKp = 3000;
+            DevMassKp = 0.024;
+
+            /////////////////////////////////////////////////////////////////////////KP_Parameters
+            MassProd = 3000;
+            Xprod = 500;
+            Yprod = 0;
+            Zprod = 0;
+
+            /////////////////////////////////////////////////////////////////////// Тарирования углов
+            Dev = -0.022;
+
+            ///////////////////////////////////////////////////////////////////////////////////////////// Поправки по координатам (Δ=Δ600+(m–m600)∙(Δ6000–Δ600)/(m6000–m600))
+            DevX600 = -0.095;
+            DevX6000 = 9.9;
+            DevY600 = -0.1552;
+            DevY6000 = 0.49;
+            DevZ600 = -0.2201;
+            DevZ6000 = -1.47;
+
+
         }
+
+        /////////////////////////////////////////////////////////////////////////StandParameters
         /// <summary>
-        /// Геометрические параметры стенда
+        /// Геометрические параметры стенда (Ось наклона стенда)
         /// </summary>
         public double S { get; set; }
         /// <summary>
@@ -64,7 +86,7 @@ namespace GravityCalc
         /// </summary>
         public double DevS { get; set; }
         /// <summary>
-        /// Геометрические параметры стенда
+        /// Геометрические параметры стенда (Ось наклона стенда)
         /// </summary>
         public double H { get; set; }
         /// <summary>
@@ -100,7 +122,7 @@ namespace GravityCalc
         /// </summary>
         public double DevFi { get; set; }
         /// <summary>
-        /// Груз разгрузки (корректирующий противовес)   
+        /// Груз разгрузки (корректирующий противовес)   // массив {270, 540, 810, 1090, 1350}  - не изменится!  
         /// </summary>
         public double Pasport_mm { get; set; }
         /// <summary>
@@ -131,6 +153,9 @@ namespace GravityCalc
         /// (±Δ)_m_a - допустимое отклонение корректирующего противовеса 
         /// </summary>
         public double DevPasport_ma { get; set; }
+
+
+        /////////////////////////////////////////////////////////////////////////AdapterParametrs
         /// <summary>
         /// Координаты центра масс переходника в системе координат переходника
         /// </summary>
@@ -166,11 +191,14 @@ namespace GravityCalc
         /// <summary>
         /// высота переходника 
         /// </summary>
-        public double HPer { get; set; }
+        public double Hper { get; set; }
         /// <summary>
         /// (±Δ)_h_p - допустимое отклонение длины переходника 
         /// </summary>
         public double DevHPer { get; set; }
+
+
+        /////////////////////////////////////////////////////////////////////////KP_Parameters
         /// <summary>
         /// Координаты КП
         /// </summary>
@@ -203,6 +231,8 @@ namespace GravityCalc
         /// (±Δ)_m_kp  - допустимое отклонение массы КП
         /// </summary>
         public double DevMassKp { get; set; }
+
+        /////////////////////////////////////////////////////////////////////////ProductParameters
         /// <summary>
         /// Масса изделия
         /// </summary>
@@ -219,5 +249,52 @@ namespace GravityCalc
         /// Координаты изделия по КД
         /// </summary>
         public double Zprod { get; set; }
+
+        //////////////////////////////////////////////////////////////////////////////////////////// Reference_ma
+        //// <summary>
+        /// Массив эталоной массы подвижного груза (4 элемента массива)
+        /// </summary>
+        public double[] ArrRef_ma { get; set; }
+        /// <summary>
+        /// DevArrRef_ma - допустипое отклонение эталонной массы подвижного груза  (4 элемента массива))
+        /// </summary>
+        public double[] DevArrRef_ma { get; set; }
+        /// <summary>
+        /// Для наклона стенда при подвижном грузе 
+        /// </  summary>
+        public double Epsilon_ma { get; set; }
+
+        //////////////////////////////////////////////////////////////////////////////////////////// Reference_mm
+        //// <summary>
+        /// Массив эталоной массы груза - разгрузки (4 элемента массива)
+        /// </summary>
+        public double[] ArrRef_mm { get; set; }
+        /// <summary>
+        /// DevArrRef_ma - допустипое отклонение эталонной массы груза - разгрузки
+        /// </summary>
+        public double[] DevArrRef_mm { get; set; }
+        /// <summary>
+        /// Для наклона стенда при использование груза - разгрузки
+        /// </  summary>
+        public double Epsilon_mm { get; set; }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////// Данные из тарировки углов
+        /// <summary>
+        /// Δ - участвует в формуле для поправки углов (стд отклонение углов)
+        /// </summary
+        public double Dev { get; set; }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////// Поправки по координатам (Δ=Δ600+(m–m600)∙(Δ6000–Δ600)/(m6000–m600))
+        public double DevX600 { get; set; }
+        public double DevX6000 { get; set; }
+        public double DevY600 { get; set; }
+        public double DevY6000 { get; set; }
+        public double DevZ600 { get; set; }
+        public double DevZ6000 { get; set; }
+
+        const double m600 = 537.76;
+        const double m6000 = 5385.1;
+
     }
 }

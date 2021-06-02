@@ -9,7 +9,7 @@ using GravityData;
 namespace GravityCalc
 {
     /// <summary>
-    /// Получение данных от издателя
+    /// Получение данных от создателя конфигурации
     /// </summary>
     public class CalcDataReporter : IObserver<Data>
     {

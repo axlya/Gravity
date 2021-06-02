@@ -125,7 +125,7 @@ namespace GravityWebExt.Models
         /// </summary>
         public double HPer { get; set; }
         /// <summary>
-        /// (±Δ)_h_p - допустимое отклонение длины переходника 
+        /// (±Δ)_h_p - допустимое отклонение высоты переходника 
         /// </summary>
         public double DevHPer { get; set; }
         /// <summary>
@@ -176,5 +176,59 @@ namespace GravityWebExt.Models
         /// Координаты изделия по КД
         /// </summary>
         public double Zprod { get; set; }
+
+        //// методы
+        
+
+        /// <summary>
+        /// Создание структуры данных для расчёта
+        /// </summary>
+        /// <returns></returns>
+        public GravityCalc.PasportData SetDataForCalculate()
+        {
+            PasportData data = new();
+            data.DefaultInit();
+            data.S = this.S;
+            data.DevS = this.DevS;
+            data.H = this.H;
+            data.DevH = this.DevH;
+            data.L = this.L;
+            data.DevL = this.DevL;
+            data.Q = this.Q;
+            data.DevQ = this.DevQ;
+            data.DevP = this.DevP;
+            data.DevEpsilon = this.DevEpsilon;
+            data.DevFi = this.DevFi;
+            data.Pasport_mm = this.Pasport_mm;
+            data.DevPas_mm = this.DevPas_mm;
+            data.D = this.D;
+            data.DevD = this.DevD;
+            data.E = this.E;
+            data.DevE = this.DevE;
+            data.Pasport_ma = this.Pasport_ma;
+            data.DevPasport_ma = this.DevPasport_ma;
+            data.Xper = this.Xper;
+            data.DevХper = this.DevХper;
+            data.Yper = this.Yper;
+            data.DevYper = this.DevYper;
+            data.Zper = this.Zper;
+            data.DevZper = this.DevZper;
+            data.MassPer = this.MassPer;
+            data.DevMassPer = this.DevMassPer;
+            data.Hper = this.HPer;
+            data.DevHPer = this.DevHPer;
+            data.Xkp = this.Xkp;
+            data.DevXkp = this.DevXkp;
+            data.Ykp = this.Ykp;
+            data.DevYkp = this.DevYkp;
+            data.Zkp = this.Zkp;
+            data.DevZkp = this.DevZkp;
+            data.DevMassKp = this.DevMassKp;
+            data.MassProd = this.MassProd;
+            data.Xprod = this.Xprod;
+            data.Yprod = this.Yprod;
+            data.Zprod = this.Zprod;
+            return data;
+        } 
     }
 }

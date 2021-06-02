@@ -17,13 +17,13 @@ namespace GravityWebExt
     {
         public static void Main(string[] args)
         {
-            DataProvider provider = new ();
-            CalcDataReporter calcReporter = new ("Calculator reporter");
-            WebDataReporter webReporter = new("Web repoter");
-            calcReporter.Subscribe(provider);
-            webReporter.Subscribe(provider);
+            //DataProvider provider = new ();
+            //CalcDataReporter calcReporter = new ("Calculator reporter");
+            //WebDataReporter webReporter = new("Web repoter");
+            //calcReporter.Subscribe(provider);
+            //webReporter.Subscribe(provider);
 
-            provider.SendData(new Data(47.6456, -122.1312));
+            //provider.SendData(new Data(47.6456, -122.1312));
 
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
@@ -43,9 +43,9 @@ namespace GravityWebExt
             }
             host.Run();
 
-            calcReporter.Unsubscribe();
-            webReporter.Unsubscribe();
-            provider.EndTransmission();
+            //calcReporter.Unsubscribe();
+            //webReporter.Unsubscribe();
+            //provider.EndTransmission();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
