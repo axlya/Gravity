@@ -21,6 +21,11 @@ namespace GravityCalc
             this.instName = name;
         }
 
+        public CalcDataReporter()
+        {
+            this.instName = "Calculator reporter";
+        }
+
         public string Name
         { get { return this.instName; } }
 

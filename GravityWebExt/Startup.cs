@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GravityCalc;
 
 namespace GravityWebExt
 {
@@ -27,11 +28,13 @@ namespace GravityWebExt
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
+            services.AddSingleton<WebDataProvider>();
+            services.AddSingleton<CalcWebReporter>();
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebDataProvider dataProvider, CalcWebReporter calcReporter)
         {
             if (env.IsDevelopment())
             {
@@ -49,6 +52,11 @@ namespace GravityWebExt
             app.UseRouting();
 
             app.UseAuthorization();
+            
+            //«апускаем провайдера данных дл€ калькул€тора и подписываем наблюдател€ калькул€тора
+            //dataProvider = new();
+            //calcReporter = new("Calculator reporter");
+            calcReporter.Subscribe(dataProvider);
 
             app.UseEndpoints(endpoints =>
             {

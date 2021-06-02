@@ -20,6 +20,11 @@ namespace GravityCalc
             this.instName = name;
         }
 
+        public CalcWebReporter()
+        {
+            this.instName = "Calculator reporter";
+        }
+
         public string Name
         { get { return this.instName; } }
 
@@ -43,7 +48,7 @@ namespace GravityCalc
         // Получены новые данные
         public virtual void OnNext(PasportData data)
         {
-            Console.WriteLine("Данные получены");
+            Console.WriteLine("{0}: Данные получены", this.Name);
         }
 
         public virtual void Unsubscribe()
