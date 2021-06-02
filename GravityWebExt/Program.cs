@@ -17,6 +17,9 @@ namespace GravityWebExt
     {
         public static void Main(string[] args)
         {
+            WebDataProvider webProvider = new();
+            CalcWebReporter calcReporter = new("Calculator reporter");
+            calcReporter.Subscribe(webProvider);
             //DataProvider provider = new ();
             //CalcDataReporter calcReporter = new ("Calculator reporter");
             //WebDataReporter webReporter = new("Web repoter");
@@ -45,7 +48,9 @@ namespace GravityWebExt
 
             //calcReporter.Unsubscribe();
             //webReporter.Unsubscribe();
-            //provider.EndTransmission();
+            //provider.EndTransmission()
+            calcReporter.Unsubscribe();
+            webProvider.EndTransmission();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

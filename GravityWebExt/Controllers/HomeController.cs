@@ -44,6 +44,8 @@ namespace GravityWebExt.Controllers
                  _db.Options.Remove(_findData);
                  _db.Options.Add(optData);
                  _db.SaveChanges();
+                //Отправляем новые данные в Калькулятор
+                //_db.Options.ElementAt(0).SetDataForCalculate();
             }
 
             return View(_db.Options.ToList());

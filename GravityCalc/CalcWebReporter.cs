@@ -43,7 +43,7 @@ namespace GravityCalc
         // Получены новые данные
         public virtual void OnNext(PasportData data)
         {
-            //Console.WriteLine("{2}: The current data is {0}, {1}", data.Data1, data.Data2, this.Name);
+            Console.WriteLine("Данные получены");
         }
 
         public virtual void Unsubscribe()
