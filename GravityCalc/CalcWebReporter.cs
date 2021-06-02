@@ -4,19 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GravityData;
 
 namespace GravityCalc
 {
     /// <summary>
-    /// Получение данных от контроллера
+    /// Получение данных от создателя конфигурации
     /// </summary>
-    public class CalcDataReporter : IObserver<Data>
+    public class CalcWebReporter : IObserver<PasportData>
     {
         private IDisposable unsubscriber;
         private string instName;
 
-        public CalcDataReporter(string name)
+        public CalcWebReporter(string name)
         {
             this.instName = name;
         }
@@ -24,7 +23,7 @@ namespace GravityCalc
         public string Name
         { get { return this.instName; } }
 
-        public virtual void Subscribe(IObservable<Data> provider)
+        public virtual void Subscribe(IObservable<PasportData> provider)
         {
             if (provider != null)
                 unsubscriber = provider.Subscribe(this);
@@ -42,9 +41,9 @@ namespace GravityCalc
         }
 
         // Получены новые данные
-        public virtual void OnNext(Data data)
+        public virtual void OnNext(PasportData data)
         {
-            Console.WriteLine("{2}: The current data is {0}, {1}", data.Data1, data.Data2, this.Name);
+            //Console.WriteLine("{2}: The current data is {0}, {1}", data.Data1, data.Data2, this.Name);
         }
 
         public virtual void Unsubscribe()

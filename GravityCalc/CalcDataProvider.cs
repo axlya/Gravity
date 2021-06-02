@@ -11,9 +11,9 @@ namespace GravityWebExt.Models
     /// <summary>
     /// Передача данных PasportData подписчикам
     /// </summary>
-    public class WebDataProvider :IObservable<PasportData>
+    public class CalcDataProvider :IObservable<PasportData>
     {
-        public WebDataProvider()
+        public CalcDataProvider()
         {
             observers = new List<IObserver<PasportData>>();
         }
@@ -50,7 +50,7 @@ namespace GravityWebExt.Models
             foreach (var observer in observers)
             {
                 if (!data.HasValue)
-                    observer.OnError(new WebDataUnknownException());
+                    observer.OnError(new DataUnknownException());
                 else
                     observer.OnNext(data.Value);
             }
@@ -66,9 +66,9 @@ namespace GravityWebExt.Models
         }
     }
 
-    public class WebDataUnknownException : Exception
+    public class DataUnknownException : Exception
     {
-        internal WebDataUnknownException()
+        internal DataUnknownException()
         { }
     }
 }
