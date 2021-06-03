@@ -28,14 +28,24 @@ namespace GravityWebExt
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
-            services.AddSingleton<WebDataProvider>();
-            services.AddSingleton<CalcWebReporter>();
+            services.AddSingleton<WebDataProvider>(); //провайдер данных для калькулятора
+            services.AddSingleton<CalcWebReporter>(); // получатель данных калькулятора
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebDataProvider dataProvider, CalcWebReporter calcReporter)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider dataProvider, CalcWebReporter calcReporter)
         {
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                calcReporter.Unsubscribe();
+                dataProvider.EndTransmission();
+
+                Console.WriteLine("Завершение работы...");
+
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -52,10 +62,8 @@ namespace GravityWebExt
             app.UseRouting();
 
             app.UseAuthorization();
-            
-            //Запускаем провайдера данных для калькулятора и подписываем наблюдателя калькулятора
-            //dataProvider = new();
-            //calcReporter = new("Calculator reporter");
+
+            // подписка калькулятора на получение данных
             calcReporter.Subscribe(dataProvider);
 
             app.UseEndpoints(endpoints =>
@@ -65,5 +73,6 @@ namespace GravityWebExt
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
     }
 }
