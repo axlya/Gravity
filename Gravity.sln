@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31313.79
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityData", "GravityData\GravityData.csproj", "{B80C81A5-C2EF-417A-9362-341EE6570318}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityUI", "GravityUI\GravityUI.csproj", "{4467448A-6527-4FD7-BCFF-05156F9F2F6B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityCalc", "GravityCalc\GravityCalc.csproj", "{82B73718-72AE-43D1-89FA-8CECBD493C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityCalc", "GravityCalc\GravityCalc.csproj", "{2B308369-D279-427B-80DE-9A8F3F2789AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityStart", "GravityStart\GravityStart.csproj", "{2151E229-FCBE-426A-B534-7C56CBF1DEE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityData", "GravityData\GravityData.csproj", "{425A2312-9B3A-4B29-B460-07ADA9E39B1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityWeb", "GravityWeb\GravityWeb.csproj", "{2E7AE658-C867-48CF-B86F-0D7845943310}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityWebExt", "GravityWebExt\GravityWebExt.csproj", "{D5199F09-EC4D-4C1B-B9E2-6A36A4066134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityWebExt", "GravityWebExt\GravityWebExt.csproj", "{38DB02B4-18B5-4744-8C78-878C2C6804D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,31 +17,45 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B80C81A5-C2EF-417A-9362-341EE6570318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B80C81A5-C2EF-417A-9362-341EE6570318}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B80C81A5-C2EF-417A-9362-341EE6570318}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B80C81A5-C2EF-417A-9362-341EE6570318}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82B73718-72AE-43D1-89FA-8CECBD493C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82B73718-72AE-43D1-89FA-8CECBD493C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82B73718-72AE-43D1-89FA-8CECBD493C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82B73718-72AE-43D1-89FA-8CECBD493C94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2151E229-FCBE-426A-B534-7C56CBF1DEE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2151E229-FCBE-426A-B534-7C56CBF1DEE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2151E229-FCBE-426A-B534-7C56CBF1DEE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2151E229-FCBE-426A-B534-7C56CBF1DEE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E7AE658-C867-48CF-B86F-0D7845943310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E7AE658-C867-48CF-B86F-0D7845943310}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E7AE658-C867-48CF-B86F-0D7845943310}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E7AE658-C867-48CF-B86F-0D7845943310}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5199F09-EC4D-4C1B-B9E2-6A36A4066134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5199F09-EC4D-4C1B-B9E2-6A36A4066134}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5199F09-EC4D-4C1B-B9E2-6A36A4066134}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5199F09-EC4D-4C1B-B9E2-6A36A4066134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4467448A-6527-4FD7-BCFF-05156F9F2F6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4467448A-6527-4FD7-BCFF-05156F9F2F6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4467448A-6527-4FD7-BCFF-05156F9F2F6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4467448A-6527-4FD7-BCFF-05156F9F2F6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B308369-D279-427B-80DE-9A8F3F2789AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B308369-D279-427B-80DE-9A8F3F2789AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B308369-D279-427B-80DE-9A8F3F2789AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B308369-D279-427B-80DE-9A8F3F2789AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{425A2312-9B3A-4B29-B460-07ADA9E39B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{425A2312-9B3A-4B29-B460-07ADA9E39B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{425A2312-9B3A-4B29-B460-07ADA9E39B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{425A2312-9B3A-4B29-B460-07ADA9E39B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38DB02B4-18B5-4744-8C78-878C2C6804D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38DB02B4-18B5-4744-8C78-878C2C6804D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38DB02B4-18B5-4744-8C78-878C2C6804D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38DB02B4-18B5-4744-8C78-878C2C6804D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {62BCDE25-9AA6-4481-9457-FD19B92086AC}
+		SolutionGuid = {BEC5BB6E-38CE-42C3-B0B2-963DB9202937}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.113:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = GravityUI\\GravityUI.csproj
+		SccProjectName1 = GravityUI
+		SccLocalPath1 = GravityUI
+		SccProjectUniqueName2 = GravityCalc\\GravityCalc.csproj
+		SccProjectName2 = GravityCalc
+		SccLocalPath2 = GravityCalc
+		SccProjectUniqueName3 = GravityData\\GravityData.csproj
+		SccProjectName3 = GravityData
+		SccLocalPath3 = GravityData
+		SccProjectUniqueName4 = GravityWebExt\\GravityWebExt.csproj
+		SccProjectName4 = GravityWebExt
+		SccLocalPath4 = GravityWebExt
 	EndGlobalSection
 EndGlobal

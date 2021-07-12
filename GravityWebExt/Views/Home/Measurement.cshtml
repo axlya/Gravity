@@ -1,6 +1,98 @@
-﻿@{
-    ViewData["Title"] = "Данные с датчиков";
+﻿@model IEnumerable<GravityWebExt.Models.MeasurementData>
+@{
+    ViewData["Title"] = "Полученные данные";
+    MeasurementData data = Model?.ElementAt(0);
 }
 @*<h1>@ViewData["Title"]</h1>*@
 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<div class="container">
+    <h4>Данные с контроллера</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Обозначение</th>
+                <th>Значение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Угол равновесия в начальной зоне </td>
+                <td>αΣ1</td>
+                <td><span id="beginBalanceAngle">@data?.BeginBalanceAngle.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Угол равновесия в средней зоне </td>
+                <td>αΣ1</td>
+                <td><span id="middleBalanceAngle">@data?.MiddleBalanceAngle.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик дисбаланса в начальной зоне работы </td>
+                <td>P1α</td>
+                <td><span id="beginUnbalanceSensor">@data?.BeginUnbalanceSensor.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик дисбаланса в средней зоне работы </td>
+                <td>P2α</td>
+                <td><span id="middleUnbalanceSensor">@data?.MiddleUnbalanceSensor.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Расстояние от оси поворота стола до известных координат центра тяжести груза </td>
+                <td>K1</td>
+                <td><span id="k1">@data?.K1.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Расстояние от оси поворота стола до известных координат центра тяжести груза </td>
+                <td>K2</td>
+                <td><span id="k2">@data?.K2.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик 1</td>
+                <td>P1</td>
+                <td><span id="p1">@data?.P1.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик 2</td>
+                <td>P2</td>
+                <td><span id="p2">@data?.P2.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="form-check-inline">
+    <input type="button" class="btn btn-outline-success" value="Остановить" id="stopUpdating" />
+    <input type="button" class="btn btn-outline-danger" value="Возобновить" id="startUpdating" />
+    <input type="text" class="form-control input" id="intervalValue" value="1000" />
+</div>
+
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        timeInterval = setInterval(getData, $("#intervalValue").val());
+        $("#stopUpdating").click(function () { clearInterval(timeInterval); });
+        $("#startUpdating").click(function () { timeInterval = setInterval(getData, $("#intervalValue").val()); });
+    });
+
+    var timeInterval;
+
+    function getData() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetControllerDataRepeat", "Home")?random=" + Math.random(),
+            dataType: "json",
+            success: function (result) {
+                $("#beginBalanceAngle").text(parseFloat(result[0].beginBalanceAngle).toFixed(3));
+                $("#middleBalanceAngle").text(parseFloat(result[0].middleBalanceAngle).toFixed(3));
+                $("#beginUnbalanceSensor").text(parseFloat(result[0].beginUnbalanceSensor).toFixed(3));
+                $("#middleUnbalanceSensor").text(parseFloat(result[0].middleUnbalanceSensor).toFixed(3));
+                $("#k1").text(parseFloat(result[0].k1).toFixed(3));
+                $("#k2").text(parseFloat(result[0].k2).toFixed(3));
+                $("#p1").text(parseFloat(result[0].p1).toFixed(3));
+                $("#p2").text(parseFloat(result[0].p2).toFixed(3));
+            }
+        });
+    }
+</script>

@@ -4,36 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GravityCalc;
+
 namespace GravityData
 {
     /// <summary>
     /// Передача данных Data подписчикам
     /// </summary>
-    public class DataProvider :IObservable<Data>
+    public class DataProvider :IObservable<ControllerData>
     {
         public DataProvider()
         {
-            observers = new List<IObserver<Data>>();
+            _observers = new List<IObserver<ControllerData>>();
         }
 
-        private List<IObserver<Data>> observers;
+        private List<IObserver<ControllerData>> _observers;
 
-        public IDisposable Subscribe(IObserver<Data> observer)
+        public IDisposable Subscribe(IObserver<ControllerData> observer)
         {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber(observers, observer);
+            if (!_observers.Contains(observer))
+                _observers.Add(observer);
+            return new Unsubscriber(_observers, observer);
         }
 
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<Data>> _observers;
-            private IObserver<Data> _observer;
+            private List<IObserver<ControllerData>> _observers;
+            private IObserver<ControllerData> _observer;
 
-            public Unsubscriber(List<IObserver<Data>> observers, IObserver<Data> observer)
+            public Unsubscriber(List<IObserver<ControllerData>> observers, IObserver<ControllerData> observer)
             {
-                this._observers = observers;
-                this._observer = observer;
+                _observers = observers;
+                _observer = observer;
             }
 
             public void Dispose()
@@ -43,9 +45,9 @@ namespace GravityData
             }
         }
 
-        public void SendData(Data? data)
+        public void SendData(ControllerData? data)
         {
-            foreach (var observer in observers)
+            foreach (var observer in _observers)
             {
                 if (!data.HasValue)
                     observer.OnError(new DataUnknownException());
@@ -56,11 +58,11 @@ namespace GravityData
 
         public void EndTransmission()
         {
-            foreach (var observer in observers.ToArray())
-                if (observers.Contains(observer))
+            foreach (var observer in _observers.ToArray())
+                if (_observers.Contains(observer))
                     observer.OnCompleted();
 
-            observers.Clear();
+            _observers.Clear();
         }
     }
 

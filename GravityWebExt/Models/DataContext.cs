@@ -11,17 +11,31 @@ namespace GravityWebExt.Models
     /// </summary>
     public class DataContext : DbContext
     {
-        // Данные с датчиков
+        /// <summary>
+        /// Данные с датчиков
+        /// </summary>
         public DbSet<MeasurementData> Measurement { get; set; }
-        // Расчитанные данные
+        /// <summary>
+        /// Расчитанные данные
+        /// </summary>
         public DbSet<CalculatedData> Calculated { get; set; }
-        // Параметры
+        /// <summary>
+        /// Параметры
+        /// </summary>
         public DbSet<OptionsData> Options { get; set; }
-
+        /// <summary>
+        /// NSP
+        /// </summary>
+        public DbSet<NSPData> NSP { get; set; }
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
             Database.EnsureCreated();
+        }
+
+        public static implicit operator DataContext(MeasurementData v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

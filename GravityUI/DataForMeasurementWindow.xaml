@@ -1,0 +1,37 @@
+﻿<Window x:Class="Gravity.DataForMeasurementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gravity"
+        mc:Ignorable="d"
+        Title="Данные для измерения" Height="450" Width="360" MinWidth="360" MinHeight="450" WindowStartupLocation="CenterScreen">
+    <Grid Margin="5" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+            <DockPanel Margin="5">
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Ф.И.О. Оператора</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_strOperatorName"></TextBox>
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Наименование изделия</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_strProductName"></TextBox>
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Номинальное значение массы изделия, кг</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_productMassNominal" PreviewTextInput="TextBox_OnPreviewTextInput"></TextBox>
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Номинальное значение координаты X изделия, мм</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_productXNominal" PreviewTextInput="TextBox_OnPreviewTextInput"></TextBox>
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Номинальное значение координаты Y изделия, мм</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_productYNominal" PreviewTextInput="TextBox_OnPreviewTextInput"></TextBox>
+                <TextBlock FontWeight="Bold" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="5,5,5,0">Номинальное значение координаты Z изделия, мм</TextBlock>
+                <TextBox DockPanel.Dock="Top" x:Name="_productZNominal" PreviewTextInput="TextBox_OnPreviewTextInput"></TextBox>
+                <TextBlock></TextBlock>
+            </DockPanel>
+        </Border>
+        <DockPanel Grid.Row="1" MinHeight="30">
+            <Button DockPanel.Dock="Right" Width="90" Margin="5" Click="OnClose">Отмена</Button>
+            <Button DockPanel.Dock="Right" Width="90" Margin="5" Click="OnOK">OK</Button>
+            <TextBlock DockPanel.Dock="Right"></TextBlock>
+        </DockPanel>        
+    </Grid>
+</Window>

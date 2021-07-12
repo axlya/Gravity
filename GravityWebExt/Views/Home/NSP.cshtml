@@ -1,0 +1,187 @@
+﻿@model IEnumerable<GravityWebExt.Models.NSPData>
+@{
+    ViewData["Title"] = "НСП";
+    NSPData nspData = Model?.ElementAt(0);
+}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="container">
+    <form method="post">
+        <input type="hidden" value="@nspData?.Id" name="Id" />
+        <h4>Расчет НСП, вносимых параметрами стенда</h4>
+        <table class="table table-striped">
+            <tr>
+                <th>Обозначение</th>
+                <th>+Δx</th>
+                <th>+Δy</th>
+                <th>+Δz</th>
+                <th>+Δm</th>
+                <th>-Δx</th>
+                <th>-Δy</th>
+                <th>-Δz</th>
+                <th>-Δm</th>
+            </tr>
+            <tr>
+                <td>ΔS</td>
+                <td><input type="text" class="form-control input" name="_devSx" value="@nspData?._devSx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSy" value="@nspData?._devSy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSz" value="@nspData?._devSz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSm" value="@nspData?._devSm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSx2" value="@nspData?._devSx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSy2" value="@nspData?._devSy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSz2" value="@nspData?._devSz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devSm2" value="@nspData?._devSm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔH</td>
+                <td><input type="text" class="form-control input" name="_devHx" value="@nspData?._devHx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHy" value="@nspData?._devHy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHz" value="@nspData?._devHz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHm" value="@nspData?._devHm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHx2" value="@nspData?._devHx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHy2" value="@nspData?._devHy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHz2" value="@nspData?._devHz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHm2" value="@nspData?._devHm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔL</td>
+                <td><input type="text" class="form-control input" name="_devLx" value="@nspData?._devLx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLy" value="@nspData?._devLy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLz" value="@nspData?._devLz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLm" value="@nspData?._devLm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLx2" value="@nspData?._devLx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLy2" value="@nspData?._devLy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLz2" value="@nspData?._devLz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devLm2" value="@nspData?._devLm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔQ</td>
+                <td><input type="text" class="form-control input" name="_devQx" value="@nspData?._devQx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQy" value="@nspData?._devQy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQz" value="@nspData?._devQz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQm" value="@nspData?._devQm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQx2" value="@nspData?._devQx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQy2" value="@nspData?._devQy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQz2" value="@nspData?._devQz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devQm2" value="@nspData?._devQm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔP</td>
+                <td><input type="text" class="form-control input" name="_devPx" value="@nspData?._devPx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPy" value="@nspData?._devPy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPz" value="@nspData?._devPz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPm" value="@nspData?._devPm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPx2" value="@nspData?._devPx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPy2" value="@nspData?._devPy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPz2" value="@nspData?._devPz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devPm2" value="@nspData?._devPm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>Δξ</td>
+                <td><input type="text" class="form-control input" name="_devEPSILx" value="@nspData?._devEPSILx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILy" value="@nspData?._devEPSILy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILz" value="@nspData?._devEPSILz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILm" value="@nspData?._devEPSILm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILx2" value="@nspData?._devEPSILx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILy2" value="@nspData?._devEPSILy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILz2" value="@nspData?._devEPSILz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEPSILm2" value="@nspData?._devEPSILm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>Δφ</td>
+                <td><input type="text" class="form-control input" name="_devFIx" value="@nspData?._devFIx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIy" value="@nspData?._devFIy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIz" value="@nspData?._devFIz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIm" value="@nspData?._devFIm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIx2" value="@nspData?._devFIx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIy2" value="@nspData?._devFIy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIz2" value="@nspData?._devFIz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devFIm2" value="@nspData?._devFIm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔXпер</td>
+                <td><input type="text" class="form-control input" name="_devXpx" value="@nspData?._devXpx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpy" value="@nspData?._devXpy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpz" value="@nspData?._devXpz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpm" value="@nspData?._devXpm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpx2" value="@nspData?._devXpx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpy2" value="@nspData?._devXpy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpz2" value="@nspData?._devXpz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devXpm2" value="@nspData?._devXpm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔYпер</td>
+                <td><input type="text" class="form-control input" name="_devYpx" value="@nspData?._devYpx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpy" value="@nspData?._devYpy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpz" value="@nspData?._devYpz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpm" value="@nspData?._devYpm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpx2" value="@nspData?._devYpx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpy2" value="@nspData?._devYpy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpz2" value="@nspData?._devYpz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devYpm2" value="@nspData?._devYpm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔYпер</td>
+                <td><input type="text" class="form-control input" name="_devZpx" value="@nspData?._devZpx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpy" value="@nspData?._devZpy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpz" value="@nspData?._devZpz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpm" value="@nspData?._devZpm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpx2" value="@nspData?._devZpx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpy2" value="@nspData?._devZpy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpz2" value="@nspData?._devZpz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devZpm2" value="@nspData?._devZpm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔMпер</td>
+                <td><input type="text" class="form-control input" name="_devMpx" value="@nspData?._devMpx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpy" value="@nspData?._devMpy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpz" value="@nspData?._devMpz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpm" value="@nspData?._devMpm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpx2" value="@nspData?._devMpx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpy2" value="@nspData?._devMpy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpz2" value="@nspData?._devMpz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMpm2" value="@nspData?._devMpm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔHпер</td>
+                <td><input type="text" class="form-control input" name="_devHpx" value="@nspData?._devHpx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpy" value="@nspData?._devHpy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpz" value="@nspData?._devHpz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpm" value="@nspData?._devHpm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpx2" value="@nspData?._devHpx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpy2" value="@nspData?._devHpy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpz2" value="@nspData?._devHpz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devHpm2" value="@nspData?._devHpm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔD</td>
+                <td><input type="text" class="form-control input" name="_devDx" value="@nspData?._devDx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDy" value="@nspData?._devDy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDz" value="@nspData?._devDz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDm" value="@nspData?._devDm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDx2" value="@nspData?._devDx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDy2" value="@nspData?._devDy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDz2" value="@nspData?._devDz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devDm2" value="@nspData?._devDm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔE</td>
+                <td><input type="text" class="form-control input" name="_devEx" value="@nspData?._devEx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEy" value="@nspData?._devEy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEz" value="@nspData?._devEz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEm" value="@nspData?._devEm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEx2" value="@nspData?._devEx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEy2" value="@nspData?._devEy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEz2" value="@nspData?._devEz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devEm2" value="@nspData?._devEm2.ToString()" /></td>
+            </tr>
+        </table>
+        <div class="row">
+            <input type="submit" class="form-control input" value="Сохранить" />
+        </div>
+    </form>
+</div>
+
+
+
+

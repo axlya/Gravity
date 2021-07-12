@@ -10,50 +10,57 @@ namespace GravityCalc
     /// <summary>
     /// Получение данных от создателя конфигурации
     /// </summary>
-    public class CalcWebReporter : IObserver<PasportData>
+    public class CalcWebReporter : IObserver<PassportData>
     {
-        private IDisposable unsubscriber;
-        private string instName;
+        private IDisposable _unsubscriber;
+        private string _instName;
+        ICalculator<ControllerData, PassportData, CalculatedData> _mainCalc = null;
 
-        public CalcWebReporter(string name)
+        public CalcWebReporter(string name, ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
         {
-            this.instName = name;
+            _instName = name;
+            _mainCalc = mainCalc;
         }
 
         public CalcWebReporter()
         {
-            this.instName = "Calculator reporter";
+            _instName = "Calculator reporter (from Pasport Data)";
+        }
+
+        public void SetCalcFunc(ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
+        {
+            _mainCalc = mainCalc;
         }
 
         public string Name
-        { get { return this.instName; } }
+        { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<PasportData> provider)
+        public virtual void Subscribe(IObservable<PassportData> provider)
         {
             if (provider != null)
-                unsubscriber = provider.Subscribe(this);
+                _unsubscriber = provider.Subscribe(this);
         }
 
         public virtual void OnCompleted()
         {
-            Console.WriteLine("Completed transmitting data to {0}.", this.Name);
+            Console.WriteLine("Completed transmitting data to {0}.", Name);
             this.Unsubscribe();
         }
 
         public virtual void OnError(Exception e)
         {
-            Console.WriteLine("{0}: The data cannot be determined.", this.Name);
+            Console.WriteLine("{0}: The data cannot be determined.", Name);
         }
 
         // Получены новые данные
-        public virtual void OnNext(PasportData data)
+        public virtual void OnNext(PassportData data)
         {
-            Console.WriteLine("{0}: Данные получены", this.Name);
+            _mainCalc?.SetPassportData(data);
         }
 
         public virtual void Unsubscribe()
         {
-            unsubscriber.Dispose();
+            _unsubscriber.Dispose();
         }
     }
 }

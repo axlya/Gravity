@@ -1,8 +1,182 @@
-﻿@{
+﻿@model IEnumerable<GravityWebExt.Models.CalculatedData>
+@{
     ViewData["Title"] = "Расчётные данные";
+    CalculatedData data = Model?.ElementAt(0);
 }
+@*<h1>@ViewData["Title"]</h1>*@
 
-@*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>*@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="container">
+    <form method="post">
+        <h4>Рассчитанные рекомендуемые значения</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Подходящий подвижный груз </td>
+                    <td>α_ma</td>
+                    <td>@data?.Result_ma.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Подходящий α угол наклона при подвижном грузе </td>
+                    <td>∠</td>
+                    <td>@data?.RefAngle_ma.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Подходящий груз-разгрузки </td>
+                    <td>α_mm</td>
+                    <td>@data?.Result_mm.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Подходящий α угол наклона при грузе-разгрузки </td>
+                    <td>∠</td>
+                    <td>@data?.RefAngle_mm.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Подходящий угол наклона без грузов </td>
+                    <td>∠</td>
+                    <td>@data?.A_not.ToString() </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Рассчитанные рекомендуемые значения</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                </tr>
+                <tr>
+                    <td>Отклоления в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды </td>
+                    <td>xOy</td>
+                    <td>@data?.DevPlane_xOy.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Отклоления в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды</td>
+                    <td>xOz</td>
+                    <td>@data?.DevPlane_xOz.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Средний угол равновесия - α</td>
+                    <td>∠ср</td>
+                    <td>@data?.AverageValue.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Поправка координат при определение КМЦ</td>
+                    <td>△</td>
+                    <td>@data?.kcmDev.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Тарировки углов</td>
+                    <td></td>
+                    <td>@data?.Amendment.ToString()</td>
+                </tr>
+            </thead>
+        </table>
+        <h4>Итоговые значения КМЦ</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
+                    <th>M</th>
+                </tr>
+                <tr>
+                    <td>Координаты Центра Масс </td>
+                    <td>@data?.RES_X.ToString()</td>
+                    <td>@data?.RES_Y.ToString()</td>
+                    <td>@data?.RES_Z.ToString()</td>
+                    <td>@data?.RES_M.ToString()</td>
+                </tr>
+            </thead>
+        </table>
+        <h4>Расчет границ погрешностей опредедения КМЦ и массы изделия</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
+                    <th>M</th>
+                <tr>
+                    <td>Среднее значение изделия</td>
+                    <td>Иср</td>
+                    <td>@data?.AverProdVal_X.ToString()</td>
+                    <td>@data?.AverProdVal_Y.ToString()</td>
+                    <td>@data?.AverProdVal_Z.ToString()</td>
+                    <td>@data?.AverProdValMas.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Граница суммарной не исключённой систематической погрешности c "+"</td>
+                    <td>+Δθ</td>
+                    <td>@data?.ErLimX1.ToString()</td>
+                    <td>@data?.ErLimY1.ToString()</td>
+                    <td>@data?.ErLimZ1.ToString()</td>
+                    <td>@data?.ErLimM1.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Граница суммарной не исключённой систематической погрешности c "-"</td>
+                    <td>-Δθ</td>
+                    <td>@data?.ErLimX2.ToString()</td>
+                    <td>@data?.ErLimY2.ToString()</td>
+                    <td>@data?.ErLimZ2.ToString()</td>
+                    <td>@data?.ErLimM2.ToString()</td>
+                </tr>
+               
+                <tr>
+                    <td>НСП(max)</td>
+                    <td>Δθi</td>
+                    <td>@data?.NSPmaxX.ToString()</td>
+                    <td>@data?.NSPmaxY.ToString()</td>
+                    <td>@data?.NSPmaxZ.ToString()</td>
+                    <td>@data?.NSPmaxM.ToString()</td>
+                </tr>
+                <tr>
+                    <td>СКО НСП</td>
+                    <td>Sθ</td>
+                    <td>@data?.ErLimSx.ToString()</td>
+                    <td>@data?.ErLimSy.ToString()</td>
+                    <td>@data?.ErLimSz.ToString()</td>
+                    <td>@data?.ErLimSm.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Весовой Коэффициент</td>
+                    <td>k</td>
+                    <td>@data?.KvesX.ToString()</td>
+                    <td>@data?.KvesY.ToString()</td>
+                    <td>@data?.KvesZ.ToString()</td>
+                    <td>@data?.KvesM.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Cуммарное среднее квадратическое отклонение </td>
+                    <td>Σcko</td>
+                    <td>@data?.Sdev_reNsX.ToString()</td>
+                    <td>@data?.Sdev_reNsY.ToString()</td>
+                    <td>@data?.Sdev_reNsZ.ToString()</td>
+                    <td>@data?.Sdev_reNsM.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Границы погрешности</td>
+                    <td>θ</td>
+                    <td>@data?.granX.ToString()</td>
+                    <td>@data?.granY.ToString()</td>
+                    <td>@data?.granZ.ToString()</td>
+                    <td>@data?.granM.ToString()</td>
+                </tr>
+            </thead>
+        </table>
+    </form>
+</div>

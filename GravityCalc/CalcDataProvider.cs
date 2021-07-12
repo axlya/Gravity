@@ -11,31 +11,31 @@ namespace GravityWebExt.Models
     /// <summary>
     /// Передача данных PasportData подписчикам
     /// </summary>
-    public class CalcDataProvider :IObservable<PasportData>
+    public class CalcDataProvider :IObservable<PassportData>
     {
         public CalcDataProvider()
         {
-            observers = new List<IObserver<PasportData>>();
+            _observers = new List<IObserver<PassportData>>();
         }
 
-        private List<IObserver<PasportData>> observers;
+        private List<IObserver<PassportData>> _observers;
 
-        public IDisposable Subscribe(IObserver<PasportData> observer)
+        public IDisposable Subscribe(IObserver<PassportData> observer)
         {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber(observers, observer);
+            if (!_observers.Contains(observer))
+                _observers.Add(observer);
+            return new Unsubscriber(_observers, observer);
         }
 
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<PasportData>> _observers;
-            private IObserver<PasportData> _observer;
+            private List<IObserver<PassportData>> _observers;
+            private IObserver<PassportData> _observer;
 
-            public Unsubscriber(List<IObserver<PasportData>> observers, IObserver<PasportData> observer)
+            public Unsubscriber(List<IObserver<PassportData>> observers, IObserver<PassportData> observer)
             {
-                this._observers = observers;
-                this._observer = observer;
+                _observers = observers;
+                _observer = observer;
             }
 
             public void Dispose()
@@ -45,9 +45,9 @@ namespace GravityWebExt.Models
             }
         }
 
-        public void SendData(PasportData? data)
+        public void SendData(PassportData? data)
         {
-            foreach (var observer in observers)
+            foreach (var observer in _observers)
             {
                 if (!data.HasValue)
                     observer.OnError(new DataUnknownException());
@@ -58,11 +58,11 @@ namespace GravityWebExt.Models
 
         public void EndTransmission()
         {
-            foreach (var observer in observers.ToArray())
-                if (observers.Contains(observer))
+            foreach (var observer in _observers.ToArray())
+                if (_observers.Contains(observer))
                     observer.OnCompleted();
 
-            observers.Clear();
+            _observers.Clear();
         }
     }
 

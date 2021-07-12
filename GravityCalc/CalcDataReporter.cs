@@ -4,57 +4,63 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GravityData;
 
 namespace GravityCalc
 {
     /// <summary>
     /// Получение данных от контроллера
     /// </summary>
-    public class CalcDataReporter : IObserver<Data>
+    public class CalcDataReporter : IObserver<ControllerData>
     {
-        private IDisposable unsubscriber;
-        private string instName;
+        private IDisposable _unsubscriber;
+        private string _instName;
+        ICalculator<ControllerData, PassportData, CalculatedData> _mainCalc = null;
 
-        public CalcDataReporter(string name)
+        public CalcDataReporter(string name, ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
         {
-            this.instName = name;
+            _instName = name;
+            _mainCalc = mainCalc;
         }
 
         public CalcDataReporter()
         {
-            this.instName = "Calculator reporter";
+            _instName = "Calculator reporter (from Controller)";
+        }
+
+        public void SetCalcFunc(ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
+        {
+            _mainCalc = mainCalc;
         }
 
         public string Name
-        { get { return this.instName; } }
+        { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<Data> provider)
+        public virtual void Subscribe(IObservable<ControllerData> provider)
         {
             if (provider != null)
-                unsubscriber = provider.Subscribe(this);
+                _unsubscriber = provider.Subscribe(this);
         }
 
         public virtual void OnCompleted()
         {
-            Console.WriteLine("Completed transmitting data to {0}.", this.Name);
-            this.Unsubscribe();
+            Console.WriteLine("Completed transmitting data to {0}.", Name);
+            Unsubscribe();
         }
 
         public virtual void OnError(Exception e)
         {
-            Console.WriteLine("{0}: The data cannot be determined.", this.Name);
+            Console.WriteLine("{0}: The data cannot be determined.", Name);
         }
 
         // Получены новые данные
-        public virtual void OnNext(Data data)
+        public virtual void OnNext(ControllerData data)
         {
-            Console.WriteLine("{2}: The current data is {0}, {1}", data.Data1, data.Data2, this.Name);
+            _mainCalc?.SetControllerData(data);
         }
 
         public virtual void Unsubscribe()
         {
-            unsubscriber.Dispose();
+            _unsubscriber.Dispose();
         }
     }
 }

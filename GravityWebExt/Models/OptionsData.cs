@@ -176,17 +176,65 @@ namespace GravityWebExt.Models
         /// Координаты изделия по КД
         /// </summary>
         public double Zprod { get; set; }
+        /// <summary>
+        /// Угол поворота платформы
+        /// </summary>
+        public double Fi { get; set; }
+        /// <summary>
+        /// Δ - участвует в формуле для поправки углов (стд отклонение углов)
+        /// </summary
+        public double Dev { get; set; }
+        //// <summary>
+        /// Массив эталоной массы подвижного груза (4 элемента массива)
+        /// </summary>
+        public double ArrRef_ma1 { get; set; }
+        public double ArrRef_ma2 { get; set; }
+        public double ArrRef_ma3 { get; set; }
+        public double ArrRef_ma4 { get; set; }
+        /// <summary>
+        /// DevArrRef_ma - допустипое отклонение эталонной массы подвижного груза  (4 элемента массива))
+        /// </summary>
+        public double DevArrRef_ma1 { get; set; }
+        public double DevArrRef_ma2 { get; set; }
+        public double DevArrRef_ma3 { get; set; }
+        public double DevArrRef_ma4 { get; set; }
+        /// <summary>
+        /// Для наклона стенда при подвижном грузе 
+        /// </  summary>
+        public double Epsilon_ma { get; set; }
+        //// <summary>
+        /// Массив эталоной массы груза - разгрузки (4 элемента массива)
+        /// </summary>
+        public double ArrRef_mm1 { get; set; }
+        public double ArrRef_mm2 { get; set; }
+        public double ArrRef_mm3 { get; set; }
+        public double ArrRef_mm4 { get; set; }
+        /// <summary>
+        /// DevArrRef_ma - допустипое отклонение эталонной массы груза - разгрузки
+        /// </summary>
+        public double DevArrRef_mm1 { get; set; }
+        public double DevArrRef_mm2 { get; set; }
+        public double DevArrRef_mm3 { get; set; }
+        public double DevArrRef_mm4 { get; set; }
+        /// <summary>
+        /// Для наклона стенда при использование груза - разгрузки
+        /// </  summary>
+        public double Epsilon_mm { get; set; }
+        /// <summary>
+        /// Подвижный груз
+        /// </summary>
+        public bool Cargo { get; set; }
 
         //// методы
-        
 
         /// <summary>
         /// Создание структуры данных для расчёта
         /// </summary>
         /// <returns></returns>
-        public GravityCalc.PasportData SetDataForCalculate()
+        public GravityCalc.PassportData SetDataForCalculate()
         {
-            PasportData data = new();
+            PassportData data = new();
+            
             data.DefaultInit();
             data.S = this.S;
             data.DevS = this.DevS;
@@ -228,6 +276,16 @@ namespace GravityWebExt.Models
             data.Xprod = this.Xprod;
             data.Yprod = this.Yprod;
             data.Zprod = this.Zprod;
+            data.Fi = this.Fi;
+            data.Dev = this.Dev;
+            data.Epsilon_ma = this.Epsilon_ma;
+            data.Epsilon_ma = this.Epsilon_ma;
+            data.ArrRef_ma = new double [] { this.ArrRef_ma1, this.ArrRef_ma2, this.ArrRef_ma3, this.ArrRef_ma4};
+            data.ArrRef_mm = new double[] { this.ArrRef_mm1, this.ArrRef_mm2, this.ArrRef_mm3, this.ArrRef_mm4};
+            data.DevArrRef_ma = new double[] { this.DevArrRef_ma1, this.DevArrRef_ma2, this.DevArrRef_ma3, this.DevArrRef_ma4};
+            data.DevArrRef_mm = new double[] { this.DevArrRef_mm1, this.DevArrRef_mm2, this.DevArrRef_mm3, this.DevArrRef_mm4 };
+            data.Cargo = this.Cargo;
+
             return data;
         } 
     }
