@@ -290,6 +290,7 @@ namespace GravityCalc
         public double DevZ6000 { get; set; }
 
         public bool Cargo { get; set; }
+
     }
     public struct ControllerData
     {
@@ -469,6 +470,14 @@ namespace GravityCalc
         public double granY { get; set; }
         public double granZ { get; set; }
         public double granM { get; set; }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////Проверка углов
+        public bool Angel_0 { get; set; }
+        public bool Angel_90 { get; set; }
+        public bool Angel_180 { get; set; }
+        public bool Angel_270 { get; set; }
+        public bool Angel_0_2 { get; set; }
+        public bool Angel_180_2 { get; set; }
     }
 
     public struct NSPData
@@ -626,14 +635,6 @@ namespace GravityCalc
         public double _devMAm2 { get; set; } 
         public double _devMMm2 { get; set; } 
     }
-
-
-
-
-
-
-
-
 
     /// <summary>
     /// обработка полученных данных

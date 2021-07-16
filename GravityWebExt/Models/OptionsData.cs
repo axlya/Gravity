@@ -225,6 +225,8 @@ namespace GravityWebExt.Models
         /// </summary>
         public bool Cargo { get; set; }
 
+        
+
         //// методы
 
         /// <summary>

@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 namespace GravityCalc
 {
     /// <summary>
-    /// Получение данных от контроллера
+    /// Получение данных от создателя конфигурации
     /// </summary>
-    public class CalcDataReporter : IObserver<ControllerData>
+    public class CalcWebNSPReporter : IObserver<NSPData>
     {
         private IDisposable _unsubscriber;
         private string _instName;
         ICalculator _mainCalc = null;
 
-        public CalcDataReporter(string name, ICalculator mainCalc)
+        public CalcWebNSPReporter(string name, ICalculator mainCalc)
         {
             _instName = name;
             _mainCalc = mainCalc;
         }
 
-        public CalcDataReporter()
+        public CalcWebNSPReporter()
         {
-            _instName = "Calculator reporter (from Controller)";
+            _instName = "Calculator reporter (from NSP Data)";
         }
 
         public void SetCalcFunc(ICalculator mainCalc)
@@ -35,7 +35,7 @@ namespace GravityCalc
         public string Name
         { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<ControllerData> provider)
+        public virtual void Subscribe(IObservable<NSPData> provider)
         {
             if (provider != null)
                 _unsubscriber = provider.Subscribe(this);
@@ -44,7 +44,7 @@ namespace GravityCalc
         public virtual void OnCompleted()
         {
             Console.WriteLine("Completed transmitting data to {0}.", Name);
-            Unsubscribe();
+            this.Unsubscribe();
         }
 
         public virtual void OnError(Exception e)
@@ -53,9 +53,9 @@ namespace GravityCalc
         }
 
         // Получены новые данные
-        public virtual void OnNext(ControllerData data)
+        public virtual void OnNext(NSPData data)
         {
-            _mainCalc?.SetControllerData(data);
+            _mainCalc?.SetNSPData(data);
         }
 
         public virtual void Unsubscribe()

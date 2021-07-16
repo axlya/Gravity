@@ -9,7 +9,7 @@ namespace GravityCalc
     /// <summary>
     /// Калькуляторы реализуют этот интерфейс
     /// </summary>
-    public interface ICalculator<in ControllerData, in PassportData, out CalculatedData>
+    public interface ICalculator
     {
         /// <summary>
         /// Получены данные от контроллера
@@ -26,5 +26,10 @@ namespace GravityCalc
         /// </summary>
         /// <returns></returns>
         public CalculatedData GetCalculatedData();
+        /// <summary>
+        /// Получены НСП данные
+        /// </summary>
+        /// <param name="nspData"></param>
+        public void SetNSPData(NSPData nspData);
     }
 }

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<GravityWebExt.Models.CalculatedData>
+﻿@model IEnumerable<GravityWebExt.Models.CalculatedDataWeb>
 @{
     ViewData["Title"] = "Расчётные данные";
-    CalculatedData data = Model?.ElementAt(0);
+    CalculatedDataWeb data = Model?.ElementAt(0);
 }
 @*<h1>@ViewData["Title"]</h1>*@
 
@@ -23,27 +23,27 @@
                 <tr>
                     <td>Подходящий подвижный груз </td>
                     <td>α_ma</td>
-                    <td>@data?.Result_ma.ToString()</td>
+                    <td><span id="result_ma">@data?.Result_ma.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Подходящий α угол наклона при подвижном грузе </td>
                     <td>∠</td>
-                    <td>@data?.RefAngle_ma.ToString()</td>
+                    <td><span id="refAngle_ma">@data?.RefAngle_ma.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Подходящий груз-разгрузки </td>
                     <td>α_mm</td>
-                    <td>@data?.Result_mm.ToString()</td>
+                    <td><span id="result_mm">@data?.Result_mm.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Подходящий α угол наклона при грузе-разгрузки </td>
                     <td>∠</td>
-                    <td>@data?.RefAngle_mm.ToString()</td>
+                    <td><span id="refAngle_mm">@data?.RefAngle_mm.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Подходящий угол наклона без грузов </td>
                     <td>∠</td>
-                    <td>@data?.A_not.ToString() </td>
+                    <td><span id="a_not">@data?.A_not.ToString("N3")</span></td>
                 </tr>
             </tbody>
         </table>
@@ -58,27 +58,27 @@
                 <tr>
                     <td>Отклоления в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды </td>
                     <td>xOy</td>
-                    <td>@data?.DevPlane_xOy.ToString()</td>
+                    <td><span id="devPlane_xOy">@data?.DevPlane_xOy.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Отклоления в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды</td>
                     <td>xOz</td>
-                    <td>@data?.DevPlane_xOz.ToString()</td>
+                    <td><span id="devPlane_xOz">@data?.DevPlane_xOz.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Средний угол равновесия - α</td>
                     <td>∠ср</td>
-                    <td>@data?.AverageValue.ToString()</td>
+                    <td><span id="averageValue">@data?.AverageValue.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Поправка координат при определение КМЦ</td>
                     <td>△</td>
-                    <td>@data?.kcmDev.ToString()</td>
+                    <td><span id="kcmDev">@data?.kcmDev.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Тарировки углов</td>
                     <td></td>
-                    <td>@data?.Amendment.ToString()</td>
+                    <td><span id="amendment">@data?.Amendment.ToString("N3")</span></td>
                 </tr>
             </thead>
         </table>
@@ -94,10 +94,10 @@
                 </tr>
                 <tr>
                     <td>Координаты Центра Масс </td>
-                    <td>@data?.RES_X.ToString()</td>
-                    <td>@data?.RES_Y.ToString()</td>
-                    <td>@data?.RES_Z.ToString()</td>
-                    <td>@data?.RES_M.ToString()</td>
+                    <td><span id="res_X">@data?.RES_X.ToString("N3")</span></td>
+                    <td><span id="res_Y">@data?.RES_Y.ToString("N3")</span></td>
+                    <td><span id="res_Z">@data?.RES_Z.ToString("N3")</span></td>
+                    <td><span id="res_M">@data?.RES_M.ToString("N3")</span></td>
                 </tr>
             </thead>
         </table>
@@ -114,69 +114,148 @@
                 <tr>
                     <td>Среднее значение изделия</td>
                     <td>Иср</td>
-                    <td>@data?.AverProdVal_X.ToString()</td>
-                    <td>@data?.AverProdVal_Y.ToString()</td>
-                    <td>@data?.AverProdVal_Z.ToString()</td>
-                    <td>@data?.AverProdValMas.ToString()</td>
+                    <td><span id="averProdVal_X">@data?.AverProdVal_X.ToString("N3")</span></td>
+                    <td><span id="averProdVal_Y">@data?.AverProdVal_Y.ToString("N3")</span></td>
+                    <td><span id="averProdVal_Z">@data?.AverProdVal_Z.ToString("N3")</span></td>
+                    <td><span id="averProdValMas">@data?.AverProdValMas.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Граница суммарной не исключённой систематической погрешности c "+"</td>
                     <td>+Δθ</td>
-                    <td>@data?.ErLimX1.ToString()</td>
-                    <td>@data?.ErLimY1.ToString()</td>
-                    <td>@data?.ErLimZ1.ToString()</td>
-                    <td>@data?.ErLimM1.ToString()</td>
+                    <td><span id="erLimX1">@data?.ErLimX1.ToString("N3")</span></td>
+                    <td><span id="erLimY1">@data?.ErLimY1.ToString("N3")</span></td>
+                    <td><span id="erLimZ1">@data?.ErLimZ1.ToString("N3")</span></td>
+                    <td><span id="erLimM1">@data?.ErLimM1.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Граница суммарной не исключённой систематической погрешности c "-"</td>
                     <td>-Δθ</td>
-                    <td>@data?.ErLimX2.ToString()</td>
-                    <td>@data?.ErLimY2.ToString()</td>
-                    <td>@data?.ErLimZ2.ToString()</td>
-                    <td>@data?.ErLimM2.ToString()</td>
+                    <td><span id="erLimX2">@data?.ErLimX2.ToString("N3")</span></td>
+                    <td><span id="erLimY2">@data?.ErLimY2.ToString("N3")</span></td>
+                    <td><span id="erLimZ2">@data?.ErLimZ2.ToString("N3")</span></td>
+                    <td><span id="erLimM2">@data?.ErLimM2.ToString("N3")</span></td>
                 </tr>
-               
+
                 <tr>
                     <td>НСП(max)</td>
                     <td>Δθi</td>
-                    <td>@data?.NSPmaxX.ToString()</td>
-                    <td>@data?.NSPmaxY.ToString()</td>
-                    <td>@data?.NSPmaxZ.ToString()</td>
-                    <td>@data?.NSPmaxM.ToString()</td>
+                    <td><span id="nspMaxX">@data?.NSPmaxX.ToString("N3")</span></td>
+                    <td><span id="nspMaxY">@data?.NSPmaxY.ToString("N3")</span></td>
+                    <td><span id="nspMaxZ">@data?.NSPmaxZ.ToString("N3")</span></td>
+                    <td><span id="nspMaxM">@data?.NSPmaxM.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>СКО НСП</td>
                     <td>Sθ</td>
-                    <td>@data?.ErLimSx.ToString()</td>
-                    <td>@data?.ErLimSy.ToString()</td>
-                    <td>@data?.ErLimSz.ToString()</td>
-                    <td>@data?.ErLimSm.ToString()</td>
+                    <td><span id="erLimSx">@data?.ErLimSx.ToString("N3")</span></td>
+                    <td><span id="erLimSy">@data?.ErLimSy.ToString("N3")</span></td>
+                    <td><span id="erLimSz">@data?.ErLimSz.ToString("N3")</span></td>
+                    <td><span id="erLimSm">@data?.ErLimSm.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Весовой Коэффициент</td>
                     <td>k</td>
-                    <td>@data?.KvesX.ToString()</td>
-                    <td>@data?.KvesY.ToString()</td>
-                    <td>@data?.KvesZ.ToString()</td>
-                    <td>@data?.KvesM.ToString()</td>
+                    <td><span id="kvesX">@data?.KvesX.ToString("N3")</span></td>
+                    <td><span id="kvesY">@data?.KvesY.ToString("N3")</span></td>
+                    <td><span id="kvesZ">@data?.KvesZ.ToString("N3")</span></td>
+                    <td><span id="kvesM">@data?.KvesM.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Cуммарное среднее квадратическое отклонение </td>
                     <td>Σcko</td>
-                    <td>@data?.Sdev_reNsX.ToString()</td>
-                    <td>@data?.Sdev_reNsY.ToString()</td>
-                    <td>@data?.Sdev_reNsZ.ToString()</td>
-                    <td>@data?.Sdev_reNsM.ToString()</td>
+                    <td><span id="sdev_reNsX">@data?.Sdev_reNsX.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsY">@data?.Sdev_reNsY.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsZ">@data?.Sdev_reNsZ.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsM">@data?.Sdev_reNsM.ToString("N3")</span></td>
                 </tr>
                 <tr>
                     <td>Границы погрешности</td>
                     <td>θ</td>
-                    <td>@data?.granX.ToString()</td>
-                    <td>@data?.granY.ToString()</td>
-                    <td>@data?.granZ.ToString()</td>
-                    <td>@data?.granM.ToString()</td>
+                    <td><span id="granX">@data?.granX.ToString("N3")</span></td>
+                    <td><span id="granY">@data?.granY.ToString("N3")</span></td>
+                    <td><span id="granZ">@data?.granZ.ToString("N3")</span></td>
+                    <td><span id="granM">@data?.granM.ToString("N3")</span></td>
                 </tr>
             </thead>
         </table>
     </form>
 </div>
+<div class="form-check-inline">
+    <input type="button" class="btn btn-outline-danger" value="Остановить" id="stopUpdating" />
+    <input type="button" class="btn btn-outline-success" value="Возобновить" id="startUpdating" />
+    <input type="text" class="form-control input" id="intervalValue" value="1000" />
+</div>
+
+
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        timeInterval = setInterval(getData, $("#intervalValue").val());
+        $("#stopUpdating").click(function () { clearInterval(timeInterval); });
+        $("#startUpdating").click(function () { timeInterval = setInterval(getData, $("#intervalValue").val()); });
+    });
+
+    var timeInterval;
+
+    function getData() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetCalculatorDataRepeat", "Home")?random=" + Math.random(),
+            dataType: "json",
+            success: function (result) {
+
+               // console.log(result);
+
+                $("#result_ma").text(parseFloat(result[0].result_ma).toFixed(3));
+                $("#refAngle_ma").text(parseFloat(result[0].refAngle_ma).toFixed(3));
+                $("#result_mm").text(parseFloat(result[0].result_mm).toFixed(3));
+                $("#refAngle_mm").text(parseFloat(result[0].refAngle_mm).toFixed(3));
+                $("#a_not").text(parseFloat(result[0].a_not).toFixed(3));
+                //
+                $("#devPlane_xOy").text(parseFloat(result[0].devPlane_xOy).toFixed(3));
+                $("#devPlane_xOz").text(parseFloat(result[0].devPlane_xOz).toFixed(3));
+                $("#averageValue").text(parseFloat(result[0].averageValue).toFixed(3));
+                $("#kcmDev").text(parseFloat(result[0].kcmDev).toFixed(3));
+                $("#amendment").text(parseFloat(result[0].amendment).toFixed(3));
+                //
+                $("#res_X").text(parseFloat(result[0].reS_X).toFixed(3));
+                $("#res_Y").text(parseFloat(result[0].reS_Y).toFixed(3));
+                $("#res_Z").text(parseFloat(result[0].reS_Z).toFixed(3));
+                $("#res_M").text(parseFloat(result[0].reS_M).toFixed(3));
+                //
+                $("#averProdVal_X").text(parseFloat(result[0].averProdVal_X).toFixed(3));
+                $("#averProdVal_Y").text(parseFloat(result[0].averProdVal_Y).toFixed(3));
+                $("#averProdVal_Z").text(parseFloat(result[0].averProdVal_Z).toFixed(3));
+                $("#averProdValMas").text(parseFloat(result[0].averProdValMas).toFixed(3));
+                $("#erLimX1").text(parseFloat(result[0].erLimX1).toFixed(3));
+                $("#erLimY1").text(parseFloat(result[0].erLimY1).toFixed(3));
+                $("#erLimZ1").text(parseFloat(result[0].erLimZ1).toFixed(3));
+                $("#erLimM1").text(parseFloat(result[0].erLimM1).toFixed(3));
+                $("#erLimX2").text(parseFloat(result[0].erLimX2).toFixed(3));
+                $("#erLimY2").text(parseFloat(result[0].erLimY2).toFixed(3));
+                $("#erLimZ2").text(parseFloat(result[0].erLimZ2).toFixed(3));
+                $("#erLimM2").text(parseFloat(result[0].erLimM2).toFixed(3));
+                $("#nspMaxX").text(parseFloat(result[0].nsPmaxX).toFixed(3));
+                $("#nspMaxY").text(parseFloat(result[0].nsPmaxY).toFixed(3));
+                $("#nspMaxZ").text(parseFloat(result[0].nsPmaxZ).toFixed(3));
+                $("#nspMaxM").text(parseFloat(result[0].nsPmaxM).toFixed(3));
+                $("#erLimSx").text(parseFloat(result[0].erLimSx).toFixed(3));
+                $("#erLimSy").text(parseFloat(result[0].erLimSy).toFixed(3));
+                $("#erLimSz").text(parseFloat(result[0].erLimSz).toFixed(3));
+                $("#erLimSm").text(parseFloat(result[0].erLimSm).toFixed(3));
+                $("#kvesX").text(parseFloat(result[0].kvesX).toFixed(3));
+                $("#kvesY").text(parseFloat(result[0].kvesY).toFixed(3));
+                $("#kvesZ").text(parseFloat(result[0].kvesZ).toFixed(3));
+                $("#kvesM").text(parseFloat(result[0].kvesM).toFixed(3));
+                $("#sdev_reNsX").text(parseFloat(result[0].sdev_reNsX).toFixed(3));
+                $("#sdev_reNsY").text(parseFloat(result[0].sdev_reNsY).toFixed(3));
+                $("#sdev_reNsZ").text(parseFloat(result[0].sdev_reNsZ).toFixed(3));
+                $("#sdev_reNsM").text(parseFloat(result[0].sdev_reNsM).toFixed(3));
+                $("#granX").text(parseFloat(result[0].granX).toFixed(3));
+                $("#granY").text(parseFloat(result[0].granY).toFixed(3));
+                $("#granZ").text(parseFloat(result[0].granZ).toFixed(3));
+                $("#granM").text(parseFloat(result[0].granM).toFixed(3));
+            }
+        });
+    }
+</script>

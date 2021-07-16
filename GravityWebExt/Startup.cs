@@ -35,18 +35,25 @@ namespace GravityWebExt
                 sqlOptions.EnableRetryOnFailure();
             })
             );
-            services.AddSingleton<WebDataProvider>(); //провайдер данных для калькулятора (Web)
-            services.AddSingleton<WebDataReporter>(); //получение данных от контроллера (Web)
-            services.AddSingleton<CalcWebReporter>(); // получатель данных калькулятора (Web)
+            //провайдеры
+            services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
+            services.AddSingleton<WebNSPDataProvider>(); //провайдер данных Web (NSPData)
+            services.AddSingleton<DataProvider>(); // провайдер данных контроллера (ControllerData)
+            services.AddSingleton<CalcDataProvider>(); // провайдер данных калькулятора (CalculatedData)
+            //подписчики
+            services.AddSingleton<WebDataReporter>(); //получатель данных от контроллера (Web)
+            services.AddSingleton<WebCalcDataReporter>(); //получатель данных от калькулятора (Web)
+            services.AddSingleton<CalcWebReporter>(); // получатель данных калькулятора (Web - PassportData)
+            services.AddSingleton<CalcWebNSPReporter>(); // получатель данных калькулятора (Web - NSP Data)
             services.AddSingleton<CalcDataReporter>(); // получатель данных контроллера (калькулятор)
-            services.AddSingleton<DataProvider>(); // поставщик данных контроллера
+            //
             services.AddSingleton<Emulator>(); // эмулятор контроллера
             services.AddSingleton<MainCalc>(); // расчетный класс калькулятора
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, CalcWebReporter calcReporter, Emulator emu, MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter)
+        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, WebNSPDataProvider webNSPDataProvider, CalcDataProvider calcDataProvider,CalcWebReporter calcReporter, CalcWebNSPReporter calcNspReporter, WebCalcDataReporter webCalcDataReporter,Emulator emu, MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter)
         {
             applicationLifetime.ApplicationStopped.Register(() =>
             {
@@ -55,8 +62,13 @@ namespace GravityWebExt
                 calcReporter.Unsubscribe();
                 webDataReporter.Unsubscribe();
                 calcDataReporter.Unsubscribe();
+                calcNspReporter.Unsubscribe();
+                webCalcDataReporter.Unsubscribe();
+
                 dataProvider.EndTransmission();
                 webDataProvider.EndTransmission();
+                webNSPDataProvider.EndTransmission();
+                calcDataProvider.EndTransmission();
 
                 logger.LogInformation("Завершение работы...");
 
@@ -84,18 +96,23 @@ namespace GravityWebExt
             //запуск эмулятора генерации данных контроллера
             emu.SetCalcFunc(mainCalc);
             emu.SetDataProvider(dataProvider);
-
             logger.LogInformation("Запуск эмулятора");
+            //установка провайдера данных
+            mainCalc.SetDataProvider(calcDataProvider);
             //установка расчётного класса
             calcReporter.SetCalcFunc(mainCalc);
-            // подписка калькулятора на получение данных
-            calcReporter.Subscribe(webDataProvider);
-            //подписка на получение данных контроллера
-            webDataReporter.Subscribe(dataProvider);
+            calcNspReporter.SetCalcFunc(mainCalc);
             calcDataReporter.SetCalcFunc(mainCalc);
+            // подписки на получение данных
+            calcReporter.Subscribe(webDataProvider);
+            calcNspReporter.Subscribe(webNSPDataProvider);
+            webDataReporter.Subscribe(dataProvider);          
             calcDataReporter.Subscribe(dataProvider);
+            webCalcDataReporter.Subscribe(calcDataProvider);
+            logger.LogInformation("Запуск подписчиков");
 
             webDataProvider.SendData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
+           // webNSPDataProvider.SendData(db.NSP.ToList().ElementAt(0).SetDataForCalculate());
             emu.SetPassportData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
 
             emu.Start();

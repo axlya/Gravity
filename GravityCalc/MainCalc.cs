@@ -10,14 +10,18 @@ namespace GravityCalc
     /// <summary>
     /// Основной класс калькулятора
     /// </summary>
-    public class MainCalc : ICalculator<ControllerData, PassportData, CalculatedData>
+    public class MainCalc : ICalculator
     {
         /// <summary>
         /// Полученные данные
         /// </summary>
         private ReceivedData _receivedData;
         private Сalculator _calculator;
+        CalculatedData calc;
         private readonly string _name = "Калькулятор";
+        private CalcDataProvider _dataProvider = null;
+        bool _angel = false;
+        bool _nsp = false;
         /// <summary>
         /// Максимальное количество получаемых данных (для расчёта)
         /// </summary>
@@ -228,39 +232,77 @@ namespace GravityCalc
                     break;
             }
 
-            if(_calculator.BeginBalanceAngleArr0.Count() == 10 && _calculator.BeginBalanceAngleArr90.Count() == 10 &&
-               _calculator.BeginBalanceAngleArr180.Count() == 10 && _calculator.BeginBalanceAngleArr270.Count() == 10 &&
-               _calculator.BeginBalanceAngleArr0_2.Count() == 10 && _calculator.BeginBalanceAngleArr180_2.Count() == 10)
+            if(_calculator.BeginBalanceAngleArr0.Count() == 10)
             {
+                calc.Angel_0 = true;
+            }
+            if (_calculator.BeginBalanceAngleArr90.Count() == 10)
+            {
+                calc.Angel_90 = true;
+            }
+            if (_calculator.BeginBalanceAngleArr180.Count() == 10)
+            {
+                calc.Angel_180 = true;
+            }
+            if (_calculator.BeginBalanceAngleArr270.Count() == 10)
+            {
+                calc.Angel_270 = true;
+            }
+            if (_calculator.BeginBalanceAngleArr0_2.Count() == 10)
+            {
+                calc.Angel_0_2 = true;
+            }
+            if (_calculator.BeginBalanceAngleArr180_2.Count() == 10)
+            {
+                calc.Angel_180_2 = true;
+            }
+
+            if (calc.Angel_0 == true && calc.Angel_90 == true && calc.Angel_180 == true && calc.Angel_270 == true && 
+                calc.Angel_0_2 == true && calc.Angel_180_2 == true)
+            {
+                _angel = true;
+            }
+
+            if(_angel == true && _nsp == true)
+            {
+                _calculator.SumValue();
+                _calculator.AngleNot();
+                _calculator.Computation_ma();
+                _calculator.Computation_mm();
+                _calculator.CalcRefAngle_ma();
+                _calculator.CalcRefAngle_mm();
                 _calculator.TranslatVal();
                 _calculator.Balanse_tg();
                 _calculator.WorkList1();
                 _calculator.WorkList2();
                 _calculator.NSP();
+                _dataProvider?.SendData(GetCalculatedData());
             }
-
+            
         }
         public void SetPassportData(PassportData passportData)
         {
             Console.WriteLine("{0} : Получены новые паспортные данные", _name);
             //_receivedData.ClearAllData();
             _receivedData.PassportData = passportData;
-            _calculator.SumValue();
-            _calculator.AngleNot();
-            _calculator.Computation_ma();
-            _calculator.Computation_mm();
-            _calculator.CalcRefAngle_ma();
-            _calculator.CalcRefAngle_mm();
+            
         }
         public CalculatedData GetCalculatedData()
         {
             Console.WriteLine("{0} : Выданы расчитанные данные", _name);
-            return new CalculatedData();
+            return _calculator.calcData;
             
         }
+        public void SetNSPData(NSPData nspData)
+        {
+            Console.WriteLine("{0} : Получены новые НСП данные", _name);
+            _nsp = true;
+            _receivedData.NSPData = nspData;
+        }
 
-
-
-
+        public void SetDataProvider(CalcDataProvider dataProvider)
+        {
+            _dataProvider = dataProvider;
+        }
     }
 }

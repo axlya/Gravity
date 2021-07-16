@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GravityCalc;
 
-namespace GravityCalc
+namespace GravityWebExt.Models
 {
     /// <summary>
-    /// Передача данных CalculatedData подписчикам
+    /// Передача данных NSPData подписчикам
     /// </summary>
-    public class CalcDataProvider :IObservable<CalculatedData>
+    public class WebNSPDataProvider :IObservable<NSPData>
     {
-        public CalcDataProvider()
+        public WebNSPDataProvider()
         {
-            _observers = new List<IObserver<CalculatedData>>();
+            _observers = new List<IObserver<NSPData>>();
         }
 
-        private List<IObserver<CalculatedData>> _observers;
+        private List<IObserver<NSPData>> _observers;
 
-        public IDisposable Subscribe(IObserver<CalculatedData> observer)
+        public IDisposable Subscribe(IObserver<NSPData> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -28,10 +29,10 @@ namespace GravityCalc
 
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<CalculatedData>> _observers;
-            private IObserver<CalculatedData> _observer;
+            private List<IObserver<NSPData>> _observers;
+            private IObserver<NSPData> _observer;
 
-            public Unsubscriber(List<IObserver<CalculatedData>> observers, IObserver<CalculatedData> observer)
+            public Unsubscriber(List<IObserver<NSPData>> observers, IObserver<NSPData> observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -44,12 +45,12 @@ namespace GravityCalc
             }
         }
 
-        public void SendData(CalculatedData? data)
+        public void SendData(NSPData? data)
         {
             foreach (var observer in _observers)
             {
                 if (!data.HasValue)
-                    observer.OnError(new DataUnknownException());
+                    observer.OnError(new WebNSPDataUnknownException());
                 else
                     observer.OnNext(data.Value);
             }
@@ -65,9 +66,9 @@ namespace GravityCalc
         }
     }
 
-    public class DataUnknownException : Exception
+    public class WebNSPDataUnknownException : Exception
     {
-        internal DataUnknownException()
+        internal WebNSPDataUnknownException()
         { }
     }
 }

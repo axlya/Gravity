@@ -18,14 +18,14 @@ namespace GravityData
         public int UpdateDataValue { get; set; } = 1; //сек
         //провайдер данных
         private DataProvider _dataProvider = null;
-        private ICalculator<ControllerData, PassportData, CalculatedData> _mainCalc = null;
+        private ICalculator _mainCalc = null;
         //private CalcDataReporter _calcDataReporter;
         private PassportData _passportData;
         private bool _stop = false;
         private static AutoResetEvent _generateDataEvent = new (true);
 
 
-        public void SetCalcFunc(ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
+        public void SetCalcFunc(ICalculator mainCalc)
         {
             _mainCalc = mainCalc;
         }

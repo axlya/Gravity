@@ -14,9 +14,9 @@ namespace GravityCalc
     {
         private IDisposable _unsubscriber;
         private string _instName;
-        ICalculator<ControllerData, PassportData, CalculatedData> _mainCalc = null;
+        ICalculator _mainCalc = null;
 
-        public CalcWebReporter(string name, ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
+        public CalcWebReporter(string name, ICalculator mainCalc)
         {
             _instName = name;
             _mainCalc = mainCalc;
@@ -27,7 +27,7 @@ namespace GravityCalc
             _instName = "Calculator reporter (from Pasport Data)";
         }
 
-        public void SetCalcFunc(ICalculator<ControllerData, PassportData, CalculatedData> mainCalc)
+        public void SetCalcFunc(ICalculator mainCalc)
         {
             _mainCalc = mainCalc;
         }

@@ -16,33 +16,35 @@ namespace GravityWebExt.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DataContext _db;
         private readonly WebDataProvider _dataProvider;
+        private readonly WebNSPDataProvider _dataNSPProvider;
         private readonly Emulator _emu;
         private readonly WebDataReporter _webDataReporter;
+        private readonly WebCalcDataReporter _webCalcDataReporter;
 
-        public HomeController(ILogger<HomeController> logger, DataContext db, WebDataProvider dataProvider, Emulator emu, WebDataReporter webDataReporter)
+        public HomeController(ILogger<HomeController> logger, DataContext db, WebDataProvider dataProvider, WebNSPDataProvider dataNSPProvider, WebCalcDataReporter webCalcDataReporter ,Emulator emu, WebDataReporter webDataReporter)
         {
             _logger = logger;
             _db = db;
             _dataProvider = dataProvider;
+            _dataNSPProvider = dataNSPProvider;
             _emu = emu;
             _webDataReporter = webDataReporter;
+            _webCalcDataReporter = webCalcDataReporter;
 
         }
         /// <summary>
         /// Получены новые данные от контроллера
         /// </summary>
-        /// <param name="controllerData"></param>
         public JsonResult GetControllerDataRepeat()
         {
-            //MeasurementData measurementDb = await _db.Measurement.FindAsync(1);
-
-            //if (measurementDb != null)
-            //{
-            //    _db.Measurement.Remove(measurementDb);
-            //    await _db.Measurement.AddAsync(new(_webDataReporter.Data));
-            //    await _db.SaveChangesAsync();
-            //}
             return Json(GetControllerData());
+        }
+        /// <summary>
+        /// Получены новые данные от калькулятора
+        /// </summary>
+        public JsonResult GetCalculatorDataRepeat()
+        {
+            return Json(GetCalculatorData());
         }
 
         public List<MeasurementData> GetControllerData()
@@ -50,9 +52,14 @@ namespace GravityWebExt.Controllers
             return new List<MeasurementData>() { new MeasurementData(_webDataReporter.Data) };
         }
 
+        public List<CalculatedDataWeb> GetCalculatorData()
+        {
+            return new List<CalculatedDataWeb>() { new CalculatedDataWeb(_webCalcDataReporter.Data) };
+        }
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View(GetCalculatorData());
         }
         [HttpGet]
         public IActionResult NSP()
@@ -60,20 +67,17 @@ namespace GravityWebExt.Controllers
             return View(_db.NSP.ToList());
         }
         [HttpPost]
-        public async Task<IActionResult> NSP(GravityWebExt.Models.NSPData data)
+        public async Task<IActionResult> NSP(NSPWebData data)
         {
-            GravityWebExt.Models.NSPData findData = await _db.NSP.FindAsync(data?.Id);
+            NSPWebData findData = await _db.NSP.FindAsync(data?.Id);
             if (findData != null)
             {
                 _db.NSP.Remove(findData);
                 await _db.NSP.AddAsync(data);
                 await _db.SaveChangesAsync();
                 //Отправляем новые данные в Калькулятор
-                //_dataProvider.SendData(_db.NSP.ToList().ElementAt(0).SetDataForCalculate());
-                //_logger.LogInformation("Отправлены паспортные данные для расчёта");
-                //Отправляем новые данные в эмулятор 
-                //_emu.SetPassportData(_db.Options.ToList().ElementAt(0).SetDataForCalculate());
-                //_logger.LogInformation("Отправлены паспортные данные для эмулятор");
+                _dataNSPProvider.SendData(_db.NSP.ToList().ElementAt(0).SetDataForCalculate());
+                _logger.LogInformation("Отправлены НСП данные для расчёта");
             }
 
             return View(_db.NSP.ToList());

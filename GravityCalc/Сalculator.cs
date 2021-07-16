@@ -39,7 +39,7 @@ namespace GravityCalc
         public List<double> MiddleUnbalanceSensorArr180_2 { get; set; }
         public List<double> MiddleUnbalanceSensorArr270 { get; set; }
         private ReceivedData _rd;
-        CalculatedData calcData;
+        public CalculatedData calcData;
         public Сalculator(ReceivedData receivedData)
         {
             _rd = receivedData;
@@ -858,7 +858,7 @@ namespace GravityCalc
                 D180_2[i] = MiddleUnbalanceSensorArr180_2[i] * Math.Cos(MiddleBal_gradArr180_2[i] - Lamda) * Math.Cos(BeginBal_gradArr180_2[i]);
             }
 
-            //tg0
+            //tg180_2
             tg180_2 = new double[A0.Length];
             for (int i = 0; i < tg180_2.Length; i++)
             {
@@ -935,7 +935,7 @@ namespace GravityCalc
             for (int i = 0; i < kcmSumX2.Length; i++)
             {
                 kcmSumX2[i] = (2 * _rd.PassportData.S * (_rd.PassportData.Pasport_ma * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_90_270[i]) - _rd.PassportData.Pasport_mm * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180_2[i]))
-                / (Sum_tg_0_180_2[i] * _rd.PassportData.Pasport_ma * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_90_270[i]) - Sum_tg_90_270[i] * _rd.PassportData.Pasport_mm * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180_2[i]))) - _rd.PassportData.H;
+                / (Sum_tg_0_180_2[i] * _rd.PassportData.Pasport_ma * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180[i]) - Sum_tg_90_270[i] * _rd.PassportData.Pasport_mm * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180_2[i]))) - _rd.PassportData.H;
             }
 
             kcmSumX = new double[kcmSumX1.Length];
@@ -948,7 +948,8 @@ namespace GravityCalc
             kcmSum_m = new double[kcmSumX1.Length];
             for (int i = 0; i < kcmSum_m.Length; i++)
             {
-                kcmSum_m[i] = (2 * calcData.Result_mm * _rd.PassportData.D + calcData.Result_ma * (_rd.ControllerData.K1 + _rd.ControllerData.K2) + _rd.PassportData.L * (_rd.ControllerData.P1 + _rd.ControllerData.P2)) / 2 * _rd.PassportData.S; // P1\2 - ? Датчик усилия и K1\2 - датчик чего-то там 
+                kcmSum_m[i] = _rd.PassportData.Pasport_mm * ((2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180_2[i]) / (2 * _rd.PassportData.S - (_rd.PassportData.H + kcmSumX[i]) * Sum_tg_0_180_2[i]));
+                //kcmSum_m[i] = (2 * calcData.Result_mm * _rd.PassportData.D + calcData.Result_ma * (_rd.ControllerData.K1 + _rd.ControllerData.K2) + _rd.PassportData.L * (_rd.ControllerData.P1 + _rd.ControllerData.P2)) / 2 * _rd.PassportData.S; // P1\2 - ? Датчик усилия и K1\2 - датчик чего-то там 
             }
 
             kcmSumY = new double[kcmSumX1.Length];
@@ -1014,8 +1015,6 @@ namespace GravityCalc
         public double[] Yprod_CM;
         public double[] Zprod_CM;
         public double[] Mprod_CM;
-
-        public double RES_X, RES_Y, RES_Z, RES_M; // Итоговые значения
         public double AvVulX1, AvVulY1, AvVulZ1, AvVulM1, AvVulX2, AvVulY2, AvVulZ2, AvVulM2; // Средние значения для расчета 
 
         public void WorkList2()
@@ -1071,13 +1070,13 @@ namespace GravityCalc
             {
                 kcmXprod.Average();
                 AvVulX1 = kcmXprod.Average();
-                RES_X = AvVulX1;
+               calcData.RES_X = AvVulX1;
             }
             else
             {
                 Xprod_CM.Average();
                 AvVulX2 = Xprod_CM.Average();
-                RES_X = AvVulX2;
+                calcData.RES_X = AvVulX2;
             }
 
             // Y
@@ -1085,13 +1084,13 @@ namespace GravityCalc
             {
                 kcmYprod.Average();
                 AvVulY1 = kcmYprod.Average();
-                RES_Y = AvVulY1;
+                calcData.RES_Y = AvVulY1;
             }
             else
             {
                 Yprod_CM.Average();
                 AvVulY2 = Yprod_CM.Average();
-                RES_Y = AvVulY2;
+                calcData.RES_Y = AvVulY2;
             }
 
             // Z
@@ -1099,13 +1098,13 @@ namespace GravityCalc
             {
                 kcmZprod.Average();
                 AvVulZ1 = kcmZprod.Average();
-                RES_Z = AvVulZ1;
+                calcData.RES_Z = AvVulZ1;
             }
             else
             {
                 Zprod_CM.Average();
                 AvVulZ2 = Zprod_CM.Average();
-                RES_Z = AvVulZ2;
+                calcData.RES_Z = AvVulZ2;
             }
 
             // m
@@ -1113,11 +1112,11 @@ namespace GravityCalc
             {
                 kcmMprod.Average();
                 AvVulM1 = kcmMprod.Average();
-                RES_M = AvVulM1;
+                calcData.RES_M = AvVulM1;
             }
             else
             {
-                RES_M = 0;
+                calcData.RES_M = 0;
             }
 
 
@@ -1160,7 +1159,7 @@ namespace GravityCalc
                     Xprod_CM[i] = Math.Pow(kcmXprod[i], 2);
                 }
                 Sum__x = Xprod_CM.Sum();
-                X = Math.Sqrt(Sum__x / (kcmXprod.Length - 1)) / Math.Sqrt(2);
+                X = Math.Sqrt(Sum__x / (Xprod_CM.Length - 1)) / Math.Sqrt(2);
             }
             //____________________________________________________
 
@@ -1181,10 +1180,10 @@ namespace GravityCalc
                 for (int i = 0; i < Yprod_CM.Length; i++)
                 {
                     Yprod_CM[i] = Yprod_CM[i] - calcData.AverProdVal_Y;
-                    Yprod_CM[i] = Math.Pow(kcmYprod[i], 2);
+                    Yprod_CM[i] = Math.Pow(Yprod_CM[i], 2);
                 }
                 Sum__y = Yprod_CM.Sum();
-                Y = Math.Sqrt(Sum__y / (kcmYprod.Length - 1)) / Math.Sqrt(2);
+                Y = Math.Sqrt(Sum__y / (Yprod_CM.Length - 1)) / Math.Sqrt(2);
             }
             //____________________________________________________
 
@@ -1209,7 +1208,7 @@ namespace GravityCalc
                     Zprod_CM[i] = Math.Pow(Zprod_CM[i], 2);
                 }
                 Sum__z = Zprod_CM.Sum();
-                Z = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(2);
+                Z = Math.Sqrt(Sum__z / (Zprod_CM.Length - 1)) / Math.Sqrt(2);
             }
             //____________________________________________________________________
 
@@ -1318,7 +1317,7 @@ namespace GravityCalc
             calcData.ErLimSy = ErLimS[1];
             calcData.ErLimSz = ErLimS[2];
             calcData.ErLimSm = ErLimS[3];
-
+            
             //Kves
             Kves = new double[ErLimS.Length];
             for (int i = 0; i < Kves.Length; i++)

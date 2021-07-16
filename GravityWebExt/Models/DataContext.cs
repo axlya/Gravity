@@ -14,11 +14,11 @@ namespace GravityWebExt.Models
         /// <summary>
         /// Данные с датчиков
         /// </summary>
-        public DbSet<MeasurementData> Measurement { get; set; }
+        //public DbSet<MeasurementData> Measurement { get; set; }
         /// <summary>
         /// Расчитанные данные
         /// </summary>
-        public DbSet<CalculatedData> Calculated { get; set; }
+        //public DbSet<CalculatedDataWeb> Calculated { get; set; }
         /// <summary>
         /// Параметры
         /// </summary>
@@ -26,7 +26,7 @@ namespace GravityWebExt.Models
         /// <summary>
         /// NSP
         /// </summary>
-        public DbSet<NSPData> NSP { get; set; }
+        public DbSet<NSPWebData> NSP { get; set; }
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {

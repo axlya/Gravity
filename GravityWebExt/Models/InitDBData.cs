@@ -77,90 +77,17 @@ namespace GravityWebExt.Models
                         DevArrRef_mm3 = 0,
                         DevArrRef_mm4 = 0,
                         Cargo = true,
-                    }
-                );
-                context.SaveChanges();
-            }
-            //Измерения
-            if (!context.Measurement.Any())
-            {
-                context.Measurement.Add(
-                    new MeasurementData()
-                    {
-                        BeginBalanceAngle = 0,
-                        MiddleBalanceAngle = 0,
-                        BeginUnbalanceSensor = 0,
-                        MiddleUnbalanceSensor = 0,
-                        K1 = 0,
-                        K2 = 0,
-                        P1 = 0,
-                        P2 = 0,
-                    }
-                );
-                context.SaveChanges();
-            }
-            //Расчеты
-            if (!context.Calculated.Any())
-            {
-                context.Calculated.Add(
-                    new CalculatedData()
-                    {
-                        Result_ma = 0,
-                RefAngle_ma = 0,
-                Result_mm = 0,
-                RefAngle_mm = 0,
-                A_not = 0,
-                DevPlane_xOy = 0,
-                DevPlane_xOz = 0,
-                RES_X = 0,
-                RES_Z = 0,
-                RES_Y = 0,
-                RES_M = 0,
-                AverageValue = 0,
-                kcmDev = 0,
-                Amendment = 0,
-                AverProdValMas = 0,
-                AverProdVal_X = 0,
-                AverProdVal_Y = 0,
-                AverProdVal_Z = 0,
-                ErLimX1 = 0,
-                ErLimY1 = 0,
-                ErLimZ1 = 0,
-                ErLimM1 =0,
-                ErLimX2 = 0,
-                ErLimY2 = 0,
-                ErLimZ2 = 0,
-                ErLimM2 = 0,
-                NSPmaxX = 0,
-                NSPmaxY = 0,
-                NSPmaxZ = 0,
-                NSPmaxM = 0,
-                ErLimSx = 0,
-                ErLimSy = 0,
-                ErLimSz = 0,
-                ErLimSm = 0,
-                KvesX = 0,
-                KvesY = 0,
-                KvesZ = 0,
-                KvesM = 0,
-                Sdev_reNsX = 0,
-                Sdev_reNsY = 0,
-                Sdev_reNsZ = 0,
-                Sdev_reNsM = 0,
-                granX = 0,
-                granY = 0,
-                granZ = 0,
-                granM = 0,
             }
                 );
                 context.SaveChanges();
             }
+            
 
             //NSP
             if (!context.NSP.Any())
             {
                 context.NSP.Add(
-                    new NSPData()
+                    new NSPWebData()
                     {
                         //X1
                         _devSx = 0.227193, _devHx = 0.030195, _devLx = 7.97E-10, _devQx = 4.517E-09, _devPx = 2.624E-06, _devEPSILx = 0.8533847, _devFIx = 0, _devXpx = 0.0101948, _devYpx = 0, _devZpx = 0, _devMpx = 0.0030387, _devHpx = 0.02, _devDx = 0.00564, _devEx = 0.00058,_devMAx = 0, _devMMx = 0,

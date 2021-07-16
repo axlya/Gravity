@@ -4,38 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GravityWebExt.Controllers;
 
-namespace GravityCalc
+using GravityCalc;
+
+namespace GravityWebExt.Models
 {
     /// <summary>
-    /// Получение данных от контроллера
+    /// Получение данных от калькулятора
     /// </summary>
-    public class CalcDataReporter : IObserver<ControllerData>
+    public class WebCalcDataReporter : IObserver<CalculatedData>
     {
         private IDisposable _unsubscriber;
         private string _instName;
-        ICalculator _mainCalc = null;
 
-        public CalcDataReporter(string name, ICalculator mainCalc)
+        public CalculatedData Data { get; set; }
+
+
+        public WebCalcDataReporter(string name)
         {
             _instName = name;
-            _mainCalc = mainCalc;
         }
 
-        public CalcDataReporter()
+        public WebCalcDataReporter()
         {
-            _instName = "Calculator reporter (from Controller)";
-        }
-
-        public void SetCalcFunc(ICalculator mainCalc)
-        {
-            _mainCalc = mainCalc;
+            _instName = "Web reporter (Calculator Data)";
         }
 
         public string Name
         { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<ControllerData> provider)
+        public virtual void Subscribe(IObservable<CalculatedData> provider)
         {
             if (provider != null)
                 _unsubscriber = provider.Subscribe(this);
@@ -44,7 +43,7 @@ namespace GravityCalc
         public virtual void OnCompleted()
         {
             Console.WriteLine("Completed transmitting data to {0}.", Name);
-            Unsubscribe();
+            this.Unsubscribe();
         }
 
         public virtual void OnError(Exception e)
@@ -53,14 +52,15 @@ namespace GravityCalc
         }
 
         // Получены новые данные
-        public virtual void OnNext(ControllerData data)
+        public virtual void OnNext(CalculatedData data)
         {
-            _mainCalc?.SetControllerData(data);
+            Data = data;
         }
 
         public virtual void Unsubscribe()
         {
             _unsubscriber.Dispose();
         }
+            
     }
 }
