@@ -32,10 +32,5 @@ namespace GravityWebExt.Models
         {
             Database.EnsureCreated();
         }
-
-        public static implicit operator DataContext(MeasurementData v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

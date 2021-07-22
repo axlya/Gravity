@@ -2,6 +2,7 @@ using GravityCalc;
 using GravityData;
 using GravityWebExt.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,13 +26,17 @@ namespace GravityWebExt
 
                 try
                 {
-                    var context = services.GetRequiredService<DataContext>();
-                    InitDBData.Initialize(context);
+                    var dataContext = services.GetRequiredService<DataContext>();
+                    InitDBData.Initialize(dataContext); // первым инициализируется этот context
+                    var authContext = services.GetRequiredService<AuthContext>();
+                    authContext.Database.Migrate();
+                    InitAuthData.Initialize(authContext);
+
                 }
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred seeding the DB.");
+                    logger.LogError(ex, "Ошибка инициализации БД.");
                 }
             }
             host.Run();

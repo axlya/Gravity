@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using GravityCalc;
 using GravityData;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace GravityWebExt
 {
@@ -29,12 +29,22 @@ namespace GravityWebExt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection, sqlServerOptionsAction: sqlOptions =>
+            string authConnection = Configuration.GetConnectionString("AuthConnection");
+            string dataConnection = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(dataConnection, sqlServerOptionsAction: sqlOptions =>
             {
                 sqlOptions.EnableRetryOnFailure();
             })
             );
+            services.AddDbContext<AuthContext>(options => options.UseSqlServer(authConnection));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => //CookieAuthenticationOptions
+                        {
+                            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                            options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                        });
             //провайдеры
             services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
             services.AddSingleton<WebNSPDataProvider>(); //провайдер данных Web (NSPData)
@@ -91,7 +101,8 @@ namespace GravityWebExt
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();    
+            app.UseAuthorization();     
 
             //запуск эмулятора генерации данных контроллера
             emu.SetCalcFunc(mainCalc);

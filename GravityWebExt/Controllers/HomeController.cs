@@ -1,6 +1,7 @@
 ﻿using GravityCalc;
 using GravityData;
 using GravityWebExt.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -90,7 +91,7 @@ namespace GravityWebExt.Controllers
             return View(GetControllerData());
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "admin")]
         public IActionResult Options()
         {
             return View(_db.Options.ToList());

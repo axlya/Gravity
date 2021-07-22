@@ -3,182 +3,185 @@
     ViewData["Title"] = "Расчётные данные";
     CalculatedDataWeb data = Model?.ElementAt(0);
 }
-@*<h1>@ViewData["Title"]</h1>*@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <div class="container">
-    <form method="post">
-        <h4>Рассчитанные рекомендуемые значения</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Обозначение</th>
-                    <th>Значение</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Подходящий подвижный груз </td>
-                    <td>α_ma</td>
-                    <td><span id="result_ma">@data?.Result_ma.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Подходящий α угол наклона при подвижном грузе </td>
-                    <td>∠</td>
-                    <td><span id="refAngle_ma">@data?.RefAngle_ma.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Подходящий груз-разгрузки </td>
-                    <td>α_mm</td>
-                    <td><span id="result_mm">@data?.Result_mm.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Подходящий α угол наклона при грузе-разгрузки </td>
-                    <td>∠</td>
-                    <td><span id="refAngle_mm">@data?.RefAngle_mm.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Подходящий угол наклона без грузов </td>
-                    <td>∠</td>
-                    <td><span id="a_not">@data?.A_not.ToString("N3")</span></td>
-                </tr>
-            </tbody>
-        </table>
-        <h4>Рассчитанные рекомендуемые значения</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Обозначение</th>
-                    <th>Значение</th>
-                </tr>
-                <tr>
-                    <td>Отклоления в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды </td>
-                    <td>xOy</td>
-                    <td><span id="devPlane_xOy">@data?.DevPlane_xOy.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Отклоления в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды</td>
-                    <td>xOz</td>
-                    <td><span id="devPlane_xOz">@data?.DevPlane_xOz.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Средний угол равновесия - α</td>
-                    <td>∠ср</td>
-                    <td><span id="averageValue">@data?.AverageValue.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Поправка координат при определение КМЦ</td>
-                    <td>△</td>
-                    <td><span id="kcmDev">@data?.kcmDev.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Тарировки углов</td>
-                    <td></td>
-                    <td><span id="amendment">@data?.Amendment.ToString("N3")</span></td>
-                </tr>
-            </thead>
-        </table>
-        <h4>Итоговые значения КМЦ</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>Z</th>
-                    <th>M</th>
-                </tr>
-                <tr>
-                    <td>Координаты Центра Масс </td>
-                    <td><span id="res_X">@data?.RES_X.ToString("N3")</span></td>
-                    <td><span id="res_Y">@data?.RES_Y.ToString("N3")</span></td>
-                    <td><span id="res_Z">@data?.RES_Z.ToString("N3")</span></td>
-                    <td><span id="res_M">@data?.RES_M.ToString("N3")</span></td>
-                </tr>
-            </thead>
-        </table>
-        <h4>Расчет границ погрешностей опредедения КМЦ и массы изделия</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Обозначение</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>Z</th>
-                    <th>M</th>
-                <tr>
-                    <td>Среднее значение изделия</td>
-                    <td>Иср</td>
-                    <td><span id="averProdVal_X">@data?.AverProdVal_X.ToString("N3")</span></td>
-                    <td><span id="averProdVal_Y">@data?.AverProdVal_Y.ToString("N3")</span></td>
-                    <td><span id="averProdVal_Z">@data?.AverProdVal_Z.ToString("N3")</span></td>
-                    <td><span id="averProdValMas">@data?.AverProdValMas.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Граница суммарной не исключённой систематической погрешности c "+"</td>
-                    <td>+Δθ</td>
-                    <td><span id="erLimX1">@data?.ErLimX1.ToString("N3")</span></td>
-                    <td><span id="erLimY1">@data?.ErLimY1.ToString("N3")</span></td>
-                    <td><span id="erLimZ1">@data?.ErLimZ1.ToString("N3")</span></td>
-                    <td><span id="erLimM1">@data?.ErLimM1.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Граница суммарной не исключённой систематической погрешности c "-"</td>
-                    <td>-Δθ</td>
-                    <td><span id="erLimX2">@data?.ErLimX2.ToString("N3")</span></td>
-                    <td><span id="erLimY2">@data?.ErLimY2.ToString("N3")</span></td>
-                    <td><span id="erLimZ2">@data?.ErLimZ2.ToString("N3")</span></td>
-                    <td><span id="erLimM2">@data?.ErLimM2.ToString("N3")</span></td>
-                </tr>
-
-                <tr>
-                    <td>НСП(max)</td>
-                    <td>Δθi</td>
-                    <td><span id="nspMaxX">@data?.NSPmaxX.ToString("N3")</span></td>
-                    <td><span id="nspMaxY">@data?.NSPmaxY.ToString("N3")</span></td>
-                    <td><span id="nspMaxZ">@data?.NSPmaxZ.ToString("N3")</span></td>
-                    <td><span id="nspMaxM">@data?.NSPmaxM.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>СКО НСП</td>
-                    <td>Sθ</td>
-                    <td><span id="erLimSx">@data?.ErLimSx.ToString("N3")</span></td>
-                    <td><span id="erLimSy">@data?.ErLimSy.ToString("N3")</span></td>
-                    <td><span id="erLimSz">@data?.ErLimSz.ToString("N3")</span></td>
-                    <td><span id="erLimSm">@data?.ErLimSm.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Весовой Коэффициент</td>
-                    <td>k</td>
-                    <td><span id="kvesX">@data?.KvesX.ToString("N3")</span></td>
-                    <td><span id="kvesY">@data?.KvesY.ToString("N3")</span></td>
-                    <td><span id="kvesZ">@data?.KvesZ.ToString("N3")</span></td>
-                    <td><span id="kvesM">@data?.KvesM.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Cуммарное среднее квадратическое отклонение </td>
-                    <td>Σcko</td>
-                    <td><span id="sdev_reNsX">@data?.Sdev_reNsX.ToString("N3")</span></td>
-                    <td><span id="sdev_reNsY">@data?.Sdev_reNsY.ToString("N3")</span></td>
-                    <td><span id="sdev_reNsZ">@data?.Sdev_reNsZ.ToString("N3")</span></td>
-                    <td><span id="sdev_reNsM">@data?.Sdev_reNsM.ToString("N3")</span></td>
-                </tr>
-                <tr>
-                    <td>Границы погрешности</td>
-                    <td>θ</td>
-                    <td><span id="granX">@data?.granX.ToString("N3")</span></td>
-                    <td><span id="granY">@data?.granY.ToString("N3")</span></td>
-                    <td><span id="granZ">@data?.granZ.ToString("N3")</span></td>
-                    <td><span id="granM">@data?.granM.ToString("N3")</span></td>
-                </tr>
-            </thead>
-        </table>
-    </form>
+    <h4>Рассчитанные рекомендуемые значения</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Обозначение</th>
+                <th>Значение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Подходящий подвижный груз </td>
+                <td>α_ma</td>
+                <td><span id="result_ma">@data?.Result_ma.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Подходящий α угол наклона при подвижном грузе </td>
+                <td>∠</td>
+                <td><span id="refAngle_ma">@data?.RefAngle_ma.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Подходящий груз-разгрузки </td>
+                <td>α_mm</td>
+                <td><span id="result_mm">@data?.Result_mm.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Подходящий α угол наклона при грузе-разгрузки </td>
+                <td>∠</td>
+                <td><span id="refAngle_mm">@data?.RefAngle_mm.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Подходящий угол наклона без грузов </td>
+                <td>∠</td>
+                <td><span id="a_not">@data?.A_not.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Рассчитанные рекомендуемые значения</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Обозначение</th>
+                <th>Значение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Отклонения в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды </td>
+                <td>xOy</td>
+                <td><span id="devPlane_xOy">@data?.DevPlane_xOy.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Отклонения в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды</td>
+                <td>xOz</td>
+                <td><span id="devPlane_xOz">@data?.DevPlane_xOz.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Средний угол равновесия - α</td>
+                <td>∠ср</td>
+                <td><span id="averageValue">@data?.AverageValue.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Поправка координат при определении КМЦ</td>
+                <td>△</td>
+                <td><span id="kcmDev">@data?.kcmDev.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Тарировки углов</td>
+                <td></td>
+                <td><span id="amendment">@data?.Amendment.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Итоговые значения КМЦ</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Z</th>
+                <th>M</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Координаты Центра Масс </td>
+                <td><span id="res_X">@data?.RES_X.ToString("N3")</span></td>
+                <td><span id="res_Y">@data?.RES_Y.ToString("N3")</span></td>
+                <td><span id="res_Z">@data?.RES_Z.ToString("N3")</span></td>
+                <td><span id="res_M">@data?.RES_M.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Расчет границ погрешностей опредедения КМЦ и массы изделия</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Обозначение</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Z</th>
+                <th>M</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Среднее значение изделия</td>
+                <td>Иср</td>
+                <td><span id="averProdVal_X">@data?.AverProdVal_X.ToString("N3")</span></td>
+                <td><span id="averProdVal_Y">@data?.AverProdVal_Y.ToString("N3")</span></td>
+                <td><span id="averProdVal_Z">@data?.AverProdVal_Z.ToString("N3")</span></td>
+                <td><span id="averProdValMas">@data?.AverProdValMas.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Граница суммарной не исключённой систематической погрешности c "+"</td>
+                <td>+Δθ</td>
+                <td><span id="erLimX1">@data?.ErLimX1.ToString("N3")</span></td>
+                <td><span id="erLimY1">@data?.ErLimY1.ToString("N3")</span></td>
+                <td><span id="erLimZ1">@data?.ErLimZ1.ToString("N3")</span></td>
+                <td><span id="erLimM1">@data?.ErLimM1.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Граница суммарной не исключённой систематической погрешности c "-"</td>
+                <td>-Δθ</td>
+                <td><span id="erLimX2">@data?.ErLimX2.ToString("N3")</span></td>
+                <td><span id="erLimY2">@data?.ErLimY2.ToString("N3")</span></td>
+                <td><span id="erLimZ2">@data?.ErLimZ2.ToString("N3")</span></td>
+                <td><span id="erLimM2">@data?.ErLimM2.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>НСП(max)</td>
+                <td>Δθi</td>
+                <td><span id="nspMaxX">@data?.NSPmaxX.ToString("N3")</span></td>
+                <td><span id="nspMaxY">@data?.NSPmaxY.ToString("N3")</span></td>
+                <td><span id="nspMaxZ">@data?.NSPmaxZ.ToString("N3")</span></td>
+                <td><span id="nspMaxM">@data?.NSPmaxM.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>СКО НСП</td>
+                <td>Sθ</td>
+                <td><span id="erLimSx">@data?.ErLimSx.ToString("N3")</span></td>
+                <td><span id="erLimSy">@data?.ErLimSy.ToString("N3")</span></td>
+                <td><span id="erLimSz">@data?.ErLimSz.ToString("N3")</span></td>
+                <td><span id="erLimSm">@data?.ErLimSm.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Весовой Коэффициент</td>
+                <td>k</td>
+                <td><span id="kvesX">@data?.KvesX.ToString("N3")</span></td>
+                <td><span id="kvesY">@data?.KvesY.ToString("N3")</span></td>
+                <td><span id="kvesZ">@data?.KvesZ.ToString("N3")</span></td>
+                <td><span id="kvesM">@data?.KvesM.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Cуммарное среднее квадратическое отклонение </td>
+                <td>Σcko</td>
+                <td><span id="sdev_reNsX">@data?.Sdev_reNsX.ToString("N3")</span></td>
+                <td><span id="sdev_reNsY">@data?.Sdev_reNsY.ToString("N3")</span></td>
+                <td><span id="sdev_reNsZ">@data?.Sdev_reNsZ.ToString("N3")</span></td>
+                <td><span id="sdev_reNsM">@data?.Sdev_reNsM.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Границы погрешности</td>
+                <td>θ</td>
+                <td><span id="granX">@data?.granX.ToString("N3")</span></td>
+                <td><span id="granY">@data?.granY.ToString("N3")</span></td>
+                <td><span id="granZ">@data?.granZ.ToString("N3")</span></td>
+                <td><span id="granM">@data?.granM.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <div class="form-check-inline">
     <input type="button" class="btn btn-outline-danger" value="Остановить" id="stopUpdating" />

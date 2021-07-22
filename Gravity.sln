@@ -40,22 +40,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BEC5BB6E-38CE-42C3-B0B2-963DB9202937}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.1.113:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = GravityUI\\GravityUI.csproj
-		SccProjectName1 = GravityUI
-		SccLocalPath1 = GravityUI
-		SccProjectUniqueName2 = GravityCalc\\GravityCalc.csproj
-		SccProjectName2 = GravityCalc
-		SccLocalPath2 = GravityCalc
-		SccProjectUniqueName3 = GravityData\\GravityData.csproj
-		SccProjectName3 = GravityData
-		SccLocalPath3 = GravityData
-		SccProjectUniqueName4 = GravityWebExt\\GravityWebExt.csproj
-		SccProjectName4 = GravityWebExt
-		SccLocalPath4 = GravityWebExt
-	EndGlobalSection
 EndGlobal
