@@ -23,31 +23,31 @@ namespace GravityWebExt.Controllers
         {
             return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                UserAccount user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    user = new User { Name = model.Name, Password = model.Password };
+                    user = new UserAccount { Name = model.Name, Password = model.Password };
                     UserGroup userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "user");
                     if (userRole != null)
                         user.Role = userRole;
 
-                    _context.Users.Add(user);
+                    await _context.Users.AddAsync(user);
                     await _context.SaveChangesAsync();
 
                     await Authenticate(user); // аутентификация
 
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Такой пользователь уже существует!");
             }
+            else
+                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             return View(model);
         }
         [HttpGet]
@@ -55,13 +55,12 @@ namespace GravityWebExt.Controllers
         {
             return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users
+                UserAccount user = await _context.Users
                     .Include(u => u.Role)
                     .FirstOrDefaultAsync(u => u.Name == model.Name && u.Password == model.Password);
                 if (user != null)
@@ -69,11 +68,11 @@ namespace GravityWebExt.Controllers
                     await Authenticate(user); // аутентификация
                     return RedirectToAction(GetPrevPage(), "Home");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Неверные логин и(или) пароль");
             }
             return View(model);
         }
-        private async Task Authenticate(User user)
+        private async Task Authenticate(UserAccount user)
         {
             // создаем один claim
             var claims = new List<Claim>
@@ -101,9 +100,31 @@ namespace GravityWebExt.Controllers
             return referer.Length == 0 ? "Index" : referer[(referer.IndexOf(mask) + mask.Length)..];
         }
         [HttpGet]
-        public IActionResult Account()
+        public IActionResult Edit()
         {
             return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                UserAccount user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                if (user != null)
+                {
+                    // изменяем поля пользователя в бд
+                    user.Password = model.Password;
+
+                    await _context.SaveChangesAsync();
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    return RedirectToAction("Login", "Account");
+                }
+                ModelState.AddModelError("", "Пользователь не найден");
+            }
+            else
+                ModelState.AddModelError("", "Пароли не совпадают!");
+            return View(model);
         }
 
     }

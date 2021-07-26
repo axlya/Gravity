@@ -18,7 +18,7 @@ namespace GravityWebExt.Models
             // добавляем роли
             UserGroup adminRole = new UserGroup { Name = adminRoleName };
             UserGroup userRole = new UserGroup { Name = userRoleName };
-            User adminUser = new User { Name = adminName, Password = adminPassword, RoleId = 1 };
+            UserAccount adminUser = new UserAccount { Name = adminName, Password = adminPassword, RoleId = 1 };
 
             // Роли
             if (!context.Roles.Any())

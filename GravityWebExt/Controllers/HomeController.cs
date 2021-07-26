@@ -62,7 +62,7 @@ namespace GravityWebExt.Controllers
         {
             return View(GetCalculatorData());
         }
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "admin, user")]
         public IActionResult NSP()
         {
             return View(_db.NSP.ToList());

@@ -9,7 +9,7 @@ namespace GravityWebExt.Models
 {
     public class AuthContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserAccount> Users { get; set; }
         public DbSet<UserGroup> Roles { get; set; }
         public AuthContext(DbContextOptions<AuthContext> options)
             : base(options)

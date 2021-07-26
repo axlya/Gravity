@@ -8,7 +8,7 @@ namespace GravityWebExt.Models
     /// <summary>
     /// Пользователь
     /// </summary>
-    public class User
+    public class UserAccount
     {
         public int Id { get; set; }
         public string Name { get; set; }

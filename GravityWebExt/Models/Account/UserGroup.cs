@@ -12,10 +12,10 @@ namespace GravityWebExt.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<User> Users { get; set; }
+        public List<UserAccount> Users { get; set; }
         public UserGroup()
         {
-            Users = new List<User>();
+            Users = new List<UserAccount>();
         }
     }
 }
