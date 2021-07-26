@@ -37,14 +37,7 @@ namespace GravityWebExt
                 sqlOptions.EnableRetryOnFailure();
             })
             );
-            services.AddDbContext<AuthContext>(options => options.UseSqlServer(authConnection));
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => //CookieAuthenticationOptions
-                        {
-                            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                            options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                        });
             //провайдеры
             services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
             services.AddSingleton<WebNSPDataProvider>(); //провайдер данных Web (NSPData)

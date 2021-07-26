@@ -28,10 +28,6 @@ namespace GravityWebExt
                 {
                     var dataContext = services.GetRequiredService<DataContext>();
                     InitDBData.Initialize(dataContext); // первым инициализируется этот context
-                    var authContext = services.GetRequiredService<AuthContext>();
-                    authContext.Database.Migrate();
-                    InitAuthData.Initialize(authContext);
-
                 }
                 catch (Exception ex)
                 {

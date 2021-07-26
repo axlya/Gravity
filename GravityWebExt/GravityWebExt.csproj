@@ -32,4 +32,8 @@
     <ProjectReference Include="..\GravityData\GravityData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Account\" />
+  </ItemGroup>
+
 </Project>
