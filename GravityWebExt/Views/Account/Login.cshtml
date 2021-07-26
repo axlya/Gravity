@@ -1,24 +1,32 @@
 ﻿@model GravityWebExt.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Авторизация пользователя";
+}
 
-<h2>Вход в приложение</h2>
-<form method="post" asp-controller="Account" asp-action="Login"
-      asp-route-returnUrl="@Model.ReturnUrl">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Name"></label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="RememberMe"></label><br />
-        <input asp-for="RememberMe" />
-    </div>
-    <div>
-        <input type="submit" value="Войти" />
-    </div>
-</form>
+<h4>Авторизация</h4>
+
+<div class="container">
+    <a asp-action="Register" asp-controller="Account">Регистрация</a><br/>
+    <form asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Model.ReturnUrl" asp-anti-forgery="true" class="was-validated">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <div class="form-group">
+                <label asp-for="Name">Введите имя пользователя:</label>
+                <input class="form-control" type="text" placeholder="Имя пользователя" asp-for="Name" required />
+                <span asp-validation-for="Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Введите пароль:</label>
+                <input class="form-control" type="password" placeholder="Пароль" asp-for="Password" required />
+                <span asp-validation-for="Password" />
+            </div>
+            <div>
+                <input asp-for="RememberMe" />
+                <label asp-for="RememberMe"> запомнить</label>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Войти" />
+            </div>
+        </div>
+    </form>
+</div>
