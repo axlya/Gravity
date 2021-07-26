@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,11 +33,18 @@ namespace GravityWebExt
             string authConnection = Configuration.GetConnectionString("AuthConnection");
             string dataConnection = Configuration.GetConnectionString("DefaultConnection");
 
+            //основной контекст
             services.AddDbContext<DataContext>(options => options.UseSqlServer(dataConnection, sqlServerOptionsAction: sqlOptions =>
             {
                 sqlOptions.EnableRetryOnFailure();
             })
             );
+            //контекст авторизации
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(authConnection));
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>();
 
             //провайдеры
             services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
