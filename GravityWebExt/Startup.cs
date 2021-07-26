@@ -46,6 +46,13 @@ namespace GravityWebExt
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
 
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options => //CookieAuthenticationOptions
+            //{
+            //    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Register");
+            //    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Register");
+            //});
+
             //провайдеры
             services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
             services.AddSingleton<WebNSPDataProvider>(); //провайдер данных Web (NSPData)

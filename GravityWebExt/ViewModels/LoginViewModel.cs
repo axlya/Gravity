@@ -2,7 +2,7 @@
 
 namespace GravityWebExt.ViewModels
 {
-    public class RegisterViewModel
+    public class LoginViewModel
     {
         [Required]
         [Display(Name = "Имя пользователя")]
@@ -13,10 +13,9 @@ namespace GravityWebExt.ViewModels
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Required]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Подтвердить пароль")]
-        public string PasswordConfirm { get; set; }
+        [Display(Name = "Запомнить?")]
+        public bool RememberMe { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

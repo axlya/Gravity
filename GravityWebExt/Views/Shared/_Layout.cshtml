@@ -18,21 +18,22 @@
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item @(curPage == "Index"? "active" : "")">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Расчётные данные</a>
-                    </li>
-                    <li class="nav-item @(curPage == "Measurement"? "active" : "")">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Measurement">Данные датчиков</a>
-                    </li>
-                    <li class="nav-item @(curPage == "NSP"? "active" : "")">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="NSP">НСП</a>
-                    </li>
+                        <li class="nav-item @(curPage == "Index"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Расчётные данные</a>
+                        </li>
+                        <li class="nav-item @(curPage == "Measurement"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Measurement">Данные датчиков</a>
+                        </li>
+                        <li class="nav-item @(curPage == "NSP"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="NSP">НСП</a>
+                        </li>
 
-                    <li class="nav-item @(curPage == "Options"? "active" : "")">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Настройки</a>
-                    </li>
+                        <li class="nav-item @(curPage == "Options"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Настройки</a>
+                        </li>
                     </ul>
-                    <ul class="navbar-nav navbar-toggler-right">
+                    <partial name="_LoginPartial" />
+                    @*<ul class="navbar-nav navbar-toggler-right">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item dropdown">
@@ -45,7 +46,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                
+
                             </li>
                         }
                         else
@@ -54,7 +55,7 @@
                                 <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
                             </li>
                         }
-                    </ul>
+                    </ul>*@
                 </div>
             </div>
 
