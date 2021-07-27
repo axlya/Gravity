@@ -43,7 +43,16 @@ namespace GravityWebExt
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(authConnection));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(
+                opts =>
+            {
+                opts.Password.RequiredLength = 3;   // минимальная длина пароля
+                opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
+                opts.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре
+                opts.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
+                opts.Password.RequireDigit = false; // требуются ли цифры
+            }
+            )
                 .AddEntityFrameworkStores<ApplicationContext>();
 
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

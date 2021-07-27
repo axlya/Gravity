@@ -80,9 +80,6 @@ namespace GravityWebExt.Controllers
             }
             return View(model);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             // удаляем аутентификационные куки
