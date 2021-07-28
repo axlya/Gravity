@@ -41,7 +41,28 @@ namespace GravityWebExt.Controllers
             }
             return View(model);
         }
-
+        /// <summary>
+        /// Редактирование текущего пользователя
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            User user = await _userManager.FindByNameAsync(User.Identity.Name??"");
+            if (user == null)
+            {
+                return NotFound();
+            }
+            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = true };
+            return View(model);
+        }
+        /// <summary>
+        /// Редактирование выбранного пользователя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [RequireRequestValue("id")]
         public async Task<IActionResult> Edit(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
@@ -49,7 +70,7 @@ namespace GravityWebExt.Controllers
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName};
+            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = false };
             return View(model);
         }
 
@@ -61,25 +82,36 @@ namespace GravityWebExt.Controllers
                 User user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
-                    user.UserName = model.Name;
-
-                    var result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    IdentityResult result;
+                    bool ok = true;
+                    if (model.ChangePassword)
                     {
-                        return RedirectToAction("Index");
+                        result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        if (!result.Succeeded)
+                        {
+                            ok = false;
+                            foreach (var error in result.Errors)
+                                ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                    user.UserName = model.Name;
+                    result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded && ok)
+                    {
+                        if (model.isLogIn)
+                            return RedirectToAction("Logout", "Account");
+                        else
+                            return RedirectToAction("Index");
                     }
                     else
                     {
                         foreach (var error in result.Errors)
-                        {
                             ModelState.AddModelError(string.Empty, error.Description);
-                        }
                     }
                 }
             }
             return View(model);
         }
-
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
@@ -90,5 +122,6 @@ namespace GravityWebExt.Controllers
             }
             return RedirectToAction("Index");
         }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model GravityWebExt.ViewModels.CreateUserViewModel
 @{
-    ViewBag.Title = "Добавление пользователя";
+    ViewData["Title"] =  "Добавление пользователя";
 }
 <form asp-action="Create" asp-controller="Users">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -13,6 +13,6 @@
         <input type="password" asp-for="Password" class="form-control" />
     </div>
     <div class="form-group">
-        <input type="submit" value="Добавить" class="btn btn-outline-secondary" />
+        <input type="submit" value="Добавить" class="btn btn-primary" />
     </div>
 </form>
