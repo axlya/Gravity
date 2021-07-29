@@ -88,7 +88,7 @@ namespace GravityWebExt.Controllers
         [HttpGet]
         public IActionResult Measurement()
         {
-            return View(GetControllerData());
+            return View(GetControllerData()); 
         }
 
         [HttpGet, Authorize(Roles = "admin")]

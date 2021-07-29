@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using GravityWebExt.Models;
 using GravityWebExt.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
 
 namespace GravityWebExt.Controllers
 {
@@ -13,33 +16,13 @@ namespace GravityWebExt.Controllers
 
         public UsersController(UserManager<User> userManager)
         {
+            // получем список ролей пользователя
             _userManager = userManager;
         }
-
-        public IActionResult Index() => View(_userManager.Users.ToList());
-
-        public IActionResult Create() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model)
+        [Authorize(Roles = "admin")]
+        public IActionResult Index()
         {
-            if (ModelState.IsValid)
-            {
-                User user = new User { UserName = model.Name };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            return View(model);
+            return View(_userManager.Users.ToList());
         }
         /// <summary>
         /// Редактирование текущего пользователя
@@ -53,7 +36,7 @@ namespace GravityWebExt.Controllers
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = true };
+            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = true, ChangePassword = true };
             return View(model);
         }
         /// <summary>
@@ -63,6 +46,7 @@ namespace GravityWebExt.Controllers
         /// <returns></returns>
         [HttpGet]
         [RequireRequestValue("id")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
@@ -70,7 +54,7 @@ namespace GravityWebExt.Controllers
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = false };
+            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Name = user.UserName, isLogIn = false, ChangePassword = true };
             return View(model);
         }
 
@@ -82,43 +66,79 @@ namespace GravityWebExt.Controllers
                 User user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
-                    IdentityResult result;
-                    bool ok = true;
+                    bool isPassChange = false;
+                    bool isLoginChange = false;
+                    if (user.UserName != model.Name)
+                    {
+                        if (user.UserName == "admin")
+                        {
+                            ModelState.AddModelError(string.Empty, "Не может быть изменено имя администратора");
+                        }
+                        else
+                        {
+                            user.UserName = model.Name;
+                            IdentityResult result = await _userManager.UpdateAsync(user);
+                            if (result.Succeeded)
+                            {
+                                isLoginChange = true;
+                            }
+                            else
+                            {
+                                foreach (var error in result.Errors)
+                                    ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                        }
+                    }
                     if (model.ChangePassword)
                     {
-                        result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                        if (!result.Succeeded)
+                        if (model.OldPassword == null)
+                            model.OldPassword = "";
+                        if (model.NewPassword == null)
+                            model.NewPassword = "";
+                        IdentityResult result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        if (result.Succeeded)
                         {
-                            ok = false;
+                            isPassChange = true;
+                        }
+                        else
+                        {
                             foreach (var error in result.Errors)
                                 ModelState.AddModelError(string.Empty, error.Description);
                         }
                     }
-                    user.UserName = model.Name;
-                    result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded && ok)
+
+                    if (ModelState.ErrorCount == 0)
                     {
                         if (model.isLogIn)
-                            return RedirectToAction("Logout", "Account");
+                        {
+                            if (isPassChange || isLoginChange)
+                                return RedirectToAction("Logout", "Account");
+                            else
+                                return RedirectToAction("Index", "Home");
+                        }
                         else
                             return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                            ModelState.AddModelError(string.Empty, error.Description);
-                    }
+
                 }
             }
             return View(model);
         }
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                if (user.UserName == "admin")
+                {
+
+                }
+                else
+                {
+                    IdentityResult result = await _userManager.DeleteAsync(user);
+                }
             }
             return RedirectToAction("Index");
         }

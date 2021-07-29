@@ -3,7 +3,7 @@
     ViewData["Title"] = "Редактирование данных пользователя";
 }
 
-<h4>Редактирование данных пользователя @Model.Name</h4>
+<h4>Редактирование данных пользователя</h4>
 
 <div class="container">
     <form asp-action="Edit" asp-controller="Users" asp-anti-forgery="true">
@@ -19,23 +19,23 @@
         </div>
         <div class="form-group form-check">
             <label class="form-check-label" asp-for="ChangePassword">
-                <input class="form-check-input" type="checkbox" asp-for="ChangePassword">Сменить пароль?
+                <input class="form-check-input" type="checkbox" asp-for="ChangePassword" id="checkPass" onchange="changevis('checkPass')">Сменить пароль
             </label>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="passwords">
             <div class="form-group">
                 <label asp-for="OldPassword"></label><br />
-                <input class="form-control" type="password" asp-for="OldPassword" />
+                <input class="form-control" type="password" asp-for="OldPassword"/>
                 <span asp-validation-for="OldPassword"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NewPassword"></label><br />
-                <input class="form-control" type="password" asp-for="NewPassword" />
+                <input class="form-control" type="password" asp-for="NewPassword"/>
                 <span asp-validation-for="NewPassword"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ConfirmNewPassword"></label><br />
-                <input class="form-control" type="password" asp-for="ConfirmNewPassword" />
+                <input class="form-control" type="password" asp-for="ConfirmNewPassword"/>
                 <span asp-validation-for="ConfirmNewPassword"></span>
             </div>
         </div>
@@ -44,6 +44,24 @@
         </div>
     </form>
 </div>
+
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        changevis("checkPass");
+    });
+
+    function changevis(elem) {
+        var value = $("#" + elem).prop("checked");
+        if (value == true) {
+            document.getElementById("passwords").style.display = '';
+        }
+        else {
+            document.getElementById("passwords").style.display = "none";
+        }
+    }
+
+</script>
 
 @section scripts{
     <partial name="_ValidationScriptsPartial" />

@@ -31,6 +31,8 @@ namespace GravityWebExt.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //установка роли
+                    await _userManager.AddToRoleAsync(user, "user");
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
@@ -86,5 +88,10 @@ namespace GravityWebExt.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+  
     }
 }

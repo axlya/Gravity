@@ -1,7 +1,9 @@
 using GravityCalc;
 using GravityData;
 using GravityWebExt.Models;
+using GravityWebExt.Models.Account;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,7 @@ namespace GravityWebExt
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             var host = CreateHostBuilder(args).Build();
@@ -28,6 +30,9 @@ namespace GravityWebExt
                 {
                     var dataContext = services.GetRequiredService<DataContext>();
                     InitDBData.Initialize(dataContext); // первым инициализируется этот context
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    await RolesInit.InitializeAsync(userManager, rolesManager);
                 }
                 catch (Exception ex)
                 {
@@ -36,7 +41,6 @@ namespace GravityWebExt
                 }
             }
             host.Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
