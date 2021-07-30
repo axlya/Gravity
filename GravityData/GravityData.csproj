@@ -15,4 +15,16 @@
     <ProjectReference Include="..\GravityCalc\GravityCalc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Opc.Ua.Client">
+      <HintPath>..\external\Opc.Ua.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Core">
+      <HintPath>..\external\Opc.Ua.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="UAClientHelperAPI">
+      <HintPath>..\external\UAClientHelperAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
