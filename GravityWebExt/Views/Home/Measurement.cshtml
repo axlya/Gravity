@@ -8,6 +8,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
 <div class="container">
     <h4>Данные с контроллера</h4>
     <table class="table table-striped">
@@ -63,8 +64,12 @@
     </table>
 </div>
 
-<div id="chart1" style="width:600px; height:250px;"></div>
 
+<div id="resizable1" class="ui-widget-content">
+    <div id="chart1" style="height:100%; width:90%;"></div>
+</div>
+
+<br />
 <div class="form-check-inline">
     <input type="button" class="btn btn-outline-danger" value="Остановить" id="stopUpdating" />
     <input type="button" class="btn btn-outline-success" value="Возобновить" id="startUpdating" />
@@ -73,10 +78,10 @@
 
 
 @*<p class="text">Click on a bar in the plot below to update the text box.</p>
-<p class="text">
-    You Clicked:
-    <span id="info1">Nothing yet.</span>
-</p>*@
+    <p class="text">
+        You Clicked:
+        <span id="info1">Nothing yet.</span>
+    </p>*@
 
 
 <script src="~/js/jquery-3.6.0.min.js"></script>
@@ -90,11 +95,22 @@
 
     //графики
     $(document).ready(function () {
-        var s1 = [1,2,1];
-        var s2 = [2,3,2];
-        var s3 = [3,4,3];
+
+        //$.jqplot._noToImageButton = true;
+
+        ////динамическое изменение размера
+        //$("resizable1").resizable({ delay: 20 });
+        //$("resizable1").bind("resize", function (event, ui) {
+        //    plot1.replot({ resetAxes: true });
+        //});
+
+        var s1 = [1,2,1,5];
+        var s2 = [2,4,1,2];
+        var s3 = [7,4,3,9];
         var labels = ["Данные 1", "Данные 2", "Данные 3"];
-        plot3 = $.jqplot('chart1', [s1, s2, s3], {
+
+
+        var plot1 = $.jqplot('chart1', [s1, s2, s3], {
             title: 'Тестовый график',
             captureRightClick: true,
             seriesDefaults: {
@@ -128,6 +144,9 @@
                 labels: labels,
             }
         });
+
+
+
         // Bind a listener to the "jqplotDataClick" event.  Here, simply change
         // the text of the info3 element to show what series and ponit were
         // clicked along with the data for that point.
@@ -136,7 +155,9 @@
         //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
         //    }
         //);
+
     });
+
 
 
     var timeInterval;
