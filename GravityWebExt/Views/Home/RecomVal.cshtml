@@ -1,0 +1,171 @@
+﻿@model IEnumerable<GravityWebExt.Models.RecomValWebData>
+@{
+    ViewData["Title"] = "Измерение рекомендованных значений";
+    RecomValWebData recomValData = Model?.ElementAt(0);
+}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="container">
+    <form method="post">
+        <input type="hidden" value="@recomValData?.Id" name="Id" />
+        <h4>Исходные данные изделия</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                    <th>±Δ</th>
+                    <th>Размерность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Номинальное значение изделия по координате Х </td>
+                    <td>X</td>
+                    <td><input type="text" class="form-control input" name="ProdX" value="@recomValData?.ProdX.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ProdDevX" value="@recomValData?.ProdDevX.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Номинальное значение изделия по координате Y</td>
+                    <td>Y</td>
+                    <td><input type="text" class="form-control input" name="ProdY" value="@recomValData?.ProdY.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ProdDevY" value="@recomValData?.ProdDevY.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Номинальное значение изделия по координате Z </td>
+                    <td>Z</td>
+                    <td><input type="text" class="form-control input" name="ProdZ" value="@recomValData?.ProdZ.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ProdDevZ" value="@recomValData?.ProdDevZ.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Номинальное значение массы иделия</td>
+                    <td>m</td>
+                    <td><input type="text" class="form-control input" name="ProdMas" value="@recomValData?.ProdMas.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ProdDevMas" value="@recomValData?.ProdDevMas.ToString()" /></td>
+                    <td>кг</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Настройки</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                    <th>Размерность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Угол наклона при нахождение M изделия </td>
+                    <td>ξ<sub>m</sub></td>
+                    <td><input type="text" class="form-control input" name="EpsilonMa" value="@recomValData?.EpsilonMa.ToString()" /></td>
+                    <td>°</td>
+                </tr>
+                <tr>
+                    <td>Эталонные значения массы корректирующих грузов при нахождение М</td>
+                    <td>m<sub>э</sub></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa6" value="@recomValData?.ArrMasMa6.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa1" value="@recomValData?.ArrMasMa1.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa2" value="@recomValData?.ArrMasMa2.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa3" value="@recomValData?.ArrMasMa3.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa4" value="@recomValData?.ArrMasMa4.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMa5" value="@recomValData?.ArrMasMa5.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Отклонения эталонных значений массы корректирующих грузов при нахождение М</td>
+                    <td>Δm<sub>э</sub></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa6" value="@recomValData?.DevArrMasMa6.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa1" value="@recomValData?.DevArrMasMa1.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa2" value="@recomValData?.DevArrMasMa2.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa3" value="@recomValData?.DevArrMasMa3.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa4" value="@recomValData?.DevArrMasMa4.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMa5" value="@recomValData?.DevArrMasMa5.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Угол для наклона при нахождение КЦМ изделия </td>
+                    <td>ξ<sub>кцм</sub></td>
+                    <td><input type="text" class="form-control input" name="EpsilonMm" value="@recomValData?.EpsilonMm.ToString()" /></td>
+                    <td>°</td>
+                </tr>
+                <tr>
+                    <td>Эталонные значения массы корректирующих грузов при нахождение КЦМ</td>
+                    <td>m<sub>m</sub></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm6" value="@recomValData?.ArrMasMm6.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm1" value="@recomValData?.ArrMasMm1.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm2" value="@recomValData?.ArrMasMm2.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm3" value="@recomValData?.ArrMasMm3.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm4" value="@recomValData?.ArrMasMm4.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="ArrMasMm5" value="@recomValData?.ArrMasMm5.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+                <tr>
+                    <td>Отклонения эталонных значений массы корректирующих грузов при нахождение КЦМ</td>
+                    <td>Δm<sub>m</sub></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm6" value="@recomValData?.DevArrMasMm6.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm1" value="@recomValData?.DevArrMasMm1.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm2" value="@recomValData?.DevArrMasMm2.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm3" value="@recomValData?.DevArrMasMm3.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm4" value="@recomValData?.DevArrMasMm4.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm5" value="@recomValData?.DevArrMasMm5.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <input type="submit" class="form-control input" value="Сохранить" />
+        </div>
+        <br />
+        <h4>Рассчитанные Рекомендуемые значения</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                    <th>Размерность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Подходящая масса при нахождение М</td>
+                    <td>M<sub>э</sub></td>
+                    <td><span id="Ma">@recomValData?.Ma.ToString("N3")</span></td>
+                    <td>кг</td>
+                </tr>
+                <tr>
+                    <td>Подходящий угол равновесия стенда при измерение массы изделия</td>
+                    <td>∠<sub>m</sub></td>
+                    <td><span id="AngleMas">@recomValData?.AngleMas.ToString("N3")</span></td>
+                    <td>°</td>
+                </tr>
+                <tr>
+                    <td>Подходящая масса при нахождение КЦМ</td>
+                    <td>M<sub>m</sub></td>
+                    <td><span id="AngleKcm">@recomValData?.AngleKcm.ToString("N3")</span></td>
+                    <td>кг</td>
+                </tr>
+                <tr>
+                    <td>Подходящий угол равновесия стенда при нахождение КЦМ </td>
+                    <td>∠<sub>кмц</sub></td>
+                    <td><span id="Mm">@recomValData?.Mm.ToString("N3")</span></td>
+                    <td>°</td>
+                </tr>
+                
+                <tr>
+                    <td>Подходящий угол равновесия стенда без использования грузов </td>
+                    <td>∠</td>
+                    <td><span id="AngleNotMas">@recomValData?.AngleNotMas.ToString("N3")</span></td>
+                    <td>°</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

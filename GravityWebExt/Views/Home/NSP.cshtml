@@ -175,12 +175,130 @@
                 <td><input type="text" class="form-control input" name="_devEz2" value="@nspData?._devEz2.ToString()" /></td>
                 <td><input type="text" class="form-control input" name="_devEm2" value="@nspData?._devEm2.ToString()" /></td>
             </tr>
+            <tr>
+                <td>Δmm</td>
+                <td><input type="text" class="form-control input" name="_devMMx" value="@nspData?._devMMx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMy" value="@nspData?._devMMy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMz" value="@nspData?._devMMz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMm" value="@nspData?._devMMm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMx2" value="@nspData?._devMMx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMy2" value="@nspData?._devMMy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMz2" value="@nspData?._devMMz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMMm2" value="@nspData?._devMMm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>Δma</td>
+                <td><input type="text" class="form-control input" name="_devMAx" value="@nspData?._devMAx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAy" value="@nspData?._devMAy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAz" value="@nspData?._devMAz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAm" value="@nspData?._devMAm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAx2" value="@nspData?._devMAx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAy2" value="@nspData?._devMAy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAz2" value="@nspData?._devMAz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMAm2" value="@nspData?._devMAm2.ToString()" /></td>
+            </tr>
+            <tr>
+                <td>ΔMassa</td>
+                <td><input type="text" class="form-control input" name="_devMASSx" value="@nspData?._devMASSx.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSy" value="@nspData?._devMASSy.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSz" value="@nspData?._devMASSz.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSm" value="@nspData?._devMASSm.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSx2" value="@nspData?._devMASSx2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSy2" value="@nspData?._devMASSy2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSz2" value="@nspData?._devMASSz2.ToString()" /></td>
+                <td><input type="text" class="form-control input" name="_devMASSm2" value="@nspData?._devMASSm2.ToString()" /></td>
+            </tr>
+        </table>
+        <div class="row">
+            <input type="reset" class="form-control reset" value="Сбросить" />
+        </div>
+        <br/>
+        <h4>Рассчитанные NSP</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
+                    <th>M</th>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Среднее значение изделия</td>
+                    <td>Иср</td>
+                    <td><span id="averProdVal_X">@nspData?.AverProdVal_X.ToString("N3")</span></td>
+                    <td><span id="averProdVal_Y">@nspData?.AverProdVal_Y.ToString("N3")</span></td>
+                    <td><span id="averProdVal_Z">@nspData?.AverProdVal_Z.ToString("N3")</span></td>
+                    <td><span id="averProdValMas">@nspData?.AverProdValMas.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Граница суммарной не исключённой систематической погрешности c "+"</td>
+                    <td>+Δθ</td>
+                    <td><span id="erLimX1">@nspData?.ErLimX1.ToString("N3")</span></td>
+                    <td><span id="erLimY1">@nspData?.ErLimY1.ToString("N3")</span></td>
+                    <td><span id="erLimZ1">@nspData?.ErLimZ1.ToString("N3")</span></td>
+                    <td><span id="erLimM1">@nspData?.ErLimM1.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Граница суммарной не исключённой систематической погрешности c "-"</td>
+                    <td>-Δθ</td>
+                    <td><span id="erLimX2">@nspData?.ErLimX2.ToString("N3")</span></td>
+                    <td><span id="erLimY2">@nspData?.ErLimY2.ToString("N3")</span></td>
+                    <td><span id="erLimZ2">@nspData?.ErLimZ2.ToString("N3")</span></td>
+                    <td><span id="erLimM2">@nspData?.ErLimM2.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>НСП(max)</td>
+                    <td>Δθi</td>
+                    <td><span id="nspMaxX">@nspData?.NSPmaxX.ToString("N3")</span></td>
+                    <td><span id="nspMaxY">@nspData?.NSPmaxY.ToString("N3")</span></td>
+                    <td><span id="nspMaxZ">@nspData?.NSPmaxZ.ToString("N3")</span></td>
+                    <td><span id="nspMaxM">@nspData?.NSPmaxM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>СКО НСП</td>
+                    <td>Sθ</td>
+                    <td><span id="erLimSx">@nspData?.ErLimSx.ToString("N3")</span></td>
+                    <td><span id="erLimSy">@nspData?.ErLimSy.ToString("N3")</span></td>
+                    <td><span id="erLimSz">@nspData?.ErLimSz.ToString("N3")</span></td>
+                    <td><span id="erLimSm">@nspData?.ErLimSm.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Весовой Коэффициент</td>
+                    <td>k</td>
+                    <td><span id="kvesX">@nspData?.KvesX.ToString("N3")</span></td>
+                    <td><span id="kvesY">@nspData?.KvesY.ToString("N3")</span></td>
+                    <td><span id="kvesZ">@nspData?.KvesZ.ToString("N3")</span></td>
+                    <td><span id="kvesM">@nspData?.KvesM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Суммарные СКОΣ </td>
+                    <td>SΣ</td>
+                    <td><span id="sdev_reNsX">@nspData?.Sdev_reNsX.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsY">@nspData?.Sdev_reNsY.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsZ">@nspData?.Sdev_reNsZ.ToString("N3")</span></td>
+                    <td><span id="sdev_reNsM">@nspData?.Sdev_reNsM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Суммарная границы погрешности</td>
+                    <td>Σθ△</td>
+                    <td><span id="granX">@nspData?.granX.ToString("N3")</span></td>
+                    <td><span id="granY">@nspData?.granY.ToString("N3")</span></td>
+                    <td><span id="granZ">@nspData?.granZ.ToString("N3")</span></td>
+                    <td><span id="granM">@nspData?.granM.ToString("N3")</span></td>
+                </tr>
+            </tbody>
+
         </table>
         <div class="row">
             <input type="submit" class="form-control input" value="Сохранить" />
         </div>
     </form>
 </div>
+
 
 
 

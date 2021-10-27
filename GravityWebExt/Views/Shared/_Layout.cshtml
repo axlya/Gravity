@@ -10,25 +10,59 @@
     <title>@ViewData["Title"] - Gravity</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        .LampOff {
+            height: 30px;
+            width: 30px;
+            background-color: #818181;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+           
+        }
+        .LampGreen {
+            height: 30px;
+            width: 30px;
+            background-color: #00FF00;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .LampRed {
+            height: 30px;
+            width: 30px;
+            background-color: #FF0000;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <header>1
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 fixed-top">
             <div class="container">
+                <span class="LampGreen"></span>
+                <span class="LampRed"></span>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item @(curPage == "ControlPanel"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ControlPanel">Контрольная панель</a>
+                        </li>
+                        <li class="nav-item @(curPage == "RecomVal"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="RecomVal">Измерение рекомендованных значений</a>
+                        </li>
+                        <li class="nav-item @(curPage == "MeasurementPanel"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MeasurementPanel">Измерительная панель</a>
+                        </li>
                         <li class="nav-item @(curPage == "Index"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Расчётные данные</a>
                         </li>
-                        <li class="nav-item @(curPage == "Measurement"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Measurement">Данные датчиков</a>
+                        <li class="nav-item @(curPage == "Options"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Настройки</a>
                         </li>
                         <li class="nav-item @(curPage == "NSP"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="NSP">НСП</a>
-                        </li>
-
-                        <li class="nav-item @(curPage == "Options"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Настройки</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

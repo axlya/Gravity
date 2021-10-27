@@ -14,35 +14,17 @@ namespace GravityWebExt.Models
     public class CalculatedDataWeb
     {
         public int Id { get; set; }
-        /// <summary>
-        /// Подходящий груз-разгрузки
-        /// </summary>
-        public double Result_mm { get; set; }
-
-        /// <summary>
-        /// Подходящий α угол наклона при грузе-разгрузки
-        /// </summary>
-        public double RefAngle_mm { get; set; }
-
-        /// <summary>
-        /// Подходящий подвижный груз
-        /// </summary>
-        public double Result_ma { get; set; }
-
-        /// <summary>
-        /// Подходящий α угол наклона при подвижном грузе
-        /// </summary>
-        public double RefAngle_ma { get; set; }
-
-        /// <summary>
-        /// Подходящий угол наклона без грузов
-        /// </summary>
-        public double A_not { get; set; }
+        public double RefK { get; set; }
 
         /// <summary>
         /// Отклоления в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды
         /// </summary>
         public double DevPlane_xOy { get; set; }
+
+        /// <summary>
+        /// Отклоления в плоскости xOy -> 3 значения будут => Градусы \ Минуты \ Секунды
+        /// </summary>
+        public double DevPlane_xOy_ { get; set; }
 
         /// <summary>
         /// Отклоления в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды
@@ -159,18 +141,99 @@ namespace GravityWebExt.Models
         public double granZ { get; set; }
         public double granM { get; set; }
 
+
+
+        //////////////////////////////////////////////// Итоговые значения для КП
+        /// <summary>
+        /// Разница
+        /// </summary>
+        public double _pX { get; set; }
+        /// <summary>
+        /// Разница
+        /// </summary>
+        public double _pY { get; set; }
+        /// <summary>
+        /// Разница
+        /// </summary>
+        public double _pZ { get; set; }
+        /// <summary>
+        /// Разница
+        /// </summary>
+        public double _pM { get; set; }
+        /// <summary>
+        /// Системные отклоениня после введения поправок
+        /// </summary>
+        public double SystemDevX { get; set; }
+        /// <summary>
+        /// Системные отклоениня после введения поправок
+        /// </summary>
+        public double SystemDevY { get; set; }
+        /// <summary>
+        /// Системные отклоениня после введения поправок
+        /// </summary>
+        public double SystemDevZ { get; set; }
+        /// <summary>
+        /// Системные отклоениня после введения поправок
+        /// </summary>
+        public double SystemDevM { get; set; }
+        /// <summary>
+        /// КЦМ изделия при использование метода замещения
+        /// </summary>
+        public double _kmcKPx { get; set; }
+        /// <summary>
+        /// КЦМ изделия при использование метода замещения
+        /// </summary>
+        public double _kmcKPy { get; set; }
+        /// <summary>
+        /// КЦМ изделия при использование метода замещения
+        /// </summary>
+        public double _kmcKPz { get; set; }
+        /// <summary>
+        /// КЦМ изделия при использование метода замещения
+        /// </summary>
+        public double _kmcKPm { get; set; }
+        /// <summary>
+        /// Системные погрешности изделия при использование КП
+        /// </summary>
+        public double SystemEerX { get; set; }
+        /// <summary>
+        /// Системные погрешности изделия при использование КП
+        /// </summary>
+        public double SystemEerY { get; set; }
+        /// <summary>
+        /// Системные погрешности изделия при использование КП
+        /// </summary>
+        public double SystemEerZ { get; set; }
+        /// <summary>
+        /// Системные погрешности изделия при использование КП
+        /// </summary>
+        public double SystemEerM { get; set; }
+        /// <summary>
+        /// Граница погрешности изделия при методе замещения
+        /// </summary>
+        public double GranKPx { get; set; }
+        /// <summary>
+        /// Граница погрешности изделия при методе замещения
+        /// </summary>
+        public double GranKPy { get; set; }
+        /// <summary>
+        /// Граница погрешности изделия при методе замещения
+        /// </summary>
+        public double GranKPz { get; set; }
+        /// <summary>
+        /// Граница погрешности изделия при методе замещения
+        /// </summary>
+        public double GranKPm { get; set; }
+        
         public CalculatedDataWeb()
         {
         }
         public CalculatedDataWeb(CalculatedData calculatedData)
         {
-            Id = 1;
-            Result_ma = calculatedData.Result_ma;
-            RefAngle_ma = calculatedData.RefAngle_ma;
-            Result_mm = calculatedData.Result_mm;
-            RefAngle_mm = calculatedData.RefAngle_mm;
-            A_not = calculatedData.A_not;
-            DevPlane_xOy = calculatedData.DevPlane_xOy; //Нужны градусы\минуты\секунды
+            
+            RefK = calculatedData.RefK;            
+            DevPlane_xOy = calculatedData.DevPlane_xOy;
+            DevPlane_xOy_ = calculatedData.DevPlane_xOy; //Нужны градусы\минуты\секунды
             DevPlane_xOz = calculatedData.DevPlane_xOz;
             RES_X = calculatedData.RES_X;
             RES_Z = calculatedData.RES_Z;
@@ -179,39 +242,60 @@ namespace GravityWebExt.Models
             AverageValue = calculatedData.AverageValue;
             kcmDev = calculatedData.kcmDev;
             Amendment = calculatedData.Amendment;
-            AverProdValMas = calculatedData.AverProdValMas;
-            AverProdVal_X = calculatedData.AverProdVal_X;
-            AverProdVal_Y = calculatedData.AverProdVal_Y;
-            AverProdVal_Z = calculatedData.AverProdVal_Z;
-            ErLimX1 = calculatedData.ErLimX1;
-            ErLimY1 = calculatedData.ErLimY1;
-            ErLimZ1 = calculatedData.ErLimZ1;
-            ErLimM1 = calculatedData.ErLimM1;
-            ErLimX2 = calculatedData.ErLimX2;
-            ErLimY2 = calculatedData.ErLimY2;
-            ErLimZ2 = calculatedData.ErLimZ2;
-            ErLimM2 = calculatedData.ErLimM2;
-            NSPmaxX = calculatedData.NSPmaxX;
-            NSPmaxY = calculatedData.NSPmaxY;
-            NSPmaxZ = calculatedData.NSPmaxZ;
-            NSPmaxM = calculatedData.NSPmaxM;
-            ErLimSx = calculatedData.ErLimSx;
-            ErLimSy = calculatedData.ErLimSy;
-            ErLimSz = calculatedData.ErLimSz;
-            ErLimSm = calculatedData.ErLimSm;
-            KvesX = calculatedData.KvesX;
-            KvesY = calculatedData.KvesY;
-            KvesZ = calculatedData.KvesZ;
-            KvesM = calculatedData.KvesM;
-            Sdev_reNsX = calculatedData.Sdev_reNsX;
-            Sdev_reNsY = calculatedData.Sdev_reNsY;
-            Sdev_reNsZ = calculatedData.Sdev_reNsZ;
-            Sdev_reNsM = calculatedData.Sdev_reNsM;
-            granX = calculatedData.granX;
-            granY = calculatedData.granY;
-            granZ = calculatedData.granZ;
-            granM = calculatedData.granM;
-            
+            //AverProdValMas = calculatedData.AverProdValMas;
+            //AverProdVal_X = calculatedData.AverProdVal_X;
+            //AverProdVal_Y = calculatedData.AverProdVal_Y;
+            //AverProdVal_Z = calculatedData.AverProdVal_Z;
+            //ErLimX1 = calculatedData.ErLimX1;
+            //ErLimY1 = calculatedData.ErLimY1;
+            //ErLimZ1 = calculatedData.ErLimZ1;
+            //ErLimM1 = calculatedData.ErLimM1;
+            //ErLimX2 = calculatedData.ErLimX2;
+            //ErLimY2 = calculatedData.ErLimY2;
+            //ErLimZ2 = calculatedData.ErLimZ2;
+            //ErLimM2 = calculatedData.ErLimM2;
+            //NSPmaxX = calculatedData.NSPmaxX;
+            //NSPmaxY = calculatedData.NSPmaxY;
+            //NSPmaxZ = calculatedData.NSPmaxZ;
+            //NSPmaxM = calculatedData.NSPmaxM;
+            //ErLimSx = calculatedData.ErLimSx;
+            //ErLimSy = calculatedData.ErLimSy;
+            //ErLimSz = calculatedData.ErLimSz;
+            //ErLimSm = calculatedData.ErLimSm;
+            //KvesX = calculatedData.KvesX;
+            //KvesY = calculatedData.KvesY;
+            //KvesZ = calculatedData.KvesZ;
+            //KvesM = calculatedData.KvesM;
+            //Sdev_reNsX = calculatedData.Sdev_reNsX;
+            //Sdev_reNsY = calculatedData.Sdev_reNsY;
+            //Sdev_reNsZ = calculatedData.Sdev_reNsZ;
+            //Sdev_reNsM = calculatedData.Sdev_reNsM;
+            //granX = calculatedData.granX;
+            //granY = calculatedData.granY;
+            //granZ = calculatedData.granZ;
+            //granM = calculatedData.granM;
+            /////////////////////////////////////////////////////
+            _pX = calculatedData._pX;
+            _pY = calculatedData._pY;
+            _pZ = calculatedData._pZ;
+            _pM = calculatedData._pM;
+            SystemDevX = calculatedData.SystemDevX;
+            SystemDevY = calculatedData.SystemDevY;
+            SystemDevZ = calculatedData.SystemDevZ;
+            SystemDevM = calculatedData.SystemDevM;
+            _kmcKPx = calculatedData._kmcKPx;
+            _kmcKPy = calculatedData._kmcKPy;
+            _kmcKPz = calculatedData._kmcKPz;
+            _kmcKPm = calculatedData._kmcKPm;
+            SystemEerX = calculatedData.SystemEerX;
+            SystemEerY = calculatedData.SystemEerY;
+            SystemEerZ = calculatedData.SystemEerZ;
+            SystemEerM = calculatedData.SystemEerM;
+            GranKPx = calculatedData.GranKPx;
+            GranKPy = calculatedData.GranKPy;
+            GranKPz = calculatedData.GranKPz;
+            GranKPm = calculatedData.GranKPm;
+
         }
     }
 }

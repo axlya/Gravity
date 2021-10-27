@@ -12,12 +12,12 @@ namespace GravityWebExt.Models
     /// <summary>
     /// Получение данных от контроллера
     /// </summary>
-    public class WebDataReporter : IObserver<ControllerData>
+    public class WebDataReporter : IObserver<ControllerDataOut>
     {
         private IDisposable _unsubscriber;
         private string _instName;
 
-        public ControllerData Data { get; set; }
+        public ControllerDataOut Data { get; set; }
 
 
         public WebDataReporter(string name)
@@ -33,7 +33,7 @@ namespace GravityWebExt.Models
         public string Name
         { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<ControllerData> provider)
+        public virtual void Subscribe(IObservable<ControllerDataOut> provider)
         {
             if (provider != null)
                 _unsubscriber = provider.Subscribe(this);
@@ -51,7 +51,7 @@ namespace GravityWebExt.Models
         }
 
         // Получены новые данные
-        public virtual void OnNext(ControllerData data)
+        public virtual void OnNext(ControllerDataOut data)
         {
             Data = data;
         }

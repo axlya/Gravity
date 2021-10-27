@@ -1,0 +1,1103 @@
+﻿
+@model IEnumerable<GravityWebExt.Models.MeasurementData>
+@{
+    ViewData["Title"] = "Контрольная панель";
+    MeasurementData data = Model?.ElementAt(0);
+}
+
+
+<title>Панель измерений</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+
+    /* Кнопка выбора*/
+    form {
+        width: 150px;
+        margin-right: 50px;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+        input[type="radio"]:checked + label {
+            color: white;
+            background-image: linear-gradient(to bottom, #1E90FF, #1E90FF);
+        }
+
+    label[id="kcm"],
+    label[id="masa"] {
+        display: block;
+        float: left;
+        padding: 8px 8px;
+        font-family: 'Arial', sans-serif;
+        font-size: 12px;
+        background-image: linear-gradient(to bottom, #fff, #ddd);
+        border: 1px solid #1E90FF;
+        cursor: pointer;
+    }
+
+    label[id="kcm"] {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+
+    label[id="masa"] {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: -1px;
+    }
+
+        label[id="kcm"]:hover,
+        label[id="masa"]:hover {
+            background-image: linear-gradient(to bottom, white, #1E90FF);
+        }
+
+    .col {
+        border: 2px solid #DEE2E6;
+    }
+
+        .col:hover {
+            border: 2px solid #1E90FF;
+        }
+
+
+
+
+    /* для элемента input c type="checkbox" */
+    .custom-checkbox {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
+
+        /* для элемента label, связанного с .custom-checkbox */
+        .custom-checkbox + label {
+            display: inline-flex;
+            align-items: center;
+            user-select: none;
+        }
+
+            /* создание в label псевдоэлемента before со следующими стилями */
+            .custom-checkbox + label::before {
+                content: '';
+                display: inline-block;
+                width: 28px;
+                height: 28px;
+                flex-shrink: 0;
+                flex-grow: 0;
+                border: 1px solid #1E90FF;
+                border-radius: 0.25em;
+                margin-right: 0.5em;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: 50% 50%;
+            }
+
+        /* стили при наведении курсора на checkbox */
+        .custom-checkbox:not(:disabled):not(:checked) + label:hover::before {
+            border-color: blue;
+        }
+
+        /* стили для активного чекбокса (при нажатии на него) */
+        .custom-checkbox:not(:disabled):active + label::before {
+            background-color: #b3d7ff;
+            border-color: #b3d7ff;
+        }
+
+        /* стили для чекбокса, находящегося в фокусе */
+        .custom-checkbox:focus + label::before {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
+        .custom-checkbox:focus:not(:checked) + label::before {
+            border-color: #80bdff;
+        }
+
+        /* стили для чекбокса, находящегося в состоянии checked */
+        .custom-checkbox:checked + label::before {
+            border-color: #0b76ef;
+            background-color: #0b76ef;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+        }
+
+        /* стили для чекбокса, находящегося в состоянии disabled */
+        .custom-checkbox:disabled + label::before {
+            background-color: #e9ecef;
+        }
+
+    .checkbox {
+        margin-bottom: 1em;
+    }
+</style>
+
+<div class="container">
+    <div class="row" style="background: #F2F2F2;">
+        <div class="col" style="background: #F2F2F2;">
+            <h5 align="center">Данные для нахождения <strong>КЦМ</strong> изделия</h5><br />
+            <div class="dropdown" style="margin-bottom:10px">
+                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
+                        style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
+                    &nbsp;Выбрать &nbsp;угол&nbsp;
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc0" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            0°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc90" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            90°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc180" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            180°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc270" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            270°
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col" style="background: #F2F2F2;">
+            <h5 align="center">Данные для нахождения <strong>МАССЫ</strong> изделия</h5><br />
+            <div class="dropdown" style="margin-bottom:10px">
+                <div class="dropdown" style="margin-bottom:10px">
+                    <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
+                            style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
+                        &nbsp;Выбрать &nbsp;угол&nbsp;
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            <button type="button" class="btn " data-toggle="modal" data-target="#m0" \
+                                    style="color:black; border: 1px solid #1E90FF;
+							border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                                0°
+                            </button>
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <button type="button" class="btn " data-toggle="modal" data-target="#m180" \
+                                    style="color:black; border: 1px solid #1E90FF;
+							border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                                180°
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped" style="margin-top: 40px; margin-left: 0px; margin-right: 0px ">
+                <thead>
+                    <tr style="background:#F2F2F2;">
+                        <th colspan="10"><h5><center>Настройки измерения &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></h5></th>
+                        <th colspan="10"><h5><center>Итоговые значения КЦМ </center></h5></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Выбран угол:</th>
+                        <th>Показадния для</th>
+                        <th>КП</th>
+                        <th colspan="2"></th>
+                        <th colspan="2"></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="3">Наименование</th>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>Z</th>
+                        <th>M</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <div class="btn-group-vertical">
+                                <div class="seldiv">
+                                    <select class="test" id="selectvalue" style="color:black; border: 1px solid #1E90FF; border-radius: 5px;">
+                                        <option>0°</option>
+                                        <option>90°</option>
+                                        <option>180°</option>
+                                        <option>270°</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <form action="">
+                                    <input type="radio" id="kcm" name="sex" />
+                                    <label for="kcm" id="kcm">КЦМ</label>
+                                    <input type="radio" id="masa" name="sex" />
+                                    <label for="masa" id="masa">Массы</label>
+                                </form>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="checkbox">
+                                <input class="custom-checkbox" type="checkbox" id="color-1" name="color-1" value="indigo">
+                                <label for="color-1"></label>
+                            </div>
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="3">Координаты Центра Масс </td>
+                        <td><span id="res_X">0</span></td>
+                        <td><span id="res_Y">0</span></td>
+                        <td><span id="res_Z">0</span></td>
+                        <td><span id="res_M">0</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <button type="button" class="btn btn-primary" style="background:#1E90FF;">Снять показания</button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" class="btn btn-primary" style="background:#1E90FF;  ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Расчет&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- The Modal -->
+    <div class="modal fade" id="kmc0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border:2px solid #007BFF; margin:0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="kmc90">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="kmc180">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="kmc270">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="m0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="m180">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span id="beginBalanceAngle0_1">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_1">0</span></td>
+                                <td><span id="middleBalanceAngle0_1">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_1">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span id="beginBalanceAngle0_2">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_2">0</span></td>
+                                <td><span id="middleBalanceAngle0_2">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_2">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span id="beginBalanceAngle0_3">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_3">0</span></td>
+                                <td><span id="middleBalanceAngle0_3">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_3">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span id="beginBalanceAngle0_4">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_4">0</span></td>
+                                <td><span id="middleBalanceAngle0_4">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_4">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span id="beginBalanceAngle0_5">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_5">0</span></td>
+                                <td><span id="middleBalanceAngle0_5">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_5">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span id="beginBalanceAngle0_6">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_6">0</span></td>
+                                <td><span id="middleBalanceAngle0_6">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_6">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span id="beginBalanceAngle0_7">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_7">0</span></td>
+                                <td><span id="middleBalanceAngle0_7">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_7">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span id="beginBalanceAngle0_8">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_8">0</span></td>
+                                <td><span id="middleBalanceAngle0_8">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_8">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span id="beginBalanceAngle0_9">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_9">0</span></td>
+                                <td><span id="middleBalanceAngle0_9">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_9">0</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span id="beginBalanceAngle0_10">0</span></td>
+                                <td><span id="beginUnbalanceSensor0_10">0</span></td>
+                                <td><span id="middleBalanceAngle0_10">0</span></td>
+                                <td><span id="middleUnbalanceSensor0_10">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col" style="background: #F2F2F2;">
+            <div id="resizable1" class="ui-widget-content">
+                <div id="chart1" style="height:100%; width:90%;"></div>
+            </div>
+        </div>
+        <div class="col" style="background: #F2F2F2;">
+            <div id="resizable1" class="ui-widget-content">
+                <div id="chart2" style="height:100%; width:90%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h4>Данные с контроллера</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Обозначение</th>
+                <th>Значение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Датчик угловых перемещений (Номинальная зона работы) </td>
+                <td>αΣ1</td>
+                <td><span id="beginBalanceAngle">@data._controlPanel?.BeginBalanceAngle.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик угловых перемещений (Средняя зона работы) </td>
+                <td>αΣ2</td>
+                <td><span id="middleBalanceAngle">@data._controlPanel?.MiddleBalanceAngle.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик силы измеретильной головки </td>
+                <td>P1α</td>
+                <td><span id="beginUnbalanceSensor">@data._controlPanel?.BeginUnbalanceSensor.ToString("N3")</span></td>
+            </tr>
+            <tr>
+                <td>Датчик силы измеретильной головки </td>
+                <td>P2α</td>
+                <td><span id="middleUnbalanceSensor">@data._controlPanel?.MiddleUnbalanceSensor.ToString("N3")</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br />
+@*<div class="form-check-inline">
+    <input type="button" class="btn btn-outline-danger" value="Остановить" id="stopUpdating" />
+    <input type="button" class="btn btn-outline-success" value="Возобновить" id="startUpdating" />
+    <input type="text" class="form-control input" id="intervalValue" value="1000" />
+</div>*@
+
+
+
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        timeInterval = setInterval(getData, /*$("#intervalValue").val()*/timeInterval);
+        //$("#stopUpdating").click(function () { clearInterval(timeInterval); });
+        //$("#startUpdating").click(function () { timeInterval = setInterval(getData, $("#intervalValue").val()); });
+
+    });
+
+    //графики
+    $(document).ready(function () {
+
+        //$.jqplot._noToImageButton = true;
+
+        ////динамическое изменение размера
+        //$("resizable1").resizable({ delay: 20 });
+        //$("resizable1").bind("resize", function (event, ui) {
+        //    plot1.replot({ resetAxes: true });
+        //});
+
+        var s1 = [5.9, 6.1, 6.2, 5.9, 6, 5.8, 6.1];
+        var s2 = [6, 6, 6, 6, 6, 6, 6];
+
+        var labels = ["Текущее значение", "Среднее значение"];
+
+
+        var plot1 = $.jqplot('chart1', [s1, s2], {
+            title: 'диаграмма дисбаланса',
+            captureRightClick: true,
+            seriesDefaults: {
+                renderer: $.jqplot.BarRenderer,
+                rendererOptions: {
+                    // Put a 30 pixel margin between bars.
+                    barMargin: 30,
+                    // Highlight bars when mouse button pressed.
+                    // Disables default highlighting on mouse over.
+                    highlightMouseDown: true,
+                    smooth: true,
+                },
+                pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
+                shadowAngle: 135,
+            },
+            axes: {
+                xaxis: {
+                    label: 'Ось X',
+                    // renderer: $.jqplot.CategoryAxisRenderer
+                    // padMin: 0
+                },
+                yaxis: {
+                    label: 'Ось Y',
+                    //   padMin: 0
+                }
+            },
+            legend: {
+                show: true,
+                location: 'e',
+                placement: 'outside',
+                labels: labels,
+            }
+        });
+
+
+
+        // Bind a listener to the "jqplotDataClick" event.  Here, simply change
+        // the text of the info3 element to show what series and ponit were
+        // clicked along with the data for that point.
+        //$('#chart1').bind('jqplotDataClick',
+        //    function (ev, seriesIndex, pointIndex, data) {
+        //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
+        //    }
+        //);
+
+    });
+    $(document).ready(function () {
+
+        //$.jqplot._noToImageButton = true;
+
+        ////динамическое изменение размера
+        //$("resizable1").resizable({ delay: 20 });
+        //$("resizable1").bind("resize", function (event, ui) {
+        //    plot1.replot({ resetAxes: true });
+        //});
+
+        var s1 = [5.9, 6.1, 6.2, 5.9, 6, 5.8, 6.1];
+        var s2 = [6, 6, 6, 6, 6, 6, 6];
+
+        var labels = ["Текущее значение", "Среднее значение"];
+
+
+        var plot1 = $.jqplot('chart2', [s1, s2], {
+            title: 'диаграмма дисбаланса',
+            captureRightClick: true,
+            seriesDefaults: {
+                renderer: $.jqplot.BarRenderer,
+                rendererOptions: {
+                    // Put a 30 pixel margin between bars.
+                    barMargin: 30,
+                    // Highlight bars when mouse button pressed.
+                    // Disables default highlighting on mouse over.
+                    highlightMouseDown: true,
+                    smooth: true,
+                },
+                pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
+                shadowAngle: 135,
+            },
+            axes: {
+                xaxis: {
+                    label: 'Ось X',
+                    // renderer: $.jqplot.CategoryAxisRenderer
+                    // padMin: 0
+                },
+                yaxis: {
+                    label: 'Ось Y',
+                    //   padMin: 0
+                }
+            },
+            legend: {
+                show: true,
+                location: 'e',
+                placement: 'outside',
+                labels: labels,
+            }
+        });
+
+
+
+        // Bind a listener to the "jqplotDataClick" event.  Here, simply change
+        // the text of the info3 element to show what series and ponit were
+        // clicked along with the data for that point.
+        //$('#chart1').bind('jqplotDataClick',
+        //    function (ev, seriesIndex, pointIndex, data) {
+        //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
+        //    }
+        //);
+
+    });
+
+
+
+    var timeInterval = 300;
+    function getData() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetMeasurementDataRepeat", "Home")?random=" + Math.random(),
+            dataType: "json",
+            success: function (result) {
+
+                console.log(result);
+
+                $("#beginBalanceAngle").text(parseFloat(result[0]._controlPanel.beginBalanceAngle).toFixed(3));
+                $("#middleBalanceAngle").text(parseFloat(result[0]._controlPanel.middleBalanceAngle).toFixed(3));
+                $("#beginUnbalanceSensor").text(parseFloat(result[0]._controlPanel.beginUnbalanceSensor).toFixed(3));
+                $("#middleUnbalanceSensor").text(parseFloat(result[0]._controlPanel.middleUnbalanceSensor).toFixed(3));
+                $("#knom").text(parseFloat(result[0]._controlPanel.knom).toFixed(3));
+                $("#kaver").text(parseFloat(result[0]._controlPanel.kaver).toFixed(3));
+            }
+        });
+    }
+
+
+</script>
+
+
+@section scripts{
+    <partial name="_PlotScriptsPartial" />
+}

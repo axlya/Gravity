@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using GravityCalc;
 using GravityData;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IO;
 
 namespace GravityWebExt
 {
@@ -46,49 +47,70 @@ namespace GravityWebExt
             services.AddIdentity<User, IdentityRole>(
                 opts =>
             {
-                opts.Password.RequiredLength = 3;   // минимальная длина пароля
-                opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
-                opts.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре
-                opts.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
-                opts.Password.RequireDigit = false; // требуются ли цифры
+                opts.Password.RequiredLength = 3;                       // минимальная длина пароля
+                opts.Password.RequireNonAlphanumeric = false;           // требуются ли не алфавитно-цифровые символы
+                opts.Password.RequireLowercase = false;                 // требуются ли символы в нижнем регистре
+                opts.Password.RequireUppercase = false;                 // требуются ли символы в верхнем регистре
+                opts.Password.RequireDigit = false;                     // требуются ли цифры
             }
             )
                 .AddEntityFrameworkStores<ApplicationContext>();
 
             //провайдеры
-            services.AddSingleton<WebDataProvider>(); //провайдер данных Web(PassportData)
-            services.AddSingleton<WebNSPDataProvider>(); //провайдер данных Web (NSPData)
-            services.AddSingleton<DataProvider>(); // провайдер данных контроллера (ControllerData)
-            services.AddSingleton<CalcDataProvider>(); // провайдер данных калькулятора (CalculatedData)
+            services.AddSingleton<WebRecomValDataProvider>();           // провайдер данных Web(RecomValData)
+            services.AddSingleton<WebDataProvider>();                   // провайдер данных Web(PassportData)
+            services.AddSingleton<WebNSPDataProvider>();                // провайдер данных Web (NSPData)
+            services.AddSingleton<DataProvider>();                      // провайдер данных контроллера (ControllerDataOut)
+            services.AddSingleton<CalcDataProvider>();                  // провайдер данных калькулятора (CalculatedData)
+            services.AddSingleton<WebToControllerDataProvider>();       // провайдер данных Web для контроллера (ControllerDataIn)
             //подписчики
-            services.AddSingleton<WebDataReporter>(); //получатель данных от контроллера (Web)
-            services.AddSingleton<WebCalcDataReporter>(); //получатель данных от калькулятора (Web)
-            services.AddSingleton<CalcWebReporter>(); // получатель данных калькулятора (Web - PassportData)
-            services.AddSingleton<CalcWebNSPReporter>(); // получатель данных калькулятора (Web - NSP Data)
-            services.AddSingleton<CalcDataReporter>(); // получатель данных контроллера (калькулятор)
+            services.AddSingleton<WebDataReporter>();                   // получатель данных от контроллера (Web)
+            services.AddSingleton<WebCalcDataReporter>();               // получатель данных от калькулятора (Web)
+            services.AddSingleton<CalcWebReporter>();                   // получатель данных калькулятора (Web - PassportData)
+            services.AddSingleton<CalcWebNSPReporter>();                // получатель данных калькулятора (Web - NSP Data)
+            services.AddSingleton<CalcWebRecomValDataReporter>();       // получатель данных калькулятора (Web - NSP Data)
+            services.AddSingleton<CalcDataReporter>();                  // получатель данных контроллера (калькулятор)
+            services.AddSingleton<DataReporter>();                      // получатель данных от Web (контроллер)
             //
-            services.AddSingleton<Emulator>(); // эмулятор контроллера
-            services.AddSingleton<MainCalc>(); // расчетный класс калькулятора
+            //services.AddSingleton<Emulator>();                        // эмулятор контроллера
+            services.AddSingleton<OPCUA_SiemensClient>();               // контроллер Siemens
+            services.AddSingleton<MainCalc>();                          // расчетный класс калькулятора
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, WebNSPDataProvider webNSPDataProvider, CalcDataProvider calcDataProvider,CalcWebReporter calcReporter, CalcWebNSPReporter calcNspReporter, WebCalcDataReporter webCalcDataReporter,Emulator emu, MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter)
+        //[Obsolete]
+        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, 
+            WebNSPDataProvider webNSPDataProvider, CalcDataProvider calcDataProvider,CalcWebReporter calcReporter, CalcWebNSPReporter calcNspReporter, WebCalcDataReporter webCalcDataReporter,
+            /*Emulator emu,*/ MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter, OPCUA_SiemensClient siemensClient,
+            WebRecomValDataProvider webRecomValDataProvider, CalcWebRecomValDataReporter calcWebRecomValDataReporter, ILoggerFactory loggerFactory, WebToControllerDataProvider webToControllerDataProvider,
+            DataReporter dataReporter)
         {
+
+            //Лог будет сохраняться в текстовый файл
+            //var path = Directory.GetCurrentDirectory();
+            //loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
+
             applicationLifetime.ApplicationStopped.Register(() =>
             {
-                emu.Stop();
+                //emu.Stop();
 
                 calcReporter.Unsubscribe();
                 webDataReporter.Unsubscribe();
                 calcDataReporter.Unsubscribe();
                 calcNspReporter.Unsubscribe();
                 webCalcDataReporter.Unsubscribe();
+                calcWebRecomValDataReporter.Unsubscribe();
+                dataReporter.Unsubscribe();
 
                 dataProvider.EndTransmission();
                 webDataProvider.EndTransmission();
                 webNSPDataProvider.EndTransmission();
                 calcDataProvider.EndTransmission();
+                webRecomValDataProvider.EndTransmission();
+                webToControllerDataProvider.EndTransmission();
+
+                siemensClient.Stop();
 
                 logger.LogInformation("Завершение работы...");
 
@@ -102,7 +124,6 @@ namespace GravityWebExt
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -112,31 +133,40 @@ namespace GravityWebExt
             app.UseRouting();
 
             app.UseAuthentication();    
-            app.UseAuthorization();     
+            app.UseAuthorization();
+
+            //запуск считывания данных с контроллера
+            siemensClient.SetDataProvider(dataProvider);
+            siemensClient.Start();
 
             //запуск эмулятора генерации данных контроллера
-            emu.SetCalcFunc(mainCalc);
-            emu.SetDataProvider(dataProvider);
-            logger.LogInformation("Запуск эмулятора");
+            //emu.SetCalcFunc(mainCalc);
+            //emu.SetDataProvider(dataProvider);
+
+            //logger.LogInformation("Запуск эмулятора");
             //установка провайдера данных
             mainCalc.SetDataProvider(calcDataProvider);
             //установка расчётного класса
             calcReporter.SetCalcFunc(mainCalc);
             calcNspReporter.SetCalcFunc(mainCalc);
+            calcWebRecomValDataReporter.SetCalcFunc(mainCalc);
             calcDataReporter.SetCalcFunc(mainCalc);
+            dataReporter.SetControllerFunc(siemensClient);
             // подписки на получение данных
             calcReporter.Subscribe(webDataProvider);
             calcNspReporter.Subscribe(webNSPDataProvider);
+            calcWebRecomValDataReporter.Subscribe(webRecomValDataProvider);
             webDataReporter.Subscribe(dataProvider);          
             calcDataReporter.Subscribe(dataProvider);
             webCalcDataReporter.Subscribe(calcDataProvider);
-            logger.LogInformation("Запуск подписчиков");
+            dataReporter.Subscribe(webToControllerDataProvider);
 
             webDataProvider.SendData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
-           // webNSPDataProvider.SendData(db.NSP.ToList().ElementAt(0).SetDataForCalculate());
-            emu.SetPassportData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
 
-            emu.Start();
+
+
+            //emu.SetPassportData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
+            //emu.Start();
 
             app.UseEndpoints(endpoints =>
             {
