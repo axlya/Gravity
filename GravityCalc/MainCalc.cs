@@ -17,7 +17,7 @@ namespace GravityCalc
         /// </summary>
         private ReceivedData _receivedData;
         private Сalculator _calculator;
-        CalculatedData calc;
+        private CalculatedData _calculatedData;                     //рассчитанные данные
         private readonly string _name = "Калькулятор";
         private CalcDataProvider _dataProvider = null;
         bool _angel = false;
@@ -235,31 +235,31 @@ namespace GravityCalc
 
             if(_calculator.BeginBalanceAngleArr0.Count() == 10)
             {
-                calc.Angel_0 = true;
+                _calculatedData.Angel_0 = true;
             }
             if (_calculator.BeginBalanceAngleArr90.Count() == 10)
             {
-                calc.Angel_90 = true;
+                _calculatedData.Angel_90 = true;
             }
             if (_calculator.BeginBalanceAngleArr180.Count() == 10)
             {
-                calc.Angel_180 = true;
+                _calculatedData.Angel_180 = true;
             }
             if (_calculator.BeginBalanceAngleArr270.Count() == 10)
             {
-                calc.Angel_270 = true;
+                _calculatedData.Angel_270 = true;
             }
             if (_calculator.Knom0.Count() == 10)
             {
-                calc.Angel_0_2 = true;
+                _calculatedData.Angel_0_2 = true;
             }
             if (_calculator.Knom180.Count() == 10)
             {
-                calc.Angel_180_2 = true;
+                _calculatedData.Angel_180_2 = true;
             }
 
-            if (calc.Angel_0 == true && calc.Angel_90 == true && calc.Angel_180 == true && calc.Angel_270 == true && 
-                calc.Angel_0_2 == true && calc.Angel_180_2 == true)
+            if (_calculatedData.Angel_0 == true && _calculatedData.Angel_90 == true && _calculatedData.Angel_180 == true && _calculatedData.Angel_270 == true && 
+                _calculatedData.Angel_0_2 == true && _calculatedData.Angel_180_2 == true)
             {
                 _angel = true;
             }

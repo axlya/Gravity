@@ -892,46 +892,8 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <h4>Данные с контроллера</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Наименование</th>
-                <th>Обозначение</th>
-                <th>Значение</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Датчик угловых перемещений (Номинальная зона работы) </td>
-                <td>αΣ1</td>
-                <td><span id="beginBalanceAngle">@data._controlPanel?.BeginBalanceAngle.ToString("N3")</span></td>
-            </tr>
-            <tr>
-                <td>Датчик угловых перемещений (Средняя зона работы) </td>
-                <td>αΣ2</td>
-                <td><span id="middleBalanceAngle">@data._controlPanel?.MiddleBalanceAngle.ToString("N3")</span></td>
-            </tr>
-            <tr>
-                <td>Датчик силы измеретильной головки </td>
-                <td>P1α</td>
-                <td><span id="beginUnbalanceSensor">@data._controlPanel?.BeginUnbalanceSensor.ToString("N3")</span></td>
-            </tr>
-            <tr>
-                <td>Датчик силы измеретильной головки </td>
-                <td>P2α</td>
-                <td><span id="middleUnbalanceSensor">@data._controlPanel?.MiddleUnbalanceSensor.ToString("N3")</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 <br />
-@*<div class="form-check-inline">
-    <input type="button" class="btn btn-outline-danger" value="Остановить" id="stopUpdating" />
-    <input type="button" class="btn btn-outline-success" value="Возобновить" id="startUpdating" />
-    <input type="text" class="form-control input" id="intervalValue" value="1000" />
-</div>*@
+
 
 
 
@@ -1071,29 +1033,6 @@
         //);
 
     });
-
-
-
-    var timeInterval = 300;
-    function getData() {
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("GetMeasurementDataRepeat", "Home")?random=" + Math.random(),
-            dataType: "json",
-            success: function (result) {
-
-                console.log(result);
-
-                $("#beginBalanceAngle").text(parseFloat(result[0]._controlPanel.beginBalanceAngle).toFixed(3));
-                $("#middleBalanceAngle").text(parseFloat(result[0]._controlPanel.middleBalanceAngle).toFixed(3));
-                $("#beginUnbalanceSensor").text(parseFloat(result[0]._controlPanel.beginUnbalanceSensor).toFixed(3));
-                $("#middleUnbalanceSensor").text(parseFloat(result[0]._controlPanel.middleUnbalanceSensor).toFixed(3));
-                $("#knom").text(parseFloat(result[0]._controlPanel.knom).toFixed(3));
-                $("#kaver").text(parseFloat(result[0]._controlPanel.kaver).toFixed(3));
-            }
-        });
-    }
-
 
 </script>
 

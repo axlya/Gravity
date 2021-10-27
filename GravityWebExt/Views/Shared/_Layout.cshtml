@@ -42,9 +42,8 @@
     <header>1
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 fixed-top">
             <div class="container">
-                <span class="LampGreen"></span>
-                <span class="LampRed"></span>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <partial name="_ConnectPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item @(curPage == "ControlPanel"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ControlPanel">Контрольная панель</a>

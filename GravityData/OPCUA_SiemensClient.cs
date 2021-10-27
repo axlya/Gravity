@@ -37,6 +37,8 @@ namespace GravityData
         {
             WriteVal("ns=4;i=42", dataIn.GoJackUp.ToString());
             WriteVal("ns=4;i=46", dataIn.GoJackDown.ToString());
+            WriteVal("ns=4;i=44", dataIn.GoCargoLeft.ToString());
+            WriteVal("ns=4;i=43", dataIn.GoCargoRight.ToString());
         }
 
         public void Start()
@@ -74,6 +76,10 @@ namespace GravityData
                 {
                     JackPos = ReadVal("ns=4;i=50"),
                     CargoPos = ReadVal("ns=4;i=51"),
+                    SensorAngle = ReadVal("ns=4;i=54"),
+                    SensorDisbalance = ReadVal("ns=4;i=40"),
+                    SensorPower = ReadVal("ns=4;i=41"),
+
                     ConnectDevice = ReadVal("ns=4;i=30"),
                     PowerSystem = ReadVal("ns=4;i=52"),
                     Error = ReadVal("ns=4;i=53"),

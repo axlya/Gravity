@@ -113,8 +113,8 @@
     <div class="row">
             <div class="col" style="background: #F2F2F2;">
                 <h5 align="center">Ход домкрата</h5><br />
-                <button type="button" class="btn btn-primary" style="margin-bottom: 10px; background: #1E90FF;" id="jackUp"><h3>&nbsp;&nbsp;&nbsp;↑&nbsp;&nbsp;&nbsp;</h3></button>
-                <button type="button" class="btn btn-primary" style="margin-bottom:10px; background: #1E90FF;" id="jackDown"><h3>&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;</h3></button>
+                <button type="button" class="btn btn-primary" onclick="this.blur();" style="margin-bottom: 10px; background: #1E90FF;" id="jackUp"><h3>&nbsp;&nbsp;&nbsp;↑&nbsp;&nbsp;&nbsp;</h3></button>
+                <button type="button" class="btn btn-primary" onclick="this.blur();" style="margin-bottom:10px; background: #1E90FF;" id="jackDown"><h3>&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;</h3></button>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span><label id="jackPos"></label></span>
                 @*<span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -123,9 +123,9 @@
             </div>
             <div class="col" style="background: #F2F2F2; ">
                 <h5 align="center">Перемещение подвижного груза</h5><br />
-                <button type="button" class="btn btn-primary" style="margin-bottom: 10px; background: #1E90FF;"><h3>&nbsp;&nbsp;←&nbsp;&nbsp;</h3></button>
-                <button type="button" class="btn btn-primary" style="margin-bottom: 10px; background: #1E90FF;"><h3>&nbsp;&nbsp;→&nbsp;&nbsp;</h3></button>
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>0</span>
+                <button type="button" class="btn btn-primary" onclick="this.blur();" style="margin-bottom: 10px; background: #1E90FF;" id="cargoLeft"><h3>&nbsp;&nbsp;←&nbsp;&nbsp;</h3></button>
+                <button type="button" class="btn btn-primary" onclick="this.blur();" style="margin-bottom: 10px; background: #1E90FF;" id="cargoRight"><h3>&nbsp;&nbsp;→&nbsp;&nbsp;</h3></button>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span><label id="cargoPos"></label></span>
                 @*<span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -155,8 +155,8 @@
                             <tbody>
                                 <tr>
                                     <td colspan="3">Датчик угловых перемещений</td>
-                                    <td>αΣ</td>
-                                    <td><span id="SensorAngle">@data?.SensorAngle.ToString("N3")</span></td>
+                                    <td>α<sub>Σ</sub></td>
+                                    <td><span><label id="sensorAngle">@data?.SensorAngle.ToString("N3")</label></span></td>
                                     @*<td><span class="Lamp"></span></td>*@
                                     <td colspan="2"></td>
                                     <td colspan="2"></td>
@@ -177,8 +177,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3">Датчик дисбаланса </td>
-                                    <td>Pα</td>
-                                    <td><span id="SensorDisbalance">@data?.SensorDisbalance.ToString("N3")</span></td>
+                                    <td>P<sub>α</sub></td>
+                                    <td><span><label id="sensorDisbalance">@data?.SensorDisbalance.ToString("N3")</label></span></td>
                                     @*<td><span class="Lamp"></span></td>*@
                                     <td colspan="2"></td>
                                     <td colspan="2"></td>
@@ -214,7 +214,7 @@
                                 <tr>
                                     <td colspan="3">Датчик силы измеретильной головки</td>
                                     <td>P</td>
-                                    <td><span id="SensorPower">@data?.SensorPower.ToString("N3")</span></td>
+                                    <td><span><label id="sensorPower">@data?.SensorPower.ToString("N3")</label></span></td>
                                     @*<td><span class="Lamp"></span></td>*@
                                     <td colspan="2"></td>
                                     <td colspan="2"></td>
@@ -326,26 +326,47 @@
             //$("#stopUpdating").click(function () { clearInterval(timeInterval); });
             //$("#startUpdating").click(function () { timeInterval = setInterval(getData, $("#intervalValue").val()); });
             //домкрат
-            $("#jackUp").mousedown(function () { jackUp = 1;});
-            $("#jackUp").mouseup(function () { jackUp = 0;});
-            $("#jackDown").mousedown(function () { jackDown = 1;});
-            $("#jackDown").mouseup(function () { jackDown = 0;});
+            $("#jackUp").mousedown(function () { jackUp = 1; setControllerData;});
+            $("#jackUp").mouseup(function () { jackUp = 0; });
+            $("#jackDown").mousedown(function () { jackDown = 1; setControllerData;});
+            $("#jackDown").mouseup(function () { jackDown = 0; });
+        });
+        $(document).ready(function () {
+            //timeInterval = setInterval(getData, $("#intervalValue").val());
+            var timerId = setTimeout(function tick() { //рекурсивный setTimeout вызов более точный чем setInterval
+                setControllerData();
+                timerId = setTimeout(tick, timeSendToControllerInterval);
+            }, timeSendToControllerInterval);
+            //$("#stopUpdating").click(function () { clearInterval(timeInterval); });
+            //$("#startUpdating").click(function () { timeInterval = setInterval(getData, $("#intervalValue").val()); });
+            //домкрат
+            $("#cargoLeft").mousedown(function () { cargoLeft = 1; setControllerData; });
+            $("#cargoLeft").mouseup(function () { cargoLeft = 0; });
+            $("#cargoRight").mousedown(function () { cargoRight = 1; setControllerData; });
+            $("#cargoRight").mouseup(function () { cargoRight = 0; });
         });
 
         //var timeInterval;
         var timeSendToControllerInterval = 300; //дискретное время посылки сигнала в контроллер, мс
         var jackUp = 0;
         var jackDown = 0;
+        var cargoLeft = 0;
+        var cargoRight = 0;
 
 
         function setControllerData() {
             $.ajax({
                 method: "GET",
                 url: "@Url.Action("SetControllerData", "Home")?random=" + Math.random(),
-                data: { jackUp: jackUp, jackDown: jackDown},
+                data: { jackUp: jackUp, jackDown: jackDown, cargoLeft: cargoLeft, cargoRight: cargoRight},
                 dataType: "json",
                 success: function (result) {
                     $("#jackPos").text(parseFloat(result.jackPos).toFixed(3));
+                    $("#cargoPos").text(parseFloat(result.cargoPos).toFixed(3));
+                    $("#sensorAngle").text(parseFloat(result.sensorAngle).toFixed(3));
+                    $("#sensorDisbalance").text(parseFloat(result.sensorDisbalance).toFixed(3));
+                    $("#sensorPower").text(parseFloat(result.sensorPower).toFixed(3));
+
                     $("#beginBalanceAngle").text(parseFloat(result.beginBalanceAngle).toFixed(3));
                     $("#middleBalanceAngle").text(parseFloat(result.middleBalanceAngle).toFixed(3));
                     $("#beginUnbalanceSensor").text(parseFloat(result.beginUnbalanceSensor).toFixed(3));

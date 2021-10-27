@@ -45,6 +45,8 @@ namespace GravityWebExt.Controllers
             _webDataReporter = webDataReporter;
             _webCalcDataReporter = webCalcDataReporter;
 
+            ViewBag.Connected = webDataReporter.Data.ConnectDevice;
+
         }
         /// <summary>
         /// Получены новые данные от контроллера
@@ -84,12 +86,14 @@ namespace GravityWebExt.Controllers
             return new List<MeasurementData>() { new MeasurementData(new ControlPanelDataWeb(_webDataReporter.Data), new CalculatedDataWeb(_webCalcDataReporter.Data)) };
         }
 
-        public JsonResult SetControllerData(double jackUp, double jackDown)
+        public JsonResult SetControllerData(double jackUp, double jackDown, double cargoLeft, double cargoRight)
         {
             _dataWebToControllerDataProvider.SendData(new ControllerDataIn()
             {
                 GoJackUp = jackUp,
                 GoJackDown = jackDown,
+                GoCargoLeft = cargoLeft,
+                GoCargoRight = cargoRight
             });
 
             //Counter.count++;
