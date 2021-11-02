@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+        using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -136,6 +136,7 @@ namespace GravityWebExt
             app.UseAuthorization();
 
             //запуск считывания данных с контроллера
+           // siemensClient.SetLogger(logger);
             siemensClient.SetDataProvider(dataProvider);
             siemensClient.Start();
 

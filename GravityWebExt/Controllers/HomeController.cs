@@ -23,7 +23,7 @@ namespace GravityWebExt.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DataContext _db;
         private readonly WebDataProvider _dataProvider;
-        private readonly WebNSPDataProvider _dataNSPProvider;
+        private readonly WebNSPDataProvider _dataNSPProvider;   
         private readonly WebRecomValDataProvider _dataWebRecomValDataProvider;
         private readonly WebToControllerDataProvider _dataWebToControllerDataProvider;
         //private readonly Emulator _emu;

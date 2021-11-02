@@ -724,19 +724,20 @@ namespace Siemens.UAClientHelper
                 }
                 return resultStrings;
             }
-            catch (System.NullReferenceException)
+            catch (System.NullReferenceException ex)
             {
                 Console.Write("Нет ссылки на данные (NullReferenceException) \n");
+                //throw ex;
                 resultStrings.Add(Defines.UNDEF_STR_VALUE);
                 return resultStrings;
             }
             catch (Exception ex)
             {
                 //handle Exception here
-                //throw e;
                 Console.Write(ex.Message + '\n');
-                resultStrings.Add(Defines.UNDEF_STR_VALUE);
-                return resultStrings;
+                throw;
+                //resultStrings.Add(Defines.UNDEF_STR_VALUE);
+                //return resultStrings;
             }
         }
 

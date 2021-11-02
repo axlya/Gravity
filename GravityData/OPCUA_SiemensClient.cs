@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GravityCalc;
+using Microsoft.Extensions.Logging;
 using Opc.Ua;
 using Opc.Ua.Client;
 using Siemens.UAClientHelper;
@@ -17,20 +18,45 @@ namespace GravityData
     /// Клиент для связи с контроллерами S300 Siemens по протоколу OPC UA 
     /// </summary>
     public class OPCUA_SiemensClient : IController
-    {
+    {   
+        private ILogger _logger = null; // логгер 
+        //private readonly string _moduleName = "[SiemensClient]";
         private UAClientHelperAPI myClientHelperAPI = null;
         private EndpointDescription mySelectedEndpoint = null;
         private Session mySession = null;
         //обновление данных
-        public int UpdateDataValue { get; set; } = 1; //сек
         private bool _stop = false;
         private static AutoResetEvent _generateDataEvent = new(true);
         //провайдер данных
         private DataProvider _dataProvider = null;
 
+        public OPCUA_SiemensClient()
+        {
+            myClientHelperAPI = new();
+        }
+
+        public OPCUA_SiemensClient(ILogger<OPCUA_SiemensClient> logger)
+        {
+            myClientHelperAPI = new();
+            _logger = logger;
+        }
+
         public void SetDataProvider(DataProvider dataProvider)
         {
             _dataProvider = dataProvider;
+        }
+
+        public void SetLogger (ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        private void WriteErrorLog(string text)
+        {
+            if (_logger != null)
+                _logger.LogError(text);
+            else
+                Console.WriteLine(text);
         }
 
         public void SetData(ControllerDataIn dataIn)
@@ -57,15 +83,11 @@ namespace GravityData
         {
             if (_dataProvider == null)
             {
-                Console.WriteLine("Ошибка: DataProvider не установлен!");
+                WriteErrorLog("Ошибка: DataProvider не установлен!\n");
                 return;
             }
 
             _generateDataEvent.WaitOne();
-
-            //_calcDataReporter = new();
-            //_calcDataReporter.SetCalcFunc(_mainCalc);
-            //_calcDataReporter.Subscribe(_dataProvider);
 
             Connect();
 
@@ -86,7 +108,7 @@ namespace GravityData
                 });
             
 
-                Thread.Sleep(500 * UpdateDataValue);
+                Thread.Sleep(300);
             }
             _generateDataEvent.Set();
 
@@ -95,10 +117,7 @@ namespace GravityData
 
         public string Url { get; } = "opc.tcp://192.168.0.1";
 
-        public OPCUA_SiemensClient()
-        {
-            myClientHelperAPI = new();
-        }
+
 
         public void Disconnect()
         {
@@ -137,16 +156,15 @@ namespace GravityData
                 }
                 else
                 {
-                    // MessageBox.Show("Please select an endpoint before connecting", "Error");
-                    return;
+                     WriteErrorLog("Не удалось подключиться к Endpoint!\n");
+                    Connect();
+                    
                 }
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
-
+                WriteErrorLog("" + ("Не удалось подключится к контроллеру по адресу {0}, код ошибки {1}\n", Url, ex.Message));
             }
-
 
         }
 
@@ -177,20 +195,19 @@ namespace GravityData
                         catch (ServiceResultException sre)
                         {
                             //If an url in ad.DiscoveryUrls can not be reached, myClientHelperAPI will throw an Exception
-                            //  MessageBox.Show(sre.Message, "Error");
+                            WriteErrorLog(sre.Message+'\n');
                         }
 
                     }
                     if (!foundEndpoints)
                     {
-                        Console.Write("Не найдены EndPoints");
-                        //  MessageBox.Show("Could not get any Endpoints", "Error");
+                        WriteErrorLog("Не найдены EndPoints");                       
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message + '\n');
+                WriteErrorLog(ex.Message + '\n');
             }
         }
 
@@ -206,7 +223,7 @@ namespace GravityData
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message + '\n');
+                WriteErrorLog(ex.Message + '\n');
             }
 
             return Defines.UNDEF_STR_VALUE;
@@ -221,7 +238,8 @@ namespace GravityData
                 return Defines.UNDEF_DBL_VALUE;
         }
 
-        public void WriteVal(string id, string text) {
+        public void WriteVal(string id, string text) 
+        {
             List<String> nodeIdStrings = new List<String>();
             List<String> values = new List<string>();
             nodeIdStrings.Add(id);
@@ -232,7 +250,7 @@ namespace GravityData
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message + '\n');
+                WriteErrorLog(ex.Message + '\n');
             }
         }
 
@@ -242,8 +260,7 @@ namespace GravityData
         }
         private void Notification_KeepAlive(Session sender, KeepAliveEventArgs e)
         {
-           
-            
+                
         }
     }
 }
