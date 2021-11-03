@@ -18,17 +18,19 @@ namespace GravityData
     /// Клиент для связи с контроллерами S300 Siemens по протоколу OPC UA 
     /// </summary>
     public class OPCUA_SiemensClient : IController
-    {   
-        private ILogger _logger = null; // логгер 
-        //private readonly string _moduleName = "[SiemensClient]";
-        private UAClientHelperAPI myClientHelperAPI = null;
+    {
+        private bool _isConnected = false;                              // установлено соединение с контроллером
+        private int _timeOut = 300;                                     // таймаут пересылки данных (в мс)
+        private ILogger _logger = null;                                 // логгер 
+        private readonly UAClientHelperAPI myClientHelperAPI = null;
         private EndpointDescription mySelectedEndpoint = null;
         private Session mySession = null;
         //обновление данных
         private bool _stop = false;
         private static AutoResetEvent _generateDataEvent = new(true);
-        //провайдер данных
-        private DataProvider _dataProvider = null;
+        private DataProvider _dataProvider = null;                      // провайдер данных
+
+        public string Url { get; } = "opc.tcp://192.168.0.1";
 
         public OPCUA_SiemensClient()
         {
@@ -50,6 +52,10 @@ namespace GravityData
         {
             _logger = logger;
         }
+        public bool IsConnected()
+        {
+            return _isConnected;
+        }
 
         private void WriteErrorLog(string text)
         {
@@ -69,6 +75,12 @@ namespace GravityData
 
         public void Start()
         {
+            if (_dataProvider == null)
+            {
+                WriteErrorLog("Провайдер данных не установлен! Работа модуля прекращена\n");
+                return;
+            }
+
             Thread thread = new(new ThreadStart(GenerateDataProc));
 
             thread.Start();
@@ -81,41 +93,37 @@ namespace GravityData
 
         void GenerateDataProc()
         {
-            if (_dataProvider == null)
-            {
-                WriteErrorLog("Ошибка: DataProvider не установлен!\n");
-                return;
-            }
-
             _generateDataEvent.WaitOne();
-
-            Connect();
 
             while (!_stop)
             {
-                
-                _dataProvider.SendData(new ControllerDataOut
+                if (!_isConnected)
+                    Connect();
+
+                ControllerDataOut controllerDataOut = new ControllerDataOut();
+                controllerDataOut.JackPos = ReadVal("ns=4;i=50");
+                controllerDataOut.CargoPos = ReadVal("ns=4;i=51");
+                controllerDataOut.SensorAngle = ReadVal("ns=4;i=54");
+                controllerDataOut.SensorDisbalance = ReadVal("ns=4;i=40");
+                controllerDataOut.SensorPower = ReadVal("ns=4;i=41");
+                controllerDataOut.ConnectDevice = ReadVal("ns=4;i=30");
+                controllerDataOut.PowerSystem = ReadVal("ns=4;i=52");
+                controllerDataOut.Error = ReadVal("ns=4;i=53");
+
+                if (controllerDataOut.ConnectDevice != 1)
                 {
-                    JackPos = ReadVal("ns=4;i=50"),
-                    CargoPos = ReadVal("ns=4;i=51"),
-                    SensorAngle = ReadVal("ns=4;i=54"),
-                    SensorDisbalance = ReadVal("ns=4;i=40"),
-                    SensorPower = ReadVal("ns=4;i=41"),
-
-                    ConnectDevice = ReadVal("ns=4;i=30"),
-                    PowerSystem = ReadVal("ns=4;i=52"),
-                    Error = ReadVal("ns=4;i=53"),
-                });
+                    _isConnected = false;
+                    WriteErrorLog("Потеряна связь с контроллером! Попытка нового соединения...\n");
+                }
+                else
+                    _dataProvider.SendData(controllerDataOut);
             
-
-                Thread.Sleep(300);
+                Thread.Sleep(_timeOut);
             }
             _generateDataEvent.Set();
 
             Disconnect();
         }
-
-        public string Url { get; } = "opc.tcp://192.168.0.1";
 
 
 
@@ -127,6 +135,7 @@ namespace GravityData
                 {
                     myClientHelperAPI.Disconnect();
                     mySession = myClientHelperAPI.Session;
+                    _isConnected = false;
                 }
                 catch
                 {
@@ -152,13 +161,13 @@ namespace GravityData
                     myClientHelperAPI.Connect(mySelectedEndpoint, false, "", "").Wait();
                     //Extract the session object for further direct session interactions
                     mySession = myClientHelperAPI.Session;
+                    _isConnected = true;
 
                 }
                 else
                 {
-                     WriteErrorLog("Не удалось подключиться к Endpoint!\n");
-                    Connect();
-                    
+                    WriteErrorLog("Не удалось подключиться к Endpoint!\n");
+                    Connect();                    
                 }
             }
             catch (Exception ex)
@@ -179,7 +188,6 @@ namespace GravityData
                 {
                     foreach (string url in ad.DiscoveryUrls)
                     {
-
                         try
                         {
                             EndpointDescriptionCollection endpoints = myClientHelperAPI.GetEndpoints(url);
@@ -189,7 +197,6 @@ namespace GravityData
                                 //берем первый endpoint
                                 mySelectedEndpoint = ep;
                                 break;
-
                             }
                         }
                         catch (ServiceResultException sre)
@@ -197,11 +204,10 @@ namespace GravityData
                             //If an url in ad.DiscoveryUrls can not be reached, myClientHelperAPI will throw an Exception
                             WriteErrorLog(sre.Message+'\n');
                         }
-
                     }
                     if (!foundEndpoints)
                     {
-                        WriteErrorLog("Не найдены EndPoints");                       
+                        WriteErrorLog("Не найдены EndPoints\n");                       
                     }
                 }
             }
