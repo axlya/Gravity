@@ -1,0 +1,12 @@
+X:\GRAVITY\GravityCalc\bin\Release\net5.0\GravityCalc.deps.json
+X:\GRAVITY\GravityCalc\bin\Release\net5.0\GravityCalc.dll
+X:\GRAVITY\GravityCalc\bin\Release\net5.0\ref\GravityCalc.dll
+X:\GRAVITY\GravityCalc\bin\Release\net5.0\GravityCalc.pdb
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.csproj.AssemblyReference.cache
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.GeneratedMSBuildEditorConfig.editorconfig
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.AssemblyInfoInputs.cache
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.AssemblyInfo.cs
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.csproj.CoreCompileInputs.cache
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.dll
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\ref\GravityCalc.dll
+X:\GRAVITY\GravityCalc\obj\Release\net5.0\GravityCalc.pdb

@@ -13,35 +13,8 @@ namespace GravityCalc
         public CalculatedData calcData;
         public Сalculator()
         {
-            _rd = receivedData;
-
-            BeginBalanceAngleArr0 = new();
-            BeginBalanceAngleArr0_2 = new();
-            BeginBalanceAngleArr90 = new();
-            BeginBalanceAngleArr180 = new();
-            BeginBalanceAngleArr180_2 = new();
-            BeginBalanceAngleArr270 = new();
-
-            MiddleBalanceAngleArr0 = new();
-            MiddleBalanceAngleArr0_2 = new();
-            MiddleBalanceAngleArr90 = new();
-            MiddleBalanceAngleArr180 = new();
-            MiddleBalanceAngleArr180_2 = new();
-            MiddleBalanceAngleArr270 = new();
-
-            BeginUnbalanceSensorArr0 = new();
-            BeginUnbalanceSensorArr0_2 = new();
-            BeginUnbalanceSensorArr90 = new();
-            BeginUnbalanceSensorArr180 = new();
-            BeginUnbalanceSensorArr180_2 = new();
-            BeginUnbalanceSensorArr270 = new();
-
-            MiddleUnbalanceSensorArr0 = new();
-            MiddleUnbalanceSensorArr0_2 = new();
-            MiddleUnbalanceSensorArr90 = new();
-            MiddleUnbalanceSensorArr180 = new();
-            MiddleUnbalanceSensorArr180_2 = new();
-            MiddleUnbalanceSensorArr270 = new();
+            receivedData = new ();
+            calcData.DefaultInit();
         }
 
 
@@ -72,24 +45,35 @@ namespace GravityCalc
         /// </summary>
         public void SumValue()
         {
-            Sum_m = _rd.PassportData.MassPer + _rd.PassportData.MassProd; // mΣ = M_пер + M_изд
+           
+            
+            Sum_m = receivedData.PassportData.PerMas + receivedData.RecomValData.ProdMas; 
 
-            SumX = (_rd.PassportData.MassPer * _rd.PassportData.Xper + _rd.PassportData.MassProd * (_rd.PassportData.Xprod + _rd.PassportData.Hper)) / Sum_m; 
+            SumX = (receivedData.PassportData.PerMas * receivedData.PassportData.PerX + receivedData.RecomValData.ProdMas * (receivedData.RecomValData.ProdX + receivedData.PassportData.PerH)) / Sum_m; 
             if (double.IsNaN(SumX) | double.IsInfinity(SumX))
             {
                 // писать в лог - деление на 0
                 return;
             }
-
-            SumY = SumZ = (_rd.PassportData.MassPer * _rd.PassportData.Yper + _rd.PassportData.Xprod * _rd.PassportData.Yprod) / Sum_m;
+            SumY = (receivedData.PassportData.PerMas * receivedData.PassportData.PerY + receivedData.RecomValData.ProdX * receivedData.RecomValData.ProdY) / Sum_m;
             if (double.IsNaN(SumY) | double.IsInfinity(SumY))
             {
                 // писать в лог - деление на 0
                 return;
             }
+            SumZ = (receivedData.PassportData.PerMas * receivedData.PassportData.PerZ + receivedData.RecomValData.ProdX * receivedData.RecomValData.ProdZ) / Sum_m;
+            if (double.IsNaN(SumZ) | double.IsInfinity(SumZ))
+            {
+                // писать в лог - деление на 0
+                return;
+            }
+            
         }
 
-        //AngleNot
+        //AngleNotMas
+        /// <summary>
+        /// Угол наклона в радианах
+        /// </summary>
         private double val_ang_ma = Defines.UNDEF_DBL_VALUE; // - переменная для расчета (угол наклона без противовеса)
         /// <summary>
         /// ctg получившигося угола наклона без противовеса из расчета
@@ -100,7 +84,7 @@ namespace GravityCalc
         /// </summary>
         public void AngleNot()
         {
-            val_ang_ma = (_rd.PassportData.S + SumY) / (_rd.PassportData.H + SumX); // - сумма углаВ
+            val_ang_ma = (receivedData.PassportData.PasS + SumY + SumZ) / (receivedData.PassportData.PasH + SumX); // - сумма углаВ
             if (double.IsNaN(val_ang_ma) | double.IsInfinity(val_ang_ma))
             {
                 // писать в лог - деление на 0
@@ -109,7 +93,7 @@ namespace GravityCalc
 
             ctg_not_ma = Math.Atan(val_ang_ma); // - ctg наклона
 
-            calcData.A_not = (ctg_not_ma * 180) / Math.PI;
+           receivedData.RecomValData.AngleNotMas = (ctg_not_ma * 180) / Math.PI;
         }
 
         //Расчет для выбора корректирующего груза для кцм
@@ -128,20 +112,25 @@ namespace GravityCalc
         /// </summary>
         public void Computation_mm()
         {
-            // Заносим значения эталоного массива подвижного (корректирующего) груза в расчетный массив ArrRef_ma = new double[4] { 47, 443, 0, 0 };
-            _mi_ma = new double[4];
-            for (int i = 0; i < _rd.PassportData.ArrRef_ma.Count(); i++)
+            // Заносим значения эталоного массива корректирущего груза в расчетный массив ArrRef_mm = new double[6] {0, 270, 540, 810, 1080, 1350};
+            _mi_mm = new double[6];
+            for (int i = 0; i < receivedData.RecomValData.ArrMasMm.Count(); i++)
             {
-                _mi_ma[i] = _rd.PassportData.ArrRef_ma[i];
+                _mi_mm[i] = receivedData.RecomValData.ArrMasMm[i];
             }
 
             // Считаем угол
-            // Epsilon_ma = 8 - угол ξ (Диапозон 0 - 20 градусов) - нужно сделать условие!
-            angel_ma_rad = (_rd.PassportData.Epsilon_ma * Math.PI) / 180;
-            tg_ma = Math.Tan(angel_ma_rad);
+            // Epsilon_mm = 16 - угол ξ (Диапозон 0 - 20 градусов) - нужно сделать условие! Рекомедуемый угол - 16±4⁰
+            angel_mm_rad = (receivedData.RecomValData.EpsilonMm * Math.PI) / 180;
+            if (double.IsNaN(angel_mm_rad) | double.IsInfinity(angel_mm_rad))
+            {
+                // писать в лог - деление на 0
+                return;
+            }
+            tg_mm = Math.Tan(angel_mm_rad);
 
-            _ma = Sum_m * (_rd.PassportData.S + SumY - (_rd.PassportData.H + SumX) * tg_ma) / (_rd.PassportData.D + _rd.PassportData.E * tg_ma);
-            if (double.IsNaN(_ma) | double.IsInfinity(_ma))
+            _mm = Sum_m * (receivedData.PassportData.PasS + SumY + SumZ - (receivedData.PassportData.PasH + SumX) * tg_mm) / (receivedData.PassportData.PasD + receivedData.PassportData.PasE * tg_mm);
+            if (double.IsNaN(_mm) | double.IsInfinity(_mm))
             {
                 // писать в лог - деление на 0
                 return;
@@ -158,24 +147,52 @@ namespace GravityCalc
                 if (_mi_mm[i] == min_mm)
                 {
 
-                    Choose_arr_ma[i] = _rd.PassportData.ArrRef_ma[i];
+                    Choose_arr_mm[i] = receivedData.RecomValData.ArrMasMm[i];
                 }
                 else
                 {
                     Choose_arr_mm[i] = 0;
                 }
 
-            if (_rd.PassportData.Pasport_ma != 0)
+            if (receivedData.PassportData.PasMm != 0)
             {
-                calcData.Result_ma = _rd.PassportData.Pasport_ma;
+                receivedData.RecomValData.Mm = receivedData.PassportData.PasMm;
             }
-            else if (calcData.A_not < 19)
+            else if (receivedData.RecomValData.AngleNotMas < 20)
             {
-                calcData.Result_ma = 0;
+                receivedData.RecomValData.Mm = 0;
             }
             else
             {
-                calcData.Result_ma = Choose_arr_ma.Sum();
+                if (receivedData.RecomValData.ProdMas == 0 || receivedData.RecomValData.ProdMas <= 1160)
+                {
+                    receivedData.RecomValData.Mm = 0;
+                }
+                if (receivedData.RecomValData.ProdMas > 1160 && receivedData.RecomValData.ProdMas <= 2190)
+                {
+                    receivedData.RecomValData.Mm = 270;
+                }
+                if (receivedData.RecomValData.ProdMas > 2190 && receivedData.RecomValData.ProdMas <= 3250)
+                {
+                    receivedData.RecomValData.Mm = 540;
+                }
+                if (receivedData.RecomValData.ProdMas > 3250 && receivedData.RecomValData.ProdMas <= 4320)
+                {
+                    receivedData.RecomValData.Mm = 810;
+                }
+                if (receivedData.RecomValData.ProdMas > 4320 && receivedData.RecomValData.ProdMas <= 5380)
+                {
+                    receivedData.RecomValData.Mm = 1080;
+                }
+                if (receivedData.RecomValData.ProdMas > 5380 && receivedData.RecomValData.ProdMas <= 6450)
+                {
+                    receivedData.RecomValData.Mm = 1350;
+                }
+                if (receivedData.RecomValData.ProdMas > 6450)
+                {
+                    Console.WriteLine("Перевес!");
+                }                
+                Console.WriteLine("Mm= {0}", Choose_arr_mm.Sum()); // Идеальное значение груза для коррекции!
             }
         }
 
@@ -188,22 +205,22 @@ namespace GravityCalc
         public void CalcRefAngle_mm()
         {
             // Проверка
-            try
+            val_ref_ang_mm = (Sum_m * (receivedData.PassportData.PasS + SumY + SumZ) - receivedData.RecomValData.Mm * receivedData.PassportData.PasD) / (receivedData.RecomValData.Mm + receivedData.PassportData.PasE + Sum_m * (receivedData.PassportData.PasH + SumX));
+            if (double.IsNaN(val_ref_ang_mm) | double.IsInfinity(val_ref_ang_mm))
             {
                 // писать в лог - деление на 0
                 return;
             }
 
-                ctg_ref_ma = Math.Atan(val_ref_ang_ma);
-                calcData.RefAngle_ma = (ctg_ref_ma * 180) / Math.PI; // - эталонный угол равновесия 
-            }
-            catch (Exception)
+            ctg_ref_mm = Math.Atan(val_ref_ang_mm);
+            receivedData.RecomValData.AngleKcm = (ctg_ref_mm * 180) / Math.PI; // - эталонный угол равновесия 
+            if (double.IsNaN(receivedData.RecomValData.AngleKcm) | double.IsInfinity(receivedData.RecomValData.AngleKcm))
             {
                 // писать в лог - деление на 0
                 return;
             }
             // Проверка
-            if ((calcData.RefAngle_ma - 21) > 0)
+            if ((receivedData.RecomValData.AngleKcm - 20) > 0)
             {
                 Console.WriteLine("Внимание! Необходима коррекция наклона!");
             }
@@ -229,20 +246,25 @@ namespace GravityCalc
         /// </summary>
         public void Computation_ma()
         {
-            // Заносим значения эталоного массива корректирующего противовеса в расчетный массив - ArrRef_mm = new double[4] { 47, 443, 0, 0 };
-            _mi_mm = new double[4];
-            for (int i = 0; i < _rd.PassportData.ArrRef_mm.Count(); i++)
+            // Заносим значения эталоного массива груза-разгрузки
+            _mi_ma = new double[6];
+            for (int i = 0; i < receivedData.RecomValData.ArrMasMa.Count(); i++)
             {
-                _mi_mm[i] = _rd.PassportData.ArrRef_mm[i];
+                _mi_ma[i] = receivedData.RecomValData.ArrMasMa[i];
             }
 
             // Считаем угол
-            // Epsilon_mm = 4 - угол ξ - (нужно сделать условие 0-20)
-            angel_mm_rad = (_rd.PassportData.Epsilon_mm * Math.PI) / 180;
-            tg_mm = Math.Tan(angel_mm_rad);
+            // Epsilon_ma = 6 - угол ξ (Диапозон 0 - 20 градусов) - нужно сделать условие! Рекомедуемый угол - 6±4⁰
+            angel_ma_rad = (receivedData.RecomValData.EpsilonMa * Math.PI) / 180;
+            if (double.IsNaN(angel_ma_rad) | double.IsInfinity(angel_ma_rad))
+            {
+                // писать в лог - деление на 0
+                return;
+            }
+            tg_ma = Math.Tan(angel_ma_rad);
 
-            _mm = Sum_m * (_rd.PassportData.S + SumY - (_rd.PassportData.H + SumX) * tg_mm) / (_rd.PassportData.D + _rd.PassportData.E * tg_mm);
-            if (double.IsNaN(_mm) | double.IsInfinity(_mm))
+            _ma = Sum_m * (receivedData.PassportData.PasS + SumY + SumZ - (receivedData.PassportData.PasH + SumX) * tg_ma) / (receivedData.PassportData.PasD + receivedData.PassportData.PasE * tg_ma);
+            if (double.IsNaN(_ma) | double.IsInfinity(_ma))
             {
                 // писать в лог - деление на 0
                 return;
@@ -259,20 +281,48 @@ namespace GravityCalc
                 if (_mi_ma[i] == min_ma)
                 {
 
-                    Choose_arr_mm[i] = _rd.PassportData.ArrRef_mm[i];
+                    Choose_arr_ma[i] = receivedData.RecomValData.ArrMasMa[i];
                 }
                 else
                 {
                     Choose_arr_ma[i] = 0;
                 }
 
-            if (_rd.PassportData.Pasport_mm != 0)
+            if (receivedData.PassportData.PasMa != 0)
             {
-                calcData.Result_mm = _rd.PassportData.Pasport_mm;
+                receivedData.RecomValData.Ma = receivedData.PassportData.PasMa;
             }
             else
             {
-                calcData.Result_mm = Choose_arr_mm.Sum();
+                if (receivedData.RecomValData.ProdMas == 0 || receivedData.RecomValData.ProdMas <= 1160)
+                {
+                    receivedData.RecomValData.Ma = 0;
+                }
+                if (receivedData.RecomValData.ProdMas > 1160 && receivedData.RecomValData.ProdMas <= 2190)
+                {
+                    receivedData.RecomValData.Ma = 270;
+                }
+                if (receivedData.RecomValData.ProdMas > 2190 && receivedData.RecomValData.ProdMas <= 3250)
+                {
+                    receivedData.RecomValData.Ma = 540;
+                }
+                if (receivedData.RecomValData.ProdMas > 3250 && receivedData.RecomValData.ProdMas <= 4320)
+                {
+                    receivedData.RecomValData.Ma = 810;
+                }
+                if (receivedData.RecomValData.ProdMas > 4320 && receivedData.RecomValData.ProdMas <= 5380)
+                {
+                    receivedData.RecomValData.Ma = 1080;
+                }
+                if (receivedData.RecomValData.ProdMas > 5380 && receivedData.RecomValData.ProdMas <= 6450)
+                {
+                    receivedData.RecomValData.Ma = 1350;
+                }
+                if (receivedData.RecomValData.ProdMas > 6450)
+                {
+                    Console.WriteLine("Перевес!");
+                }
+                Console.WriteLine("Ma= {0}", Choose_arr_ma.Sum());
             }
         }
 
@@ -287,21 +337,31 @@ namespace GravityCalc
             // Проверка
             try
             {
-                val_ref_ang_mm = (Sum_m * (_rd.PassportData.S + SumY + SumZ) - calcData.Result_mm * _rd.PassportData.D) / (calcData.Result_mm + _rd.PassportData.E + Sum_m * (_rd.PassportData.H + SumX));
-                ctg_ref_mm = Math.Atan(val_ref_ang_mm);
-                calcData.RefAngle_mm = (ctg_ref_mm * 180) / Math.PI; // - эталонный угол равновесия 
+                val_ref_ang_ma = (Sum_m * (receivedData.PassportData.PasS + SumY + SumZ) - receivedData.RecomValData.Ma * receivedData.PassportData.PasD) / (receivedData.RecomValData.Ma + receivedData.PassportData.PasE + Sum_m * (receivedData.PassportData.PasH + SumX));
+                if (double.IsNaN(val_ref_ang_ma) | double.IsInfinity(val_ref_ang_ma))
+                {
+                    // писать в лог - деление на 0
+                    return;
+                }
+                ctg_ref_ma = Math.Atan(val_ref_ang_ma);
+                receivedData.RecomValData.AngleMas = (ctg_ref_ma * 180) / Math.PI; // - эталонный угол равновесия 
+                if (double.IsNaN(receivedData.RecomValData.AngleMas) | double.IsInfinity(val_ref_ang_ma))
+                {
+                    // писать в лог - деление на 0
+                    return;
+                }
             }
             catch (Exception)
             {
-                calcData.RefAngle_mm = calcData.A_not;
+                receivedData.RecomValData.AngleMas = receivedData.RecomValData.AngleNotMas;
             }
 
             // Проверка
-            if ((calcData.RefAngle_mm - calcData.RefAngle_ma) >= 0)
+            if ((receivedData.RecomValData.AngleMas - receivedData.RecomValData.AngleKcm) >= 0)
             {
                 Console.WriteLine("Необходимо выбрать другую массу корректирующего груза");
             }
-            else if (calcData.RefAngle_mm < 1)
+            else if (receivedData.RecomValData.AngleMas < 1)
             {
                 Console.WriteLine("УГОЛ НАКЛОНА МЕНЬШЕ ДОПУСТИМОГО!");
             }
@@ -312,8 +372,6 @@ namespace GravityCalc
         }
 
         //ProductAngle
-       
-        public double[] balanceAngel { get; set; } // средние значения угла равновесия после 10 измерений
         /// <summary>
         /// средние значения угла равновесия после 10 измерений
         /// </summary>
@@ -323,8 +381,8 @@ namespace GravityCalc
         /// </summary>
         public void ProductAngle(List<double> BeginBalanceAngleArr, List<double> MiddleBalanceAngleArr, List<double> BeginUnbalanceSensorArr, List<double> MiddleUnbalanceSensorArr)
         {
-            calcData.Amendment = _rd.PassportData.Dev * (_rd.PassportData.MassProd - m600) / (m6000 - m600); // - Расчет поправки
-            for (int i = 0; i < beginBalanceAngleArr.Count(); i++) // - ТАРИРОВКА УГЛА
+            calcData.Amendment = receivedData.PassportData.Dev * (receivedData.RecomValData.ProdMas - m600) / (m6000 - m600); // - Расчет поправки
+            for (int i = 0; i < BeginBalanceAngleArr.Count(); i++) // - ТАРИРОВКА УГЛА
             {
                 BeginBalanceAngleArr[i] += calcData.Amendment;
                 BeginBalanceAngleArr[i] = Math.Abs(BeginBalanceAngleArr[i]);
@@ -350,6 +408,22 @@ namespace GravityCalc
             calcData.AverageValue = balanceAngel.Average(); // - Среднее значение угла равновесия получившегося в итоге!
             Console.WriteLine("Среднее значение угла равновесия {0} для угла {1}", calcData.AverageValue, receivedData.PassportData.Fi);
         }
+        public double[] kcmSum_m; // - МАССА ДЕТАЛИ!!! ( с переходником )
+        public double K1;
+        public double K2;
+        public void Massa()
+        {
+            K1 = (calcData.MiddleIndicationK0.Sum() / 10 + calcData.BeginIndicationK0.Sum() / 10) / 2;
+            K2 = (calcData.MiddleIndicationK180.Sum() / 10 + calcData.BeginIndicationK180.Sum() / 10) / 2;
+
+            kcmSum_m = new double[10];
+            for( int i = 0; i< kcmSum_m.Count(); i++)
+            {
+                kcmSum_m[i] = (2 * receivedData.RecomValData.Ma * receivedData.PassportData.PasD + receivedData.PassportData.PasMassPG * (2 * receivedData.PassportData.PasK + K1 + K2) + receivedData.PassportData.PasL * (calcData.BeginPowerSensor0[i] + calcData.MiddlePowerSensor0[i] + calcData.BeginPowerSensor180[i] + calcData.MiddlePowerSensor180[i])) / (2 * receivedData.PassportData.PasS);
+            }
+        }
+        
+
 
         private double[] BeginBal_gradArr0 { get; set; } // - переведенный угол в радианы
         //private double[] BeginBal_gradArr0_2 { get; set; } // - переведенный угол в радианы
@@ -368,9 +442,9 @@ namespace GravityCalc
         {
             //0_____________________________________________________________________________________
             BeginBal_gradArr0 = new double[10]; // - Угол равновесия переведенный в радианы
-            for (int i = 0; i < _rd.beginBalanceAngleArr0.Count(); i++)
+            for (int i = 0; i < calcData.BeginBalanceAngleArr0.Count(); i++)
             {
-                BeginBal_gradArr0[i] = _rd.beginBalanceAngleArr0[i];
+                BeginBal_gradArr0[i] = calcData.BeginBalanceAngleArr0[i];
             }
             for (int i = 0; i < BeginBal_gradArr0.Length; i++)
             {
@@ -389,9 +463,9 @@ namespace GravityCalc
 
             //90_____________________________________________________________________________________
             BeginBal_gradArr90 = new double[10]; // - Угол равновесия переведенный в радианы
-            for (int i = 0; i < _rd.beginBalanceAngleArr90.Count(); i++)
+            for (int i = 0; i < calcData.BeginBalanceAngleArr90.Count(); i++)
             {
-                BeginBal_gradArr90[i] = _rd.beginBalanceAngleArr90[i];
+                BeginBal_gradArr90[i] = calcData.BeginBalanceAngleArr90[i];
             }
             for (int i = 0; i < BeginBal_gradArr90.Length; i++)
             {
@@ -410,9 +484,9 @@ namespace GravityCalc
 
             //180_____________________________________________________________________________________
             BeginBal_gradArr180 = new double[10]; // - Угол равновесия переведенный в радианы
-            for (int i = 0; i < _rd.beginBalanceAngleArr180.Count(); i++)
+            for (int i = 0; i < calcData.BeginBalanceAngleArr180.Count(); i++)
             {
-                BeginBal_gradArr180[i] = _rd.beginBalanceAngleArr180[i];
+                BeginBal_gradArr180[i] = calcData.BeginBalanceAngleArr180[i];
             }
             for (int i = 0; i < BeginBal_gradArr180.Length; i++)
             {
@@ -431,9 +505,9 @@ namespace GravityCalc
 
             //270_____________________________________________________________________________________
             BeginBal_gradArr270 = new double[10]; // - Угол равновесия переведенный в радианы
-            for (int i = 0; i < _rd.beginBalanceAngleArr270.Count(); i++)
+            for (int i = 0; i < calcData.BeginBalanceAngleArr270.Count(); i++)
             {
-                BeginBal_gradArr270[i] = _rd.beginBalanceAngleArr270[i];
+                BeginBal_gradArr270[i] = calcData.BeginBalanceAngleArr270[i];
             }
             for (int i = 0; i < BeginBal_gradArr270.Length; i++)
             {
@@ -519,28 +593,28 @@ namespace GravityCalc
         /// </summary>
         public void Balanse_tg()
         {
-            Lamda = Math.Atan(_rd.PassportData.Q / _rd.PassportData.L);
+            Lamda = Math.Atan(receivedData.PassportData.PasQ / receivedData.PassportData.PasL);
             //0
             // α1±Δξ
             for (int i = 0; i < BeginBal_gradArr0.Length; i++)
             {
-                BeginBal_gradArr0[i] = BeginBal_gradArr0[i] + _rd.PassportData.DevEpsilon;
+                BeginBal_gradArr0[i] = BeginBal_gradArr0[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             for (int i = 0; i < MiddleBal_gradArr0.Length; i++)
             {
-                MiddleBal_gradArr0[i] = MiddleBal_gradArr0[i] + _rd.PassportData.DevEpsilon;
+                MiddleBal_gradArr0[i] = MiddleBal_gradArr0[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             // P1±ΔP
             for (int i = 0; i < calcData.BeginDisbalanceSensorArr0.Count; i++)
             {
-                BeginUnbalanceSensorArr0[i] = BeginUnbalanceSensorArr0[i] + _rd.PassportData.DevP;
+                calcData.BeginDisbalanceSensorArr0[i] = calcData.BeginDisbalanceSensorArr0[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             for (int i = 0; i < calcData.MiddleDisbalanceSensorArr0.Count; i++)
             {
-                MiddleUnbalanceSensorArr0[i] = MiddleUnbalanceSensorArr0[i] + _rd.PassportData.DevP;
+                calcData.MiddleDisbalanceSensorArr0[i] = calcData.MiddleDisbalanceSensorArr0[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             //A, B, C, D
@@ -580,23 +654,23 @@ namespace GravityCalc
             // α1±Δξ
             for (int i = 0; i < BeginBal_gradArr90.Length; i++)
             {
-                BeginBal_gradArr90[i] = BeginBal_gradArr90[i] + _rd.PassportData.DevEpsilon;
+                BeginBal_gradArr90[i] = BeginBal_gradArr90[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             for (int i = 0; i < MiddleBal_gradArr90.Length; i++)
             {
-                MiddleBal_gradArr90[i] = MiddleBal_gradArr90[i] + _rd.PassportData.DevEpsilon;
+                MiddleBal_gradArr90[i] = MiddleBal_gradArr90[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             // P1±ΔP
             for (int i = 0; i < calcData.BeginDisbalanceSensorArr90.Count; i++)
             {
-                BeginUnbalanceSensorArr90[i] = BeginUnbalanceSensorArr90[i] + _rd.PassportData.DevP;
+                calcData.BeginDisbalanceSensorArr90[i] = calcData.BeginDisbalanceSensorArr90[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             for (int i = 0; i < calcData.MiddleDisbalanceSensorArr90.Count; i++)
             {
-                MiddleUnbalanceSensorArr90[i] = MiddleUnbalanceSensorArr90[i] + _rd.PassportData.DevP;
+                calcData.MiddleDisbalanceSensorArr90[i] = calcData.MiddleDisbalanceSensorArr90[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             //A, B, C, D
@@ -636,23 +710,23 @@ namespace GravityCalc
             // α1±Δξ
             for (int i = 0; i < BeginBal_gradArr180.Length; i++)
             {
-                BeginBal_gradArr180[i] = BeginBal_gradArr180[i] + _rd.PassportData.DevEpsilon;
+                BeginBal_gradArr180[i] = BeginBal_gradArr180[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             for (int i = 0; i < MiddleBal_gradArr180.Length; i++)
             {
-                MiddleBal_gradArr180[i] = MiddleBal_gradArr180[i] + _rd.PassportData.DevEpsilon;
+                MiddleBal_gradArr180[i] = MiddleBal_gradArr180[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             // P1±ΔP
             for (int i = 0; i < calcData.BeginDisbalanceSensorArr180.Count; i++)
             {
-                BeginUnbalanceSensorArr180[i] = BeginUnbalanceSensorArr180[i] + _rd.PassportData.DevP;
+                calcData.BeginDisbalanceSensorArr180[i] = calcData.BeginDisbalanceSensorArr180[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             for (int i = 0; i < calcData.MiddleDisbalanceSensorArr180.Count; i++)
             {
-                MiddleUnbalanceSensorArr180[i] = MiddleUnbalanceSensorArr180[i] + _rd.PassportData.DevP;
+                calcData.MiddleDisbalanceSensorArr180[i] = calcData.MiddleDisbalanceSensorArr180[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             //A, B, C, D
@@ -692,23 +766,23 @@ namespace GravityCalc
             // α1±Δξ
             for (int i = 0; i < BeginBal_gradArr270.Length; i++)
             {
-                BeginBal_gradArr270[i] = BeginBal_gradArr270[i] + _rd.PassportData.DevEpsilon;
+                BeginBal_gradArr270[i] = BeginBal_gradArr270[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             for (int i = 0; i < MiddleBal_gradArr270.Length; i++)
             {
-                MiddleBal_gradArr270[i] = MiddleBal_gradArr270[i] + _rd.PassportData.DevEpsilon;
+                MiddleBal_gradArr270[i] = MiddleBal_gradArr270[i] + receivedData.PassportData.PasDevEpsilon;
             }
 
             // P1±ΔP
             for (int i = 0; i < calcData.BeginDisbalanceSensorArr270.Count; i++)
             {
-                BeginUnbalanceSensorArr270[i] = BeginUnbalanceSensorArr270[i] + _rd.PassportData.DevP;
+                calcData.BeginDisbalanceSensorArr270[i] = calcData.BeginDisbalanceSensorArr270[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             for (int i = 0; i < calcData.MiddleDisbalanceSensorArr270.Count; i++)
             {
-                MiddleUnbalanceSensorArr270[i] = MiddleUnbalanceSensorArr270[i] + _rd.PassportData.DevP;
+                calcData.MiddleDisbalanceSensorArr270[i] = calcData.MiddleDisbalanceSensorArr270[i] + receivedData.PassportData.PasDevPdisbal;
             }
 
             //A, B, C, D
@@ -933,7 +1007,7 @@ namespace GravityCalc
             kcmSumX = new double[A0.Length];
             for (int i = 0; i < kcmSumX.Length; i++)
             {
-                kcmSumX[i] = (kcmSumX1[i] + kcmSumX2[i]) / 2;
+                kcmSumX[i] = receivedData.PassportData.PasS * (1 / (tg0[i] + tg180[i]) + 1 / (tg90[i] + tg270[i])) - receivedData.PassportData.PasH;
             }
 
             ////МАССА ИЗДЕЛИЯ И ПЕРЕХОДНИКА - СТАНКОПРЕСС!!!
@@ -946,13 +1020,13 @@ namespace GravityCalc
             kcmSumY = new double[kcmSumX.Length];
             for (int i = 0; i < kcmSumY.Length; i++)
             {
-                kcmSumY[i] = (_rd.PassportData.S * Dif_tg_0_180[i] - (_rd.PassportData.D * Dif_tg_0_180[i] * calcData.Result_ma) / kcmSum_m[i]) / Dif_tg_0_180[i];
+                kcmSumY[i] = receivedData.PassportData.PasS * (tg0[i] - tg180[i]) / (tg0[i] + tg180[i]);
             }
 
             kcmSumZ = new double[kcmSumX.Length];
             for (int i = 0; i < kcmSumZ.Length; i++)
             {
-                kcmSumZ[i] = (_rd.PassportData.S * Dif_tg_90_270[i] - (_rd.PassportData.D * Dif_tg_90_270[i] * calcData.Result_ma) / kcmSum_m[i]) / Dif_tg_90_270[i];
+                kcmSumZ[i] = receivedData.PassportData.PasS * (tg90[i] - tg270[i]) / (tg90[i] + tg270[i]);
             }
             //_________________________________________________________________________________________________________________________
             //_________________________________________________________________________________________________________________________
@@ -960,39 +1034,39 @@ namespace GravityCalc
 
             // Номинали на лист СРЕДНИЙ
             kcmDev = new double[3];
-            kcmDev[0] = _rd.PassportData.DevX600 + (_rd.PassportData.MassProd - m600) * (_rd.PassportData.DevX6000 - _rd.PassportData.DevX600) / (m6000 - m600);
-            kcmDev[1] = _rd.PassportData.DevY600 + (_rd.PassportData.MassProd - m600) * (_rd.PassportData.DevY6000 - _rd.PassportData.DevY600) / (m6000 - m600);
-            kcmDev[2] = _rd.PassportData.DevZ600 + (_rd.PassportData.MassProd - m600) * (_rd.PassportData.DevZ6000 - _rd.PassportData.DevZ600) / (m6000 - m600);
+            kcmDev[0] = receivedData.PassportData.DevX600 + (receivedData.RecomValData.ProdMas - m600) * (receivedData.PassportData.DevX6000 - receivedData.PassportData.DevX600) / (m6000 - m600);
+            kcmDev[1] = receivedData.PassportData.DevY600 + (receivedData.RecomValData.ProdMas - m600) * (receivedData.PassportData.DevY6000 - receivedData.PassportData.DevY600) / (m6000 - m600);
+            kcmDev[2] = receivedData.PassportData.DevZ600 + (receivedData.RecomValData.ProdMas - m600) * (receivedData.PassportData.DevZ6000 - receivedData.PassportData.DevZ600) / (m6000 - m600);
             // Даныне пойдут на в средн
             kcmMprod = new double[kcmSumX.Length]; // - МАССА ДЕТАЛИ ИСТИННАЯ ( 10 замеров )
             for (int i = 0; i < kcmMprod.Length; i++)
             {
-                kcmMprod[i] = kcmSum_m[i] - _rd.PassportData.MassPer;
+                kcmMprod[i] = kcmSum_m[i] - receivedData.PassportData.PerMas;
             }
 
             kcmXprod = new double[kcmSumX.Length];
             for (int i = 0; i < kcmXprod.Length; i++)
             {
-                kcmXprod[i] = (kcmSum_m[i] * kcmSumX[i] - _rd.PassportData.MassPer * _rd.PassportData.DevХper - kcmMprod[i] * _rd.PassportData.Hper) / kcmMprod[i] + kcmDev[0];
+                kcmXprod[i] = (kcmSum_m[i] * kcmSumX[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerX - kcmMprod[i] * receivedData.PassportData.PerH) / kcmMprod[i] + kcmDev[0];
             }
 
             kcmYprod = new double[kcmSumX.Length];
             for (int i = 0; i < kcmYprod.Length; i++)
             {
-                kcmYprod[i] = (kcmSum_m[i] * kcmSumY[i] - _rd.PassportData.MassPer * _rd.PassportData.DevYper) / kcmMprod[i] + kcmDev[1];
+                kcmYprod[i] = (kcmSum_m[i] * kcmSumY[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerY) / kcmMprod[i] + kcmDev[1];
             }
 
             kcmZprod = new double[kcmSumX.Length];
             for (int i = 0; i < kcmZprod.Length; i++)
             {
-                kcmZprod[i] = (kcmSum_m[i] * kcmSumZ[i] - _rd.PassportData.MassPer * _rd.PassportData.DevZper) / kcmMprod[i] + kcmDev[2];
+                kcmZprod[i] = (kcmSum_m[i] * kcmSumZ[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerZ) / kcmMprod[i] + kcmDev[2];
                 // Оценка влияния Δφ для у
-                kcmZprod[i] = kcmZprod[i] + kcmYprod[i] * _rd.PassportData.DevFi;
+                kcmZprod[i] = kcmZprod[i] + kcmYprod[i] * receivedData.PassportData.PasDevFi;
             }
             // Оценка влияния Δφ для у
             for (int i = 0; i < kcmYprod.Length; i++)
             {
-                kcmYprod[i] = kcmYprod[i] - kcmZprod[i] * _rd.PassportData.DevFi;
+                kcmYprod[i] = kcmYprod[i] - kcmZprod[i] * receivedData.PassportData.PasDevFi;
             }
         }
 
@@ -1012,45 +1086,46 @@ namespace GravityCalc
             Gruz = false;
 
             // Расчет суммарных
-            SumX_CM = new double[A0.Length];
-            for (int i = 0; i < SumX_CM.Length; i++)
-            {
-                SumX_CM[i] = ((2 * _rd.PassportData.S - _rd.PassportData.Pasport_ma * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_0_180[i]) / Sum_m) / Sum_tg_0_180[i] +
-                (2 * _rd.PassportData.S - _rd.PassportData.Pasport_ma * (2 * _rd.PassportData.D + _rd.PassportData.E * Sum_tg_90_270[i]) / Sum_m) / Sum_tg_90_270[i]) / 2 - _rd.PassportData.H;
-            }
+            if(receivedData.RecomValData.Mm != 0)
+            { 
+                SumX_CM = new double[A0.Length];
+                for (int i = 0; i < SumX_CM.Length; i++)
+                {
+                    SumX_CM[i] = ((2 * kcmSum_m[i] * receivedData.PassportData.PasS - receivedData.RecomValData.Mm * receivedData.PassportData.PasE * (tg0[i] + tg180[i]) - 2 * receivedData.RecomValData.Mm * receivedData.PassportData.PasD)
+                    / kcmSum_m[i] * (tg90[i] + tg180[i]) - receivedData.PassportData.PasH + (2 * kcmSum_m[i] * receivedData.PassportData.PasS - receivedData.RecomValData.Mm * receivedData.PassportData.PasE * (tg90[i] + tg270[i]) - 2 * receivedData.RecomValData.Mm * receivedData.PassportData.PasD)
+                    / kcmSum_m[i] * (tg90[i] + tg270[i]) - receivedData.PassportData.PasH) / 2;
+                }
 
-            SumY_CM = new double[A0.Length];
-            for (int i = 0; i < SumY_CM.Length; i++)
-            {
-                SumY_CM[i] = (_rd.PassportData.S * Dif_tg_0_180[i] - _rd.PassportData.D * Dif_tg_0_180[i] * _rd.PassportData.Pasport_ma / Sum_m) / Sum_tg_0_180[i];
-            }
+                SumY_CM = new double[A0.Length];
+                for (int i = 0; i < SumY_CM.Length; i++)
+                {
+                    SumY_CM[i] = (receivedData.PassportData.PasS * kcmSum_m[i] - receivedData.RecomValData.Mm * receivedData.PassportData.PasD) * (tg0[i] - tg180[i]) / kcmSum_m[i] * (tg0[i] + tg180[i]);
+                }
 
-            SumZ_CM = new double[A0.Length];
-            for (int i = 0; i < SumZ_CM.Length; i++)
-            {
-                SumZ_CM[i] = (_rd.PassportData.S * Dif_tg_90_270[i] - _rd.PassportData.D * Dif_tg_90_270[i] * _rd.PassportData.Pasport_ma / Sum_m) / Sum_tg_90_270[i];
-            }
-            //________________________________________________________________________________________________________________________
-            //________________________________________________________________________________________________________________________
-            //________________________________________________________________________________________________________________________
+                SumZ_CM = new double[A0.Length];
+                for (int i = 0; i < SumZ_CM.Length; i++)
+                {
+                    SumZ_CM[i] = (receivedData.PassportData.PasS * kcmSum_m[i] - receivedData.RecomValData.Mm * receivedData.PassportData.PasD) * (tg90[i] - tg270[i]) / kcmSum_m[i] * (tg90[i] + tg270[i]);
+                }
 
-            Xprod_CM = new double[A0.Length];
-            for (int i = 0; i < Xprod_CM.Length; i++)
-            {
-                Xprod_CM[i] = (Sum_m * SumX_CM[i] - _rd.PassportData.MassPer * _rd.PassportData.Xper - _rd.PassportData.MassProd * _rd.PassportData.Hper) / _rd.PassportData.MassProd;
-            }
+                Xprod_CM = new double[A0.Length];
+                for (int i = 0; i < Xprod_CM.Length; i++)
+                {
+                    Xprod_CM[i] = (Sum_m * SumX_CM[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerX - receivedData.RecomValData.ProdMas * receivedData.PassportData.PerH) / receivedData.RecomValData.ProdMas;
+                }
 
+                Yprod_CM = new double[A0.Length];
+                for (int i = 0; i < Yprod_CM.Length; i++)
+                {
+                    Yprod_CM[i] = (Sum_m * SumY_CM[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerY) / receivedData.RecomValData.ProdMas;
+                }
 
-            Yprod_CM = new double[A0.Length];
-            for (int i = 0; i < Yprod_CM.Length; i++)
-            {
-                Yprod_CM[i] = (Sum_m * SumY_CM[i] - _rd.PassportData.MassPer * _rd.PassportData.Yper) / _rd.PassportData.MassProd;
-            }
-
-            Zprod_CM = new double[A0.Length];
-            for (int i = 0; i < Zprod_CM.Length; i++)
-            {
-                Zprod_CM[i] = (Sum_m * SumZ_CM[i] - _rd.PassportData.MassPer * _rd.PassportData.Zper) / _rd.PassportData.MassProd;
+                Zprod_CM = new double[A0.Length];
+                for (int i = 0; i < Zprod_CM.Length; i++)
+                {
+                    Zprod_CM[i] = (Sum_m * SumZ_CM[i] - receivedData.PassportData.PerMas * receivedData.PassportData.PerZ) / receivedData.RecomValData.ProdMas;
+                }
+                Gruz = true;
             }
 
             //________________________________________________________________________________________________________________________
@@ -1059,18 +1134,67 @@ namespace GravityCalc
 
             // РАСЧЕТ КООРДИНАТ для КЦМ\М и КП-КЦМ\М (ИТОГ)
             // X
-            if (_rd.PassportData.MassProd == 0)
+            if (receivedData.PassportData.KP == true)
             {
-                kcmXprod.Average();
-                AvVulX1 = kcmXprod.Average();
-               calcData.RES_X = AvVulX1;
+                if (Gruz == false)
+                {
+                    kcmXprod.Average();
+                    AvVulX1 = kcmXprod.Average();
+                    calcData.RES_Xkp = AvVulX1;
+                }
+                else
+                {
+                    Xprod_CM.Average();
+                    AvVulX2 = Xprod_CM.Average();
+                    calcData.RES_Xkp = AvVulX2;
+                }
+
+                //Y
+                if (Gruz == false)
+                {
+                    kcmYprod.Average();
+                    AvVulY1 = kcmYprod.Average();
+                    calcData.RES_Ykp = AvVulY1;
+                }
+                else
+                {
+                    Yprod_CM.Average();
+                    AvVulY2 = Yprod_CM.Average();
+                    calcData.RES_Ykp = AvVulY2;
+                }
+
+                // Z
+                if (Gruz == false)
+                {
+                    kcmZprod.Average();
+                    AvVulZ1 = kcmZprod.Average();
+                    calcData.RES_Zkp = AvVulZ1;
+                }
+                else
+                {
+                    Zprod_CM.Average();
+                    AvVulZ2 = Zprod_CM.Average();
+                    calcData.RES_Zkp = AvVulZ2;
+                }
+
+                kcmMprod.Average();
+                AvVulM1 = kcmMprod.Average();
+                calcData.RES_Mkp = AvVulM1;
             }
             else
             {
-                Xprod_CM.Average();
-                AvVulX2 = Xprod_CM.Average();
-                calcData.RES_X = AvVulX2;
-            }
+                if (Gruz == false)
+                {
+                    kcmXprod.Average();
+                    AvVulX1 = kcmXprod.Average();
+                    calcData.RES_X = AvVulX1;
+                }
+                else
+                {
+                    Xprod_CM.Average();
+                    AvVulX2 = Xprod_CM.Average();
+                    calcData.RES_X = AvVulX2;
+                }
 
                 //Y
                 if (Gruz == false)
@@ -1107,97 +1231,150 @@ namespace GravityCalc
 
             //_______________________________________________________________________________
             //Определение средних значений КМЦ и массы и их отклонений!!!!
-            if (_rd.PassportData.MassProd == 0)
-            {
-                calcData.AverProdValMas = kcmMprod.Average();
+             receivedData.NSPData.AverProdValMas = kcmMprod.Average();
                 for (int i = 0; i < kcmMprod.Length; i++)
                 {
-                    kcmMprod[i] = kcmMprod[i] - calcData.AverProdValMas;
-                    kcmMprod[i] = Math.Pow(kcmMprod[i], 2);
+                     kcmMprod[i] = kcmMprod[i] - receivedData.NSPData.AverProdValMas;
+                     kcmMprod[i] = Math.Pow(kcmMprod[i], 2);
                 }
-                Sum__m = kcmMprod.Sum();
-                M = Math.Sqrt(Sum__m / (kcmMprod.Length - 1)) / Math.Sqrt(2);
-            }
-            else
-            {
-                M = 0;
-            }
+            Sum__m = kcmMprod.Sum();
+             if (receivedData.PassportData.KP == true)
+             {
+                Mkp = Math.Sqrt(Sum__m / (kcmMprod.Length - 1)) / Math.Sqrt(10);
+             }    
+             else
+             {
+                M = Math.Sqrt(Sum__m / (kcmMprod.Length - 1)) / Math.Sqrt(10);
+             }
+                
             //____________________________________________________
 
             if (Gruz == false)
             {
-                calcData.AverProdVal_X = kcmXprod.Average();
+                receivedData.NSPData.AverProdVal_X = kcmXprod.Average();
                 for (int i = 0; i < kcmXprod.Length; i++)
                 {
-                    kcmXprod[i] = kcmXprod[i] - calcData.AverProdVal_X;
+                    kcmXprod[i] = kcmXprod[i] - receivedData.NSPData.AverProdVal_X;
                     kcmXprod[i] = Math.Pow(kcmXprod[i], 2);
                 }
                 Sum__x = kcmXprod.Sum();
-                X = Math.Sqrt(Sum__x / (kcmXprod.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Xkp = Math.Sqrt(Sum__x / (kcmXprod.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    X = Math.Sqrt(Sum__x / (kcmXprod.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             else
             {
-                calcData.AverProdVal_X = Xprod_CM.Average();
-                for (int i = 0; i < kcmXprod.Length; i++)
+                receivedData.NSPData.AverProdVal_X = Xprod_CM.Average();
+                for (int i = 0; i < Xprod_CM.Length; i++)
                 {
-                    Xprod_CM[i] = Xprod_CM[i] - calcData.AverProdVal_X;
+                    Xprod_CM[i] = Xprod_CM[i] - receivedData.NSPData.AverProdVal_X;
                     Xprod_CM[i] = Math.Pow(kcmXprod[i], 2);
                 }
                 Sum__x = Xprod_CM.Sum();
-                X = Math.Sqrt(Sum__x / (Xprod_CM.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Xkp = Math.Sqrt(Sum__x / (Xprod_CM.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    X = Math.Sqrt(Sum__x / (Xprod_CM.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             //____________________________________________________
 
             if (Gruz == false)
             {
-                calcData.AverProdVal_Y = kcmYprod.Average();
+                receivedData.NSPData.AverProdVal_Y = kcmYprod.Average();
                 for (int i = 0; i < kcmYprod.Length; i++)
                 {
-                    kcmYprod[i] = kcmYprod[i] - calcData.AverProdVal_Y;
+                    kcmYprod[i] = kcmYprod[i] - receivedData.NSPData.AverProdVal_Y;
                     kcmYprod[i] = Math.Pow(kcmYprod[i], 2);
                 }
                 Sum__y = kcmYprod.Sum();
-                Y = Math.Sqrt(Sum__y / (kcmYprod.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Ykp = Math.Sqrt(Sum__y / (kcmYprod.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    Y = Math.Sqrt(Sum__y / (kcmYprod.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             else
             {
-                calcData.AverProdVal_Y = Yprod_CM.Average();
+                receivedData.NSPData.AverProdVal_Y = Yprod_CM.Average();
                 for (int i = 0; i < Yprod_CM.Length; i++)
                 {
-                    Yprod_CM[i] = Yprod_CM[i] - calcData.AverProdVal_Y;
+                    Yprod_CM[i] = Yprod_CM[i] - receivedData.NSPData.AverProdVal_Y;
                     Yprod_CM[i] = Math.Pow(Yprod_CM[i], 2);
                 }
                 Sum__y = Yprod_CM.Sum();
-                Y = Math.Sqrt(Sum__y / (Yprod_CM.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Ykp = Math.Sqrt(Sum__y / (Yprod_CM.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    Y = Math.Sqrt(Sum__y / (Yprod_CM.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             //____________________________________________________
 
             if (Gruz == false)
             {
-                calcData.AverProdVal_Z = kcmZprod.Average();
+                receivedData.NSPData.AverProdVal_Z = kcmZprod.Average();
                 for (int i = 0; i < kcmZprod.Length; i++)
                 {
-                    kcmZprod[i] = kcmZprod[i] - calcData.AverProdVal_Z;
+                    kcmZprod[i] = kcmZprod[i] - receivedData.NSPData.AverProdVal_Z;
                     kcmZprod[i] = Math.Pow(kcmZprod[i], 2);
                 }
                 Sum__z = kcmZprod.Sum();
-                Z = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Zkp = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    Z = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             else
             {
-                calcData.AverProdVal_Z = Zprod_CM.Average();
+                receivedData.NSPData.AverProdVal_Z = Zprod_CM.Average();
                 for (int i = 0; i < Zprod_CM.Length; i++)
                 {
-                    Zprod_CM[i] = Zprod_CM[i] - calcData.AverProdVal_Z;
+                    Zprod_CM[i] = Zprod_CM[i] - receivedData.NSPData.AverProdVal_Z;
                     Zprod_CM[i] = Math.Pow(Zprod_CM[i], 2);
                 }
                 Sum__z = Zprod_CM.Sum();
-                Z = Math.Sqrt(Sum__z / (Zprod_CM.Length - 1)) / Math.Sqrt(2);
+                if (receivedData.PassportData.KP == true)
+                {
+                    Zkp = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(10);
+                }
+                else
+                {
+                    Z = Math.Sqrt(Sum__z / (kcmZprod.Length - 1)) / Math.Sqrt(10);
+                }
+                
             }
             //____________________________________________________________________
 
             // Среднеквадратичное отклонение средних арифметических 
             DevAver = new double[4] { X, Y, Z, M };
+            receivedData.NSPData.devXnsp = DevAver[0];
+            receivedData.NSPData.devYnsp = DevAver[1];
+            receivedData.NSPData.devZnsp = DevAver[2];
+            receivedData.NSPData.devMnsp = DevAver[3];
         }
 
 
@@ -1212,14 +1389,14 @@ namespace GravityCalc
         public void NSP()
         {
             // Вносим данные 
-            devX1 = new double[16] {_rd.NSPData._devSx, _rd.NSPData._devHx, _rd.NSPData._devLx, _rd.NSPData._devQx, _rd.NSPData._devPx, _rd.NSPData._devEPSILx, _rd.NSPData._devFIx, _rd.NSPData._devXpx, _rd.NSPData._devYpx, _rd.NSPData._devZpx, _rd.NSPData._devMpx, _rd.NSPData._devHpx, _rd.NSPData._devDx, _rd.NSPData._devEx, _rd.NSPData._devMAx, _rd.NSPData._devMMx };
-            devY1 = new double[16] { _rd.NSPData._devSy, _rd.NSPData._devHy, _rd.NSPData._devLy, _rd.NSPData._devQy, _rd.NSPData._devPy, _rd.NSPData._devEPSILy, _rd.NSPData._devFIy, _rd.NSPData._devXpy, _rd.NSPData._devYpy, _rd.NSPData._devZpy, _rd.NSPData._devMpy, _rd.NSPData._devHpy, _rd.NSPData._devDy, _rd.NSPData._devEy, _rd.NSPData._devMAy, _rd.NSPData._devMMy };
-            devZ1 = new double[16] { _rd.NSPData._devSz, _rd.NSPData._devHz, _rd.NSPData._devLz, _rd.NSPData._devQz, _rd.NSPData._devPz, _rd.NSPData._devEPSILz, _rd.NSPData._devFIz, _rd.NSPData._devXpz, _rd.NSPData._devYpz, _rd.NSPData._devZpz, _rd.NSPData._devMpz, _rd.NSPData._devHpz, _rd.NSPData._devDz, _rd.NSPData._devEz, _rd.NSPData._devMAz, _rd.NSPData._devMMz };
-            devM1 = new double[16] { _rd.NSPData._devSm, _rd.NSPData._devHm, _rd.NSPData._devLm, _rd.NSPData._devQm, _rd.NSPData._devPm, _rd.NSPData._devEPSILm, _rd.NSPData._devFIm, _rd.NSPData._devXpm, _rd.NSPData._devYpm, _rd.NSPData._devZpm, _rd.NSPData._devMpm, _rd.NSPData._devHpm, _rd.NSPData._devDm, _rd.NSPData._devEm, _rd.NSPData._devMAm, _rd.NSPData._devMMm };
-            devX2 = new double[16] { _rd.NSPData._devSx2, _rd.NSPData._devHx2, _rd.NSPData._devLx2, _rd.NSPData._devQx2, _rd.NSPData._devPx2, _rd.NSPData._devEPSILx2, _rd.NSPData._devFIx2, _rd.NSPData._devXpx2, _rd.NSPData._devYpx2, _rd.NSPData._devZpx2, _rd.NSPData._devMpx2, _rd.NSPData._devHpx2, _rd.NSPData._devDx2, _rd.NSPData._devEx2, _rd.NSPData._devMAx2, _rd.NSPData._devMMx2 };
-            devY2 = new double[16] { _rd.NSPData._devSy2, _rd.NSPData._devHy2, _rd.NSPData._devLy2, _rd.NSPData._devQy2, _rd.NSPData._devPy2, _rd.NSPData._devEPSILy2, _rd.NSPData._devFIy2, _rd.NSPData._devXpy2, _rd.NSPData._devYpy2, _rd.NSPData._devZpy2, _rd.NSPData._devMpy2, _rd.NSPData._devHpy2, _rd.NSPData._devDy2, _rd.NSPData._devEy2, _rd.NSPData._devMAy2, _rd.NSPData._devMMy2 };
-            devZ2 = new double[16] { _rd.NSPData._devSz2, _rd.NSPData._devHz2, _rd.NSPData._devLz2, _rd.NSPData._devQz2, _rd.NSPData._devPz2, _rd.NSPData._devEPSILz2, _rd.NSPData._devFIz2, _rd.NSPData._devXpz2, _rd.NSPData._devYpz2, _rd.NSPData._devZpz2, _rd.NSPData._devMpz2, _rd.NSPData._devHpz2, _rd.NSPData._devDz2, _rd.NSPData._devEz2, _rd.NSPData._devMAz2, _rd.NSPData._devMMz2 };
-            devM2 = new double[16] { _rd.NSPData._devSm2, _rd.NSPData._devHm2, _rd.NSPData._devLm2, _rd.NSPData._devQm2, _rd.NSPData._devPm2, _rd.NSPData._devEPSILm2, _rd.NSPData._devFIm2, _rd.NSPData._devXpm2, _rd.NSPData._devYpm2, _rd.NSPData._devZpm2, _rd.NSPData._devMpm2, _rd.NSPData._devHpm2, _rd.NSPData._devDm2, _rd.NSPData._devEm2, _rd.NSPData._devMAm2, _rd.NSPData._devMMm2 };
+            devX1 = new double[17] {receivedData.NSPData._devSx, receivedData.NSPData._devHx, receivedData.NSPData._devLx, receivedData.NSPData._devQx, receivedData.NSPData._devPx, receivedData.NSPData._devEPSILx, receivedData.NSPData._devFIx, receivedData.NSPData._devXpx, receivedData.NSPData._devYpx, receivedData.NSPData._devZpx, receivedData.NSPData._devMpx, receivedData.NSPData._devHpx, receivedData.NSPData._devDx, receivedData.NSPData._devEx, receivedData.NSPData._devMAx, receivedData.NSPData._devMMx, receivedData.NSPData._devMASSx };
+            devY1 = new double[17] { receivedData.NSPData._devSy, receivedData.NSPData._devHy, receivedData.NSPData._devLy, receivedData.NSPData._devQy, receivedData.NSPData._devPy, receivedData.NSPData._devEPSILy, receivedData.NSPData._devFIy, receivedData.NSPData._devXpy, receivedData.NSPData._devYpy, receivedData.NSPData._devZpy, receivedData.NSPData._devMpy, receivedData.NSPData._devHpy, receivedData.NSPData._devDy, receivedData.NSPData._devEy, receivedData.NSPData._devMAy, receivedData.NSPData._devMMy, receivedData.NSPData._devMASSy };
+            devZ1 = new double[17] { receivedData.NSPData._devSz, receivedData.NSPData._devHz, receivedData.NSPData._devLz, receivedData.NSPData._devQz, receivedData.NSPData._devPz, receivedData.NSPData._devEPSILz, receivedData.NSPData._devFIz, receivedData.NSPData._devXpz, receivedData.NSPData._devYpz, receivedData.NSPData._devZpz, receivedData.NSPData._devMpz, receivedData.NSPData._devHpz, receivedData.NSPData._devDz, receivedData.NSPData._devEz, receivedData.NSPData._devMAz, receivedData.NSPData._devMMz, receivedData.NSPData._devMASSz };
+            devM1 = new double[17] { receivedData.NSPData._devSm, receivedData.NSPData._devHm, receivedData.NSPData._devLm, receivedData.NSPData._devQm, receivedData.NSPData._devPm, receivedData.NSPData._devEPSILm, receivedData.NSPData._devFIm, receivedData.NSPData._devXpm, receivedData.NSPData._devYpm, receivedData.NSPData._devZpm, receivedData.NSPData._devMpm, receivedData.NSPData._devHpm, receivedData.NSPData._devDm, receivedData.NSPData._devEm, receivedData.NSPData._devMAm, receivedData.NSPData._devMMm, receivedData.NSPData._devMASSm };
+            devX2 = new double[17] { receivedData.NSPData._devSx2, receivedData.NSPData._devHx2, receivedData.NSPData._devLx2, receivedData.NSPData._devQx2, receivedData.NSPData._devPx2, receivedData.NSPData._devEPSILx2, receivedData.NSPData._devFIx2, receivedData.NSPData._devXpx2, receivedData.NSPData._devYpx2, receivedData.NSPData._devZpx2, receivedData.NSPData._devMpx2, receivedData.NSPData._devHpx2, receivedData.NSPData._devDx2, receivedData.NSPData._devEx2, receivedData.NSPData._devMAx2, receivedData.NSPData._devMMx2, receivedData.NSPData._devMASSx2 };
+            devY2 = new double[17] { receivedData.NSPData._devSy2, receivedData.NSPData._devHy2, receivedData.NSPData._devLy2, receivedData.NSPData._devQy2, receivedData.NSPData._devPy2, receivedData.NSPData._devEPSILy2, receivedData.NSPData._devFIy2, receivedData.NSPData._devXpy2, receivedData.NSPData._devYpy2, receivedData.NSPData._devZpy2, receivedData.NSPData._devMpy2, receivedData.NSPData._devHpy2, receivedData.NSPData._devDy2, receivedData.NSPData._devEy2, receivedData.NSPData._devMAy2, receivedData.NSPData._devMMy2, receivedData.NSPData._devMASSy2 };
+            devZ2 = new double[17] { receivedData.NSPData._devSz2, receivedData.NSPData._devHz2, receivedData.NSPData._devLz2, receivedData.NSPData._devQz2, receivedData.NSPData._devPz2, receivedData.NSPData._devEPSILz2, receivedData.NSPData._devFIz2, receivedData.NSPData._devXpz2, receivedData.NSPData._devYpz2, receivedData.NSPData._devZpz2, receivedData.NSPData._devMpz2, receivedData.NSPData._devHpz2, receivedData.NSPData._devDz2, receivedData.NSPData._devEz2, receivedData.NSPData._devMAz2, receivedData.NSPData._devMMz2, receivedData.NSPData._devMASSz2 };
+            devM2 = new double[17] { receivedData.NSPData._devSm2, receivedData.NSPData._devHm2, receivedData.NSPData._devLm2, receivedData.NSPData._devQm2, receivedData.NSPData._devPm2, receivedData.NSPData._devEPSILm2, receivedData.NSPData._devFIm2, receivedData.NSPData._devXpm2, receivedData.NSPData._devYpm2, receivedData.NSPData._devZpm2, receivedData.NSPData._devMpm2, receivedData.NSPData._devHpm2, receivedData.NSPData._devDm2, receivedData.NSPData._devEm2, receivedData.NSPData._devMAm2, receivedData.NSPData._devMMm2, receivedData.NSPData._devMASSm2 };
 
             //Находим границы погрешностей Δθ=1,1√Σ(+Δi)2
             //ErLimX1 
@@ -1227,14 +1404,14 @@ namespace GravityCalc
             {
                 devX1[i] = Math.Pow(devX1[i], 2);
             }
-            calcData.ErLimX1 = Math.Sqrt(devX1.Sum() / 3);
+            receivedData.NSPData.ErLimX1 = Math.Abs(Math.Sqrt(devX1.Sum() / 3));
 
             //ErLimY1 
             for (int i = 0; i < 17; i++)
             {
                 devY1[i] = Math.Pow(devY1[i], 2);
             }
-            calcData.ErLimY1 = Math.Sqrt(devY1.Sum() / 3);
+            receivedData.NSPData.ErLimY1 = Math.Abs(Math.Sqrt(devY1.Sum() / 3));
 
             //ErLimZ1 
             for (int i = 0; i < 17; i++)
@@ -1242,14 +1419,14 @@ namespace GravityCalc
                 devZ1[i] = Math.Pow(devZ1[i], 2);
 
             }
-            calcData.ErLimZ1 = Math.Sqrt(devZ1.Sum() / 3);
+            receivedData.NSPData.ErLimZ1 = Math.Abs(Math.Sqrt(devZ1.Sum() / 3));
 
             //ErLimM1 
             for (int i = 0; i < 17; i++)
             {
                 devM1[i] = Math.Pow(devM1[i], 2);
             }
-            calcData.ErLimM1 = Math.Sqrt(devM1.Sum() / 3);
+            receivedData.NSPData.ErLimM1 = Math.Abs(Math.Sqrt(devM1.Sum() / 3));
 
             //Находим границы погрешностей  Δθ=1,1√Σ(–Δi)2
             //ErLimX2 
@@ -1257,35 +1434,35 @@ namespace GravityCalc
             {
                 devX2[i] = Math.Pow(devX2[i], 2);
             }
-            calcData.ErLimX2 = Math.Sqrt(devX2.Sum() / 3);
+            receivedData.NSPData.ErLimX2 = Math.Abs(Math.Sqrt(devX2.Sum() / 3));
 
             //ErLimY2 
             for (int i = 0; i < 17; i++)
             {
                 devY2[i] = Math.Pow(devY2[i], 2);
             }
-            calcData.ErLimY2 = Math.Sqrt(devY2.Sum() / 3);
+            receivedData.NSPData.ErLimY2 = Math.Abs(Math.Sqrt(devY2.Sum() / 3));
 
             //ErLimZ2
             for (int i = 0; i < 17; i++)
             {
                 devZ2[i] = Math.Pow(devZ2[i], 2);
             }
-            calcData.ErLimZ2 = Math.Sqrt(devZ2.Sum() / 3);
+            receivedData.NSPData.ErLimZ2 = Math.Abs(Math.Sqrt(devZ2.Sum() / 3));
 
             //ErLimM2
             for (int i = 0; i < 17; i++)
             {
                 devM2[i] = Math.Pow(devM2[i], 2);
             }
-            calcData.ErLimM2 = Math.Sqrt(devM2.Sum() / 3);
+            receivedData.NSPData.ErLimM2 = Math.Abs(Math.Sqrt(devM2.Sum() / 3));
 
             //NSPmax  (Δθi)
-            calcData.NSPmaxX = Math.Max(calcData.ErLimX1, calcData.ErLimX2);
-            calcData.NSPmaxY = Math.Max(calcData.ErLimY1, calcData.ErLimY2);
-            calcData.NSPmaxZ = Math.Max(calcData.ErLimZ1, calcData.ErLimZ2);
-            calcData.NSPmaxM = Math.Max(calcData.ErLimM1, calcData.ErLimM2);
-            NSPmax = new double[4] { calcData.NSPmaxX, calcData.NSPmaxY, calcData.NSPmaxZ, calcData.NSPmaxM };
+            receivedData.NSPData.NSPmaxX = Math.Max(receivedData.NSPData.ErLimX1, receivedData.NSPData.ErLimX2);
+            receivedData.NSPData.NSPmaxY = Math.Max(receivedData.NSPData.ErLimY1, receivedData.NSPData.ErLimY2);
+            receivedData.NSPData.NSPmaxZ = Math.Max(receivedData.NSPData.ErLimZ1, receivedData.NSPData.ErLimZ2);
+            receivedData.NSPData.NSPmaxM = Math.Max(receivedData.NSPData.ErLimM1, receivedData.NSPData.ErLimM2);
+            NSPmax = new double[4] { receivedData.NSPData.NSPmaxX, receivedData.NSPData.NSPmaxY, receivedData.NSPData.NSPmaxZ, receivedData.NSPData.NSPmaxM };
 
 
             //ErLimS - среднее квадратичное отклоенине суммарных НСП (Sθ)
@@ -1298,21 +1475,21 @@ namespace GravityCalc
             {
                 ErLimS[i] = ErLimS[i] / (1.1 * Math.Pow(3, 0.5));
             }
-            calcData.ErLimSx = ErLimS[0];
-            calcData.ErLimSy = ErLimS[1];
-            calcData.ErLimSz = ErLimS[2];
-            calcData.ErLimSm = ErLimS[3];
-            
-            //Kves
+            receivedData.NSPData.ErLimSx = ErLimS[0];
+            receivedData.NSPData.ErLimSy = ErLimS[1];
+            receivedData.NSPData.ErLimSz = ErLimS[2];
+            receivedData.NSPData.ErLimSm = ErLimS[3];
+
+            //Kves Весовой Коэффициент  
             Kves = new double[ErLimS.Length];
             for (int i = 0; i < Kves.Length; i++)
             {
                 Kves[i] = (Kt * DevAver[i] + NSPmax[i]) / (DevAver[i] + ErLimS[i]);
             }
-            calcData.KvesX = Kves[0];
-            calcData.KvesY = Kves[1];
-            calcData.KvesZ = Kves[2];
-            calcData.KvesM = Kves[3];
+            receivedData.NSPData.KvesX = Kves[0];
+            receivedData.NSPData.KvesY = Kves[1];
+            receivedData.NSPData.KvesZ = Kves[2];
+            receivedData.NSPData.KvesM = Kves[3];
 
             //(SΣ) Суммарные средние квадратиеское отклонение
             Sdev_res = new double[ErLimS.Length];
@@ -1320,10 +1497,10 @@ namespace GravityCalc
             {
                 Sdev_res[i] = Math.Sqrt(Math.Pow(DevAver[i], 2) + Math.Pow(ErLimS[i], 2));
             }
-            calcData.Sdev_reNsX = Sdev_res[0];
-            calcData.Sdev_reNsY = Sdev_res[1];
-            calcData.Sdev_reNsZ = Sdev_res[2];
-            calcData.Sdev_reNsM = Sdev_res[3];
+            receivedData.NSPData.Sdev_reNsX = Sdev_res[0];
+            receivedData.NSPData.Sdev_reNsY = Sdev_res[1];
+            receivedData.NSPData.Sdev_reNsZ = Sdev_res[2];
+            receivedData.NSPData.Sdev_reNsM = Sdev_res[3];
 
             //(±Δ) - границы
             gran = new double[ErLimS.Length];
@@ -1331,10 +1508,81 @@ namespace GravityCalc
             {
                 gran[i] = Sdev_res[i] * Kves[i];
             }
-            calcData.granX = gran[0];
-            calcData.granY = gran[1];
-            calcData.granZ = gran[2];
-            calcData.granM = gran[3];
+            receivedData.NSPData.granX = gran[0];
+            receivedData.NSPData.granY = gran[1];
+            receivedData.NSPData.granZ = gran[2];
+            receivedData.NSPData.granM = gran[3];
+        }
+        /// <summary>
+        /// Поправки
+        /// </summary>
+        public double[] _p;
+        public double[] SystemDev;
+        public double[] _kmcKP;
+        public double[] SystemEer;
+        public double[] GranKP;
+        public void KP()
+        {
+            if (receivedData.PassportData.KP == true)
+            {
+                _p = new double[4];
+                _p[0] = calcData.RES_Xkp - receivedData.PassportData.KpX;
+                _p[1] = calcData.RES_Ykp - receivedData.PassportData.KpY;
+                _p[2] = calcData.RES_Zkp - receivedData.PassportData.KpZ;
+                _p[3] = calcData.RES_Mkp- receivedData.PassportData.KpMas;
+                calcData._pX = _p[0];
+                calcData._pY = _p[1];
+                calcData._pZ = _p[2];
+                calcData._pM = _p[3];
+
+
+                _kmcKP = new double[4];
+                _kmcKP[0] = calcData.RES_X - _p[0];
+                _kmcKP[1] = calcData.RES_Y - _p[1];
+                _kmcKP[2] = calcData.RES_Z - _p[2];
+                _kmcKP[3] = calcData.RES_M - _p[3];
+                calcData._kmcKPx = _kmcKP[0];
+                calcData._kmcKPy = _kmcKP[1];
+                calcData._kmcKPz = _kmcKP[2];
+                calcData._kmcKPm = _kmcKP[3];
+
+                //Систем отклоенния после введения поправок
+                SystemDev = new double[4];
+                SystemDev[0] = _kmcKP[0] - receivedData.PassportData.KpX;
+                SystemDev[1] = _kmcKP[1] - receivedData.PassportData.KpY;
+                SystemDev[2] = _kmcKP[2] - receivedData.PassportData.KpZ;
+                SystemDev[3] = _kmcKP[3] - receivedData.PassportData.KpMas;
+                calcData.SystemDevX = SystemDev[0];
+                calcData.SystemDevY = SystemDev[1];
+                calcData.SystemDevZ = SystemDev[2];
+                calcData.SystemDevM = SystemDev[3];
+
+                // Систем погрешности
+                SystemEer = new double[4];
+                SystemEer[0] = receivedData.PassportData.KpDevX + SystemDev[0];
+                SystemEer[1] = receivedData.PassportData.KpDevY + SystemDev[1];
+                SystemEer[2] = receivedData.PassportData.KpDevZ + SystemDev[2];
+                SystemEer[3] = receivedData.PassportData.KpDevMas + SystemDev[3];
+                calcData.SystemEerX = SystemEer[0];
+                calcData.SystemEerY = SystemEer[1];
+                calcData.SystemEerZ = SystemEer[2];
+                calcData.SystemEerM = SystemEer[3];
+
+
+                GranKP = new double[4];
+                GranKP[0] = SystemEer[0] + Xkp;
+                GranKP[1] = SystemEer[1] + Ykp;
+                GranKP[2] = SystemEer[2] + Zkp;
+                GranKP[3] = SystemEer[3] + Mkp; 
+                calcData.GranKPx = GranKP[0];
+                calcData.GranKPy = GranKP[1];
+                calcData.GranKPz = GranKP[2];
+                calcData.GranKPm = GranKP[3];
+            }
+            else
+            {
+                Console.WriteLine("КП не выбрано");
+            }
         }
     }
 }

@@ -1,0 +1,10 @@
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\bin\Release\netstandard2.0\Opc.Ua.Core.deps.json
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\bin\Release\netstandard2.0\Opc.Ua.Core.dll
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\bin\Release\netstandard2.0\Opc.Ua.Core.pdb
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.csproj.AssemblyReference.cache
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.GeneratedMSBuildEditorConfig.editorconfig
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.AssemblyInfoInputs.cache
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.AssemblyInfo.cs
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.csproj.CoreCompileInputs.cache
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.dll
+X:\GRAVITY\external\OpcUaCore\Opc.Ua.Core\obj\Release\netstandard2.0\Opc.Ua.Core.pdb

@@ -157,140 +157,124 @@ namespace GravityCalc
         /// </summary>
         public double PasDevD { get; set; } //PasDevD
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Вертикальное расстояние между осью наклона стенда и осьюподвеса грузов противовеса
         /// </summary>
-        public double Xper { get; set; }
+        public double PasE { get; set; } //PasE = 0
         /// <summary>
-        /// (±Δ)Хper - допустимое отклонение КЦМ переходника в системе координат переходника
+        /// (±Δ)PasE 
         /// </summary>
-        public double DevХper { get; set; }
+        public double PasDevE { get; set; } //PasDevE
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Подвижный груз
         /// </summary>
-        public double Yper { get; set; }
+        public double PasMassPG { get; set; } //PasMasPG
         /// <summary>
-        /// (±Δ)Yper - допустимое отклонение КЦМ переходника в системе координат переходника 
+        /// Отклонения подвижного груза
         /// </summary>
-        public double DevYper { get; set; }
+        public double PasDevMassPG { get; set; } //PasDevMasPG
+
+        /////////////////////////////////////////////////////////////////////////AdapterParametrs
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Координаты переходника по оси Х
         /// </summary>
-        public double Zper { get; set; }
+        public double PerX { get; set; } //PerX
         /// <summary>
-        /// (±Δ)Zper - допустимое отклонение КЦМ переходника в системе координат переходника
+        /// (±Δ)PerХ - допустимое отклонение переходника в системе координат переходника
         /// </summary>
-        public double DevZper { get; set; }
+        public double PerDevX { get; set; } //PerDevX
         /// <summary>
-        /// масса переходника
+        /// Координаты переходника по оси Y
         /// </summary>
-        public double MassPer { get; set; }
+        public double PerY { get; set; } //PerY
         /// <summary>
-        /// (±Δ)_m_per - допустимое отклонение массы переходника 
+        /// (±Δ)PerY - допустимое отклонение переходника в системе координат переходника 
         /// </summary>
-        public double DevMassPer { get; set; }
+        public double PerDevY { get; set; } //PerDevY
         /// <summary>
-        /// высота переходника 
+        /// Координаты переходника по оси Z
         /// </summary>
-        public double Hper { get; set; }
+        public double PerZ { get; set; } //PerZ
         /// <summary>
-        /// (±Δ)_h_p - допустимое отклонение длины переходника 
+        /// (±Δ)PerZ - допустимое отклонение переходника в системе координат переходника
         /// </summary>
-        public double DevHPer { get; set; }
+        public double PerDevZ { get; set; } //PerDevX
+        /// <summary>
+        /// Масса переходника
+        /// </summary>
+        public double PerMas { get; set; } //PerMas
+        /// <summary>
+        /// (±Δ)PerMas - допустимое отклонение массы переходника 
+        /// </summary>
+        public double PerDevMas { get; set; } //PerDevMas
+        /// <summary>
+        /// Высота переходника 
+        /// </summary>
+        public double PerH { get; set; } //PerH
+        /// <summary>
+        /// (±Δ)PerH - допустимое отклонение длины переходника 
+        /// </summary>
+        public double PerDevH { get; set; } //PerDevH
 
 
         /////////////////////////////////////////////////////////////////////////KP_Parameters
         /// <summary>
-        /// Координаты КП
+        /// Координаты КП по Х
         /// </summary>
-        public double Xkp { get; set; }
+        public double KpX { get; set; } //KpX
         /// <summary>
-        /// (±Δ)Xkp - допустимое отклонение
+        /// (±Δ)KpX
         /// </summary>
-        public double DevXkp { get; set; }
-        /// <summary>
-        /// Координаты КП
-        /// </summary>
-        public double Ykp { get; set; }
-        /// <summary>
-        /// (±Δ)Ykp - допустимое отклонение
-        /// </summary>
-        public double DevYkp { get; set; }
-        /// <summary>
-        /// Координаты КП
-        /// </summary>
-        public double Zkp { get; set; }
-        /// <summary>
-        /// (±Δ)Zkp - допустимое отклонение
-        /// </summary>
-        public double DevZkp { get; set; }
+        public double KpDevX { get; set; } //KpDevX
         /// <summary>
         /// Координаты КП по Y
         /// </summary>
-        public double MassKp { get; set; }
+        public double KpY { get; set; } //KpY
         /// <summary>
-        /// (±Δ)_m_kp  - допустимое отклонение массы КП
+        /// (±Δ)KpY
         /// </summary>
-        public double DevMassKp { get; set; }
+        public double KpDevY { get; set; } //KpDevY
+        /// <summary>
+        /// Координаты КП по Z
+        /// </summary>
+        public double KpZ { get; set; } //KpZ
+        /// <summary>
+        /// (±Δ)KpZ
+        /// </summary>
+        public double KpDevZ { get; set; } //KpDevZ
+        /// <summary>
+        /// Масса КП
+        /// </summary>
+        public double KpMas { get; set; } //KpMas
+        /// <summary>
+        /// (±Δ)KpMas
+        /// </summary>
+        public double KpDevMas { get; set; } //KpDevMas
 
-        /////////////////////////////////////////////////////////////////////////ProductParameters
         /// <summary>
-        /// Масса изделия
+        /// Угол поворота платформы
         /// </summary>
-        public double MassProd { get; set; }
-        /// <summary>
-        /// Координаты изделия по КД
-        /// </summary>
-        public double Xprod { get; set; }
-        /// <summary>
-        /// Координаты изделия по КД
-        /// </summary>
-        public double Yprod { get; set; }
-        /// <summary>
-        /// Координаты изделия по КД
-        /// </summary>
-        public double Zprod { get; set; }
-        /// <summary>
-        /// Номинальное отклонение массы изделия 
-        /// </summary>
-        public double Fi { get; set; }
-
-        //////////////////////////////////////////////////////////////////////////////////////////// Reference_ma
-        public double[] ArrRef_ma { get; set; }
-        /// <summary>
-        /// DevArrRef_ma - допустипое отклонение эталонной массы подвижного груза  (4 элемента массива))
-        /// </summary>
-        public double[] DevArrRef_ma { get; set; }
-        /// <summary>
-        /// Для наклона стенда при подвижном грузе 
-        /// </  summary>
-        public double Epsilon_ma { get; set; }
-        //// <summary>
-        /// Массив эталоной массы груза - разгрузки (4 элемента массива)
-        /// </summary>
-        public double[] ArrRef_mm { get; set; }
-       
-        /// <summary>
-        /// DevArrRef_ma - допустипое отклонение эталонной массы груза - разгрузки
-        /// </summary>
-        public double[] DevArrRef_mm { get; set; }
-        /// <summary>
-        /// Для наклона стенда при использование груза - разгрузки
-        /// </  summary>
-        public double Epsilon_mm { get; set; }
+        public double Fi { get; set; }       
 
         ///////////////////////////////////////////////////////////////////////////////////////////// Данные из тарировки углов
         /// <summary>
-        /// Подходящий ∠ равновесия без использования грузов
-        /// </summary>
-        public double AngleNotMas { get; set; }
+        /// Δ - участвует в формуле для поправки углов (стд отклонение углов)
+        /// </summary
+        public double Dev { get; set; }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////Отклонение для ПОПРАВКИ во время расчета КМЦ
+        public double DevX600 { get; set; }
+        public double DevX6000 { get; set; }
+        public double DevY600 { get; set; }
+        public double DevY6000 { get; set; }
+        public double DevZ600 { get; set; }
+        public double DevZ6000 { get; set; }
 
         public bool Cargo { get; set; }
+        public bool KP { get; set; }
 
-            EpsilonMa = 16;
-            EpsilonMm = 6;
-        }
     }
-    public struct ControllerData
+    public struct RecomValData
     {
         //___________________________________________________ Исходные данные
         /// <summary>
@@ -304,51 +288,135 @@ namespace GravityCalc
         /// <summary>
         /// Номинальное значение изделия по координате Y
         /// </summary>
-        public double BeginUnbalanceSensor { get; set; } // Получаем 6 раз, по 10 значений – с ma 0⁰/90⁰/180⁰/270⁰ и с mm 0⁰/90⁰
+        public double ProdY { get; set; }
         /// <summary>
-        ///  Датчик дисбаланса в средней зоне работы
+        /// Номинальное отклонение изделия по координате Y
         /// </summary>
-        public double MiddleUnbalanceSensor { get; set; } // Получаем 6 раз, по 10 значений – с ma 0⁰/90⁰/180⁰/270⁰ и с mm 0⁰/90⁰
+        public double ProdDevY { get; set; }
         /// <summary>
-        /// Расстояния от оси поворота стола до известных координат центра тяжести груза
+        /// Номинальное значение изделия по координате Z
         /// </summary>
-        public double K1 { get; set; }
+        public double ProdZ { get; set; }
         /// <summary>
-        /// Расстояния от оси поворота стола до известных координат центра тяжести груза
+        /// Номинальное отклонение изделия по координате Z
         /// </summary>
-        public double K2 { get; set; }
-        public double P1 { get; set; } // Какие-то датчики
-        public double P2 { get; set; } // Какие-то датчики
+        public double ProdDevZ { get; set; }
+        /// <summary>
+        /// Номинальная масса изделия
+        /// </summary>
+        public double ProdMas { get; set; }
+        /// <summary>
+        /// Номинальное отклонение массы изделия 
+        /// </summary>
+        public double ProdDevMas { get; set; }
+
+        //___________________________________________________ Данные для расчета рекомендуемых значений       
+        /// <summary>
+        /// Угол наклона при нахождение КЦМ изделия
+        /// </summary>
+        public int EpsilonMa { get; set; }
+        /// <summary>
+        /// Угол наклона при нахождение М изделия
+        /// </summary>
+        public int EpsilonMm { get; set; }
+        /// <summary>
+        /// Эталонные значения массы корректирующих грузов при нахождения М
+        /// </summary>
+        public double[] ArrMasMa { get; set; }
+        
+        //// <summary>
+        ///  Эталонные значения массы корректирующих грузов при при нахожденеи КЦМ
+        /// </summary>
+        public double[] ArrMasMm { get; set; }        
+
+        //___________________________________________________ Рекомендуемые значения 
+        /// <summary>
+        /// Подходящая масса корректирующего груза для нахождения М
+        /// </summary>
+        public double Ma { get; set; }
+        /// <summary>
+        /// Подходящая масса корректирующего груза груза для нахождения КЦМ
+        /// </summary>
+        public double Mm { get; set; }
+        /// <summary>
+        /// Подходящий ∠ равновесия при нахождение КЦМ
+        /// </summary>
+        public double AngleKcm { get; set; }
+        /// <summary>
+        /// Подходящий ∠ равновесия при измерение массы изделия
+        /// </summary>
+        public double AngleMas { get; set; }
+        /// <summary>
+        /// Подходящий ∠ равновесия без использования грузов
+        /// </summary>
+        public double AngleNotMas { get; set; }
+
+        public void DefaultInit()
+        {
+            ProdX = 0;
+            ProdDevX = 0;
+            ProdY = 0;
+            ProdDevY = 0;
+            ProdZ = 0;
+            ProdDevZ = 0;      
+            ProdMas = 0;
+            ProdDevMas = 0;
+
+            EpsilonMa = 16;
+            EpsilonMm = 6;
+        }
     }
     /// <summary>
-    /// Расчитанные данные
+    /// Данные от контроллера
     /// </summary>
-    public struct CalculatedData
+    public struct ControllerDataOut
     {
         /// <summary>
-        /// Подходящий груз-разгрузки
+        /// Положение домкрата
         /// </summary>
-        public double Result_mm { get; set; }
+        public double JackPos { get; set; }
+        /// <summary>
+        /// Положение подвижного груза
+        /// </summary>
+        public double CargoPos { get; set; }
+        /// <summary>
+        /// Связь с устройством
+        /// </summary>
+        public double ConnectDevice { get; set; }
+        /// <summary>
+        /// Включение\ Выключение системы
+        /// </summary>
+        public double PowerSystem { get; set; }
+        /// <summary>
+        /// Включение\Выключение двигателя трения №1
+        /// </summary>
+        public double OutFrictionMotor1 { get; set; }
+        /// <summary>
+        /// Включение\Выключение двигателя трения №2
+        /// </summary>
+        public double OutFrictionMotor2 { get; set; }
+
 
         /// <summary>
-        /// Подходящий α угол наклона при грузе-разгрузки
+        /// Датчик угловых перемещений
         /// </summary>
-        public double RefAngle_mm { get; set; }
-
+        public double SensorAngle { get; set; }
         /// <summary>
-        /// Подходящий подвижный груз
+        /// Датчик дисбаланса
         /// </summary>
-        public double Result_ma { get; set; }
-
+        public double SensorDisbalance { get; set; }
         /// <summary>
-        /// Подходящий α угол наклона при подвижном грузе
+        /// Датчик силы измеретильной головки
         /// </summary>
-        public double RefAngle_ma { get; set; }
-
+        public double SensorPower { get; set; }
         /// <summary>
-        /// Подходящий угол наклона без грузов
+        /// Датчик линейного передвижения в начальной зоны работы 
         /// </summary>
-        public double A_not { get; set; }
+        public double IndicationK { get; set; }
+        /// <summary>
+        /// Список ошибок
+        /// </summary>
+        public Dictionary<double, string> ErrorsList;
 
         public void DefaultInit()
         {
@@ -413,15 +481,15 @@ namespace GravityCalc
         /// <summary>
         /// Сброс ошибок
         /// </summary>
-        public double DevPlane_xOy { get; set; }
+        public double ResetErrors { get; set; }
 
-        /// <summary>
-        /// Отклоления в плоскости xOz -> 3 значения будут => Градусы \ Минуты \ Секунды
-        /// </summary>
-        public double DevPlane_xOz { get; set; }
-        //_____________________________________________________________________________________________________________________________________________________________________________________________
-        //Нужно еще сделать диаграммы на каждый угол 0°\90°\180... для КП тоже самое... диаграммы одинаковые. (По значениям эталонного угла, углов равновессия и среднего значения углов равновесия)!!!
-        //_____________________________________________________________________________________________________________________________________________________________________________________________
+    }
+    /// <summary>
+    /// Расчитанные данные
+    /// </summary>
+    public struct CalculatedData
+    {
+        public double RefK { get; set; }
 
 
         //Координаты Центра Масс (КЦМ)
@@ -439,7 +507,7 @@ namespace GravityCalc
         /// <summary>
         /// Средний угол равновесия - α
         /// </summary>
-        public double AverageValue { get; set; } // Нужно для 90°\180°\270° - сделать, а так же для груза-разгрузки и КП
+        public double AverageValue { get; set; }
 
         /// <summary>
         /// Поправка координат при определение КМЦ
@@ -451,15 +519,53 @@ namespace GravityCalc
         /// </summary>
         public double Amendment { get; set; }
 
-
         /////////////////////////////////////////////////////////////////////////////////////////////Определение средних значений КЦМ и массы, и их отклонений 
-        /// <summary>
-        /// Среднее значение Массы изделия
-        /// </summary>
-        public double AverProdValMas { get; set; }
 
+
+        public List<double> BeginBalanceAngleArr0 { get; set; }
+        public List<double> MiddleBalanceAngleArr0 { get; set; }
+        public List<double> BeginDisbalanceSensorArr0 { get; set; }
+        public List<double> MiddleDisbalanceSensorArr0 { get; set; }
+        public List<double> BeginBalanceAngleArr90 { get; set; }
+        public List<double> MiddleBalanceAngleArr90 { get; set; }
+        public List<double> BeginDisbalanceSensorArr90 { get; set; }
+        public List<double> MiddleDisbalanceSensorArr90 { get; set; }
+        public List<double> BeginBalanceAngleArr180 { get; set; }
+        public List<double> MiddleBalanceAngleArr180 { get; set; }
+        public List<double> BeginDisbalanceSensorArr180 { get; set; }
+        public List<double> MiddleDisbalanceSensorArr180 { get; set; }
+        public List<double> BeginBalanceAngleArr270 { get; set; }
+        public List<double> MiddleBalanceAngleArr270 { get; set; }
+        public List<double> BeginDisbalanceSensorArr270 { get; set; }
+        public List<double> MiddleDisbalanceSensorArr270 { get; set; }
+        public List<double> BeginPowerSensor0 { get; set; }        
+        public List<double> MiddlePowerSensor0 { get; set; }
+        public List<double> BeginPowerSensor180 { get; set; }
+        public List<double> MiddlePowerSensor180 { get; set; }
+        public List<double> BeginIndicationK0 { get; set; }
+        public List<double> MiddleIndicationK0 { get; set; }
+        public List<double> BeginIndicationK180 { get; set; }
+        public List<double> MiddleIndicationK180 { get; set; }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////Проверка углов
         /// <summary>
-        /// Среднее значение X
+        /// Все углы заполнены 
+        /// </summary>
+        public bool AllAngelFilling { get; set; }
+        /// <summary>
+        /// Массивы находятся в процессе заполнения (для web отображения) 
+        /// </summary>
+        public bool ArraysAreFilling { get; set; }// 0 - массивы не заполнены, 1 - массивы заполены на половину, 2 - массивы заполнены полностью
+        public int kcmAngel_0 { get; set; } 
+        public int kcmAngel_90 { get; set; }
+        public int kcmAngel_180 { get; set; }
+        public int kcmAngel_270 { get; set; }
+        public int mAngel_0 { get; set; }
+        public int mAngel_180 { get; set; }
+
+        //////////////////////////////////////////////// Итоговые значения для КП
+        /// <summary>
+        /// Разница
         /// </summary>
         public double _pX { get; set; }
         /// <summary>
@@ -826,7 +932,28 @@ namespace GravityCalc
         public double _devDm2 { get; set; } 
         public double _devEm2 { get; set; }
         public double _devMAm2 { get; set; } 
-        public double _devMMm2 { get; set; } 
+        public double _devMMm2 { get; set; }
+        public double _devMASSm2 { get; set; }
+    }
+
+    public struct MeasurementDataOut
+    {
+        /// <summary>
+        /// Запуск расчета
+        /// </summary>
+        public bool CalculationCalc { get; set; }
+        /// <summary>
+        /// Угол поворота платформы
+        /// </summary>
+        public double Fi { get; set; }
+        /// <summary>
+        /// Показание для КЦМ - true \ Массы - false
+        /// </summary>
+        public bool findCoordMass { get; set; }
+        /// <summary>
+        /// Контрольное приспособление 
+        /// </summary>
+        public bool KP { get; set; }
     }
 
 
@@ -836,10 +963,12 @@ namespace GravityCalc
     public class ReceivedData
     {
         //public CalculatedData CalculatedData { get; set; }
-        public ControllerData ControllerData { get; set; }
-        public PassportData PassportData { get; set; }
-        public NSPData NSPData { get; set; }
-        
+        public ControllerDataOut ControllerDataOut;
+        public ControllerDataIn ControllerDataIn;
+        public PassportData PassportData;
+        public NSPData NSPData;
+        public RecomValData RecomValData;
+        public MeasurementDataOut MeasurementData;
 
     }
     /// <summary>
@@ -850,75 +979,57 @@ namespace GravityCalc
         /// <summary>
         /// Ошибки контроллера
         /// </summary>
-        public List<double> beginBalanceAngleArr0;
-        public List<double> beginBalanceAngleArr0_2;
-        public List<double> beginBalanceAngleArr90;
-        public List<double> beginBalanceAngleArr180;
-        public List<double> beginBalanceAngleArr180_2;
-        public List<double> beginBalanceAngleArr270;
-
+        private List<double> ControllerErrors;
+        private List<ErrorsTable> ErrorsList;
+        private string FileName { get; }
         /// <summary>
         /// Описание ошибок
         /// </summary>
-        public List<double> MiddleBalanceAngleArr0;
-        public List<double> MiddleBalanceAngleArr0_2;
-        public List<double> MiddleBalanceAngleArr90;
-        public List<double> MiddleBalanceAngleArr180;
-        public List<double> MiddleBalanceAngleArr180_2;
-        public List<double> MiddleBalanceAngleArr270;
-
-        /// <summary>
-        /// Датчик дисбаланса в начальной зоне работы
-        /// </summary>
-        public List<double> BeginUnbalanceSensorArr0;
-        public List<double> BeginUnbalanceSensorArr0_2;
-        public List<double> BeginUnbalanceSensorArr90;
-        public List<double> BeginUnbalanceSensorArr180;
-        public List<double> BeginUnbalanceSensorArr180_2;
-        public List<double> BeginUnbalanceSensorArr270;
-
-        /// <summary>
-        /// Датчик дисбаланса в средней зоне работы
-        /// </summary>
-        public List<double> MiddleUnbalanceSensorArr0;
-        public List<double> MiddleUnbalanceSensorArr0_2;
-        public List<double> MiddleUnbalanceSensorArr90;
-        public List<double> MiddleUnbalanceSensorArr180;
-        public List<double> MiddleUnbalanceSensorArr180_2;
-        public List<double> MiddleUnbalanceSensorArr270;
-
-
-
+        public class ErrorsTable
+        {
+            /// <summary>
+            /// Номер ошибки
+            /// </summary>
+            public double Number { get; set; }
+            /// <summary>
+            /// Описание ошибки
+            /// </summary>
+            public string Text { get; set; }
+        }
+        public sealed class ErrorsTableMap : ClassMap<ErrorsTable>
+        {
+            public ErrorsTableMap()
+            {
+                Map(x => x.Number).Name("Number");
+                Map(x => x.Text).Name("Text");
+            }
+        }
 
         public Errors()
         {
-            beginBalanceAngleArr0 = new();
-            beginBalanceAngleArr0_2 = new();
-            beginBalanceAngleArr90 = new();
-            beginBalanceAngleArr180 = new();
-            beginBalanceAngleArr180_2 = new();
-            beginBalanceAngleArr270 = new();
+            ControllerErrors = new();
+            FileName = Directory.GetCurrentDirectory() + "\\" + "Errors.csv";
+            ErrorsList = ReadErrorsListFile(FileName);
 
-            MiddleBalanceAngleArr0 = new();
-            MiddleBalanceAngleArr0_2 = new();
-            MiddleBalanceAngleArr90 = new();
-            MiddleBalanceAngleArr180 = new();
-            MiddleBalanceAngleArr180_2 = new();
-            MiddleBalanceAngleArr270 = new();
-
-            BeginUnbalanceSensorArr0 = new();
-            BeginUnbalanceSensorArr0_2 = new();
-            BeginUnbalanceSensorArr90 = new();
-            BeginUnbalanceSensorArr180 = new();
-            BeginUnbalanceSensorArr180_2 = new();
-            BeginUnbalanceSensorArr270 = new();
-
-            MiddleUnbalanceSensorArr0 = new();
-            MiddleUnbalanceSensorArr0_2 = new();
-            MiddleUnbalanceSensorArr90 = new();
-            MiddleUnbalanceSensorArr180 = new();
-            MiddleUnbalanceSensorArr180_2 = new();
-            MiddleUnbalanceSensorArr270 = new();
+        }
+        public bool IsErrorListExists()
+        {
+            return ErrorsList != null;
+        }
+        /// <summary>
+        /// Очистить все ошибки
+        /// </summary>
+        public void ClearAllErrors()
+        {
+            ControllerErrors.Clear();
+        }
+        /// <summary>
+        /// Получить количество ошибок
+        /// </summary>
+        /// <returns></returns>
+        public int GetErrorsNumber()
+        {
+            return ControllerErrors.Count;
         }
         /// <summary>
         /// Добавить новую ошибку контроллера
@@ -938,25 +1049,43 @@ namespace GravityCalc
         }
         public Dictionary<double,string> GetDictErrorList()
         {
-            beginBalanceAngleArr0.Clear(); 
-            beginBalanceAngleArr90.Clear();
-            beginBalanceAngleArr180.Clear();
-            beginBalanceAngleArr270.Clear();
+            Dictionary<double, string> tempList = new();
 
-            MiddleBalanceAngleArr0.Clear();
-            MiddleBalanceAngleArr90.Clear();
-            MiddleBalanceAngleArr180.Clear();
-            MiddleBalanceAngleArr270.Clear();
-
-            BeginUnbalanceSensorArr0.Clear();
-            BeginUnbalanceSensorArr90.Clear();
-            BeginUnbalanceSensorArr180.Clear();
-            BeginUnbalanceSensorArr270.Clear();
-
-            MiddleUnbalanceSensorArr0.Clear();
-            MiddleUnbalanceSensorArr90.Clear();
-            MiddleUnbalanceSensorArr180.Clear();
-            MiddleUnbalanceSensorArr270.Clear();
+            foreach(double i in ControllerErrors)
+            {
+                ErrorsTable result = ErrorsList?.Find(x => x.Number == i);
+                if (result == null)
+                {
+                    tempList.Add(i, "Нет описания ошибки");
+                }
+                else
+                {
+                    tempList.Add(result.Number, result.Text);
+                }
+            }
+            
+            return tempList;
+        }
+        /// <summary>
+        /// Считать описание ошибок из файла
+        /// </summary>
+        private List<ErrorsTable> ReadErrorsListFile(string location)
+        {
+            try
+            {
+                using (var reader = new StreamReader(location, Encoding.UTF8))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    csv.Context.RegisterClassMap<ErrorsTableMap>();
+                    var records = csv.GetRecords<ErrorsTable>().ToList();
+                    return records;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+               // throw new Exception(e.Message);
+            }
         }
     }
 

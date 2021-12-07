@@ -21,20 +21,28 @@ namespace GravityWebExt.Controllers
         private readonly DataContext _db;
         private readonly WebDataProvider _dataProvider;
         private readonly WebNSPDataProvider _dataNSPProvider;
-        private readonly Emulator _emu;
+        private readonly WebRecomValDataProvider _dataWebRecomValDataProvider;
+        private readonly WebToControllerDataProvider _dataWebToControllerDataProvider;
+        private readonly WebToCalculatorDataProvider _dataWebToCalculatorDataProvider;
+        //private readonly Emulator _emu;
         private readonly WebDataReporter _webDataReporter;
         private readonly WebCalcDataReporter _webCalcDataReporter;
 
-        public HomeController(ILogger<HomeController> logger, DataContext db, WebDataProvider dataProvider, WebNSPDataProvider dataNSPProvider, WebCalcDataReporter webCalcDataReporter ,Emulator emu, WebDataReporter webDataReporter)
+
+        public HomeController(ILogger<HomeController> logger, DataContext db, WebDataProvider dataProvider, WebNSPDataProvider dataNSPProvider, 
+            WebCalcDataReporter webCalcDataReporter ,/*Emulator emu,*/ WebDataReporter webDataReporter, WebRecomValDataProvider dataWebRecomValDataProvider, 
+            WebToControllerDataProvider dataWebToControllerDataProvider, WebToCalculatorDataProvider dataWebToCalculatorDataProvider)
         {
             _logger = logger;
             _db = db;
             _dataProvider = dataProvider;
             _dataNSPProvider = dataNSPProvider;
-            _emu = emu;
+            _dataWebRecomValDataProvider = dataWebRecomValDataProvider;
+            _dataWebToControllerDataProvider = dataWebToControllerDataProvider;
+            _dataWebToCalculatorDataProvider = dataWebToCalculatorDataProvider;
+            //_emu = emu;
             _webDataReporter = webDataReporter;
             _webCalcDataReporter = webCalcDataReporter;
-
         }
         /// <summary>
         /// Получены новые данные от контроллера
@@ -51,9 +59,12 @@ namespace GravityWebExt.Controllers
             return Json(GetCalculatorData());
         }
 
-        public List<MeasurementData> GetControllerData()
+        /// <summary>
+        /// Получены новые данные от Контроллера
+        /// </summary>
+        public JsonResult GetMeasurementDataRepeat()
         {
-            return new List<MeasurementData>() { new MeasurementData(_webDataReporter.Data) };
+            return Json(GetMeasurementData());
         }
 
         public ControlPanelDataWeb GetControllerData()
@@ -98,6 +109,7 @@ namespace GravityWebExt.Controllers
 
             return Json(_webDataReporter.Data);
         }
+
         [HttpGet]
         public IActionResult Calculate()
         {
@@ -126,6 +138,23 @@ namespace GravityWebExt.Controllers
             return View(_db.NSP.ToList());
         } 
 
+        public IActionResult RecomVal()
+        {
+            return View(_db.RecomValWebData.ToList());
+        }
+        [HttpPost]
+        public async Task<IActionResult> RecomVal(RecomValWebData data)
+        {
+            RecomValWebData findData = await _db.RecomValWebData.FindAsync(data?.Id);
+            if (findData != null)
+            {
+                _db.RecomValWebData.Remove(findData);
+                await _db.RecomValWebData.AddAsync(data);
+                await _db.SaveChangesAsync();
+                //Отправляем новые данные в Калькулятор
+                _dataWebRecomValDataProvider.SendData(_db.RecomValWebData.ToList().ElementAt(0).SetDataForCalculate());
+                _logger.LogInformation("Отправлены рекомендованные значения для расчёта");
+            }
 
             return View(_db.RecomValWebData.ToList());
         }
@@ -134,6 +163,25 @@ namespace GravityWebExt.Controllers
         public IActionResult ControlPanel()
         {
             return View(GetControllerData()); 
+        }
+
+        [HttpGet]
+        public IActionResult MeasurementPanel()
+        {
+            return View(GetMeasurementData());
+        }
+        [HttpPost]
+        public IActionResult MeasurementPanel(MeasurementData measurementData, string submitButton)
+        {
+            if (submitButton == "calculate")
+                measurementData.CalculationCalc = true;
+            else
+                measurementData.CalculationCalc = false;
+            //Отправляем новые данные в Калькулятор
+            _dataWebToCalculatorDataProvider.SendData(measurementData.SetDataForCalculate());
+            _logger.LogInformation("Отправлены значения измерений для расчёта");
+
+            return View(GetMeasurementData());
         }
 
         [HttpGet, Authorize(Roles = "admin")]
@@ -153,9 +201,6 @@ namespace GravityWebExt.Controllers
                 //Отправляем новые данные в Калькулятор
                 _dataProvider.SendData(_db.Options.ToList().ElementAt(0).SetDataForCalculate());
                 _logger.LogInformation("Отправлены паспортные данные для расчёта");
-                //Отправляем новые данные в эмулятор 
-                _emu.SetPassportData(_db.Options.ToList().ElementAt(0).SetDataForCalculate());
-                _logger.LogInformation("Отправлены паспортные данные для эмулятор");
             }
 
             return View(_db.Options.ToList());

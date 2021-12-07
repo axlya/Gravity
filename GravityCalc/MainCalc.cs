@@ -20,6 +20,10 @@ namespace GravityCalc
         private CalcDataProvider _dataProvider = null;
         bool _angel = false;
         bool _nsp = false;
+        bool _recomVal = false;
+        bool _controllerIn = false;
+        bool _pd = false;
+
         /// <summary>
         /// Максимальное количество получаемых данных (для расчёта)
         /// </summary>
@@ -32,29 +36,56 @@ namespace GravityCalc
             _calculator = new();
            
         }
-        public void SetControllerData(ControllerData controllerData)
+
+        public void SetRecomValData(RecomValData recomValData)
         {
-            Console.WriteLine("{0} : Получены новые данные от контроллера", _name);
-            _receivedData.ControllerData = controllerData;
-            
-            switch (_receivedData.PassportData.Fi)
+            // Console.WriteLine("{0} : Получены новые рекмоендуемые данные", _name);
+            _recomVal = true;
+            _calculator.receivedData.RecomValData = recomValData;
+            if (_recomVal == true)
             {
-                case 0:
-                    if(_receivedData.PassportData.Cargo == true)
-                    {
-                        if (_receivedData.beginBalanceAngleArr0.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr0.Count() < _maxReceivedData &&
-                            _receivedData.BeginUnbalanceSensorArr0.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr0.Count() < _maxReceivedData)
+                _calculator.SumValue();
+                _calculator.AngleNot();
+                _calculator.Computation_mm();
+                _calculator.Computation_ma();
+                _calculator.CalcRefAngle_mm();
+                _calculator.CalcRefAngle_mm();
+            }
+        }
+
+
+        public void SetControllerData(ControllerDataOut controllerData)
+        {
+            if (startSaveArrays)
+            {
+                switch (_calculator.receivedData.MeasurementData.Fi) 
+                {
+                    case 0:
+                        if (_calculator.receivedData.MeasurementData.findCoordMass == true)
                         {
-                            _receivedData.beginBalanceAngleArr0.Add(controllerData.BeginBalanceAngle);
-                            _receivedData.MiddleBalanceAngleArr0.Add(controllerData.MiddleBalanceAngle);
-                            _receivedData.BeginUnbalanceSensorArr0.Add(controllerData.BeginUnbalanceSensor);
-                            _receivedData.MiddleUnbalanceSensorArr0.Add(controllerData.MiddleUnbalanceSensor);
-                        }
-                        else
-                        {
-                            _receivedData.beginBalanceAngleArr0.RemoveAt(0);
-                            _receivedData.beginBalanceAngleArr0.Add(controllerData.BeginBalanceAngle);
-                            _calculator.BeginBalanceAngleArr0 = _receivedData.beginBalanceAngleArr0;
+                            if(firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginBalanceAngleArr0.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginDisbalanceSensorArr0.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginBalanceAngleArr0.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.BeginDisbalanceSensorArr0.Add(controllerData.SensorDisbalance);
+                                    _calculator.calcData.kcmAngel_0 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.kcmAngel_0 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddleBalanceAngleArr0.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleDisbalanceSensorArr0.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddleBalanceAngleArr0.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.MiddleDisbalanceSensorArr0.Add(controllerData.SensorDisbalance);
 
                                     _calculator.calcData.ArraysAreFilling = true;
                                 }
@@ -62,63 +93,74 @@ namespace GravityCalc
                                 {
                                     _calculator.calcData.kcmAngel_0 = 2; //массивы заполнены полностью
 
-                            _receivedData.BeginUnbalanceSensorArr0.RemoveAt(0);
-                            _receivedData.BeginUnbalanceSensorArr0.Add(controllerData.BeginUnbalanceSensor);
-                            _calculator.BeginUnbalanceSensorArr0 = _receivedData.BeginUnbalanceSensorArr0;
-
-                            _receivedData.MiddleUnbalanceSensorArr0.RemoveAt(0);
-                            _receivedData.MiddleUnbalanceSensorArr0.Add(controllerData.MiddleUnbalanceSensor);
-                            _calculator.MiddleUnbalanceSensorArr0 = _receivedData.MiddleUnbalanceSensorArr0;
-
-                            _calculator.ProductAngle(_calculator.BeginBalanceAngleArr0, _calculator.MiddleBalanceAngleArr0, _calculator.BeginUnbalanceSensorArr0, _calculator.MiddleUnbalanceSensorArr0);
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
                         }
-                    }
-                    else
-                        if (_receivedData.beginBalanceAngleArr0_2.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr0_2.Count() < _maxReceivedData &&
-                            _receivedData.BeginUnbalanceSensorArr0_2.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr0_2.Count() < _maxReceivedData)
-                    {
-                        _receivedData.beginBalanceAngleArr0_2.Add(controllerData.BeginBalanceAngle);
-                        _receivedData.MiddleBalanceAngleArr0_2.Add(controllerData.MiddleBalanceAngle);
-                        _receivedData.BeginUnbalanceSensorArr0_2.Add(controllerData.BeginUnbalanceSensor);
-                        _receivedData.MiddleUnbalanceSensorArr0_2.Add(controllerData.MiddleUnbalanceSensor);
-                    }
-                    else
-                    {
-                        _receivedData.beginBalanceAngleArr0_2.RemoveAt(0);
-                        _receivedData.beginBalanceAngleArr0_2.Add(controllerData.BeginBalanceAngle);
-                        _calculator.BeginBalanceAngleArr0_2 = _receivedData.beginBalanceAngleArr0_2;
+                        else
+                        {
+                             if(firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginPowerSensor0.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginIndicationK0.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginPowerSensor0.Add(controllerData.SensorPower);
+                                    _calculator.calcData.BeginIndicationK0.Add(controllerData.IndicationK);
+                                    _calculator.calcData.mAngel_0 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.mAngel_0 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddlePowerSensor0.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleIndicationK0.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddlePowerSensor0.Add(controllerData.SensorPower);
+                                    _calculator.calcData.MiddleIndicationK0.Add(controllerData.IndicationK);
 
-                        _receivedData.MiddleBalanceAngleArr0_2.RemoveAt(0);
-                        _receivedData.MiddleBalanceAngleArr0_2.Add(controllerData.MiddleBalanceAngle);
-                        _calculator.MiddleBalanceAngleArr0_2 = _receivedData.MiddleBalanceAngleArr0_2;
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.mAngel_0 = 2; //массивы заполнены полностью
 
-                        _receivedData.BeginUnbalanceSensorArr0_2.RemoveAt(0);
-                        _receivedData.BeginUnbalanceSensorArr0_2.Add(controllerData.BeginUnbalanceSensor);
-                        _calculator.BeginUnbalanceSensorArr0_2 = _receivedData.BeginUnbalanceSensorArr0_2;
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                        }
 
-                        _receivedData.MiddleUnbalanceSensorArr0_2.RemoveAt(0);
-                        _receivedData.MiddleUnbalanceSensorArr0_2.Add(controllerData.MiddleUnbalanceSensor);
-                        _calculator.MiddleUnbalanceSensorArr0_2 = _receivedData.MiddleUnbalanceSensorArr0_2;
-
-                        _calculator.ProductAngle(_calculator.BeginBalanceAngleArr0_2, _calculator.MiddleBalanceAngleArr0_2, _calculator.BeginUnbalanceSensorArr0_2, _calculator.MiddleUnbalanceSensorArr0_2);
-                    }
-
-                    break;
-
-                case 90:
-                    if (_receivedData.beginBalanceAngleArr90.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr90.Count() < _maxReceivedData &&
-                       _receivedData.BeginUnbalanceSensorArr90.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr90.Count() < _maxReceivedData)
-                    {
-                        _receivedData.beginBalanceAngleArr90.Add(controllerData.BeginBalanceAngle);
-                        _receivedData.MiddleBalanceAngleArr90.Add(controllerData.MiddleBalanceAngle);
-                        _receivedData.BeginUnbalanceSensorArr90.Add(controllerData.BeginUnbalanceSensor);
-                        _receivedData.MiddleUnbalanceSensorArr90.Add(controllerData.MiddleUnbalanceSensor);
-                    }
-                    else
-                    {
-                        _receivedData.beginBalanceAngleArr90.RemoveAt(0);
-                        _receivedData.beginBalanceAngleArr90.Add(controllerData.BeginBalanceAngle);
-                        _calculator.BeginBalanceAngleArr90 = _receivedData.beginBalanceAngleArr90;
+                        break;
+                    case 90:
+                        if (_calculator.receivedData.MeasurementData.findCoordMass == true)
+                        {
+                            if (firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginBalanceAngleArr90.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginDisbalanceSensorArr90.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginBalanceAngleArr90.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.BeginDisbalanceSensorArr90.Add(controllerData.SensorDisbalance);
+                                    _calculator.calcData.kcmAngel_90 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.kcmAngel_90 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddleBalanceAngleArr90.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleDisbalanceSensorArr90.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddleBalanceAngleArr90.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.MiddleDisbalanceSensorArr90.Add(controllerData.SensorDisbalance);
 
                                     _calculator.calcData.ArraysAreFilling = true;
                                 }
@@ -126,34 +168,37 @@ namespace GravityCalc
                                 {
                                     _calculator.calcData.kcmAngel_90 = 2; //массивы заполнены полностью
 
-                        _receivedData.BeginUnbalanceSensorArr90.RemoveAt(0);
-                        _receivedData.BeginUnbalanceSensorArr90.Add(controllerData.BeginUnbalanceSensor);
-                        _calculator.BeginUnbalanceSensorArr90 = _receivedData.BeginUnbalanceSensorArr90;
-
-                        _receivedData.MiddleUnbalanceSensorArr90.RemoveAt(0);
-                        _receivedData.MiddleUnbalanceSensorArr90.Add(controllerData.MiddleUnbalanceSensor);
-                        _calculator.MiddleUnbalanceSensorArr90 = _receivedData.MiddleUnbalanceSensorArr90;
-
-                        _calculator.ProductAngle(_calculator.BeginBalanceAngleArr90, _calculator.MiddleBalanceAngleArr90, _calculator.BeginUnbalanceSensorArr90, _calculator.MiddleUnbalanceSensorArr90);
-                    }
-                    break;
-
-                case 180:
-                    if (_receivedData.PassportData.Cargo == true)
-                    { 
-                        if (_receivedData.beginBalanceAngleArr180.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr180.Count() < _maxReceivedData &&
-                           _receivedData.BeginUnbalanceSensorArr180.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr180.Count() < _maxReceivedData)
-                        {
-                            _receivedData.beginBalanceAngleArr180.Add(controllerData.BeginBalanceAngle);
-                            _receivedData.MiddleBalanceAngleArr180.Add(controllerData.MiddleBalanceAngle);
-                            _receivedData.BeginUnbalanceSensorArr180.Add(controllerData.BeginUnbalanceSensor);
-                            _receivedData.MiddleUnbalanceSensorArr180.Add(controllerData.MiddleUnbalanceSensor);
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
                         }
-                        else
+                        break;
+                    case 180:
+                        if (_calculator.receivedData.MeasurementData.findCoordMass == true)
                         {
-                            _receivedData.beginBalanceAngleArr180.RemoveAt(0);
-                            _receivedData.beginBalanceAngleArr180.Add(controllerData.BeginBalanceAngle);
-                            _calculator.BeginBalanceAngleArr180 = _receivedData.beginBalanceAngleArr180;
+                            if (firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginBalanceAngleArr180.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginDisbalanceSensorArr180.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginBalanceAngleArr180.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.BeginDisbalanceSensorArr180.Add(controllerData.SensorDisbalance);
+                                    _calculator.calcData.kcmAngel_180 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.kcmAngel_180 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddleBalanceAngleArr180.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleDisbalanceSensorArr180.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddleBalanceAngleArr180.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.MiddleDisbalanceSensorArr180.Add(controllerData.SensorDisbalance);
 
                                     _calculator.calcData.ArraysAreFilling = true;
                                 }
@@ -161,72 +206,73 @@ namespace GravityCalc
                                 {
                                     _calculator.calcData.kcmAngel_180 = 2; //массивы заполнены полностью
 
-                            _receivedData.BeginUnbalanceSensorArr180.RemoveAt(0);
-                            _receivedData.BeginUnbalanceSensorArr180.Add(controllerData.BeginUnbalanceSensor);
-                            _calculator.BeginUnbalanceSensorArr180 = _receivedData.BeginUnbalanceSensorArr180;
-
-                            _receivedData.MiddleUnbalanceSensorArr180.RemoveAt(0);
-                            _receivedData.MiddleUnbalanceSensorArr180.Add(controllerData.MiddleUnbalanceSensor);
-                            _calculator.MiddleUnbalanceSensorArr180 = _receivedData.MiddleUnbalanceSensorArr180;
-
-                            _calculator.ProductAngle(_calculator.BeginBalanceAngleArr180, _calculator.MiddleBalanceAngleArr180, _calculator.BeginUnbalanceSensorArr180, _calculator.MiddleUnbalanceSensorArr180);
-                        }
-                    }
-                    else
-                    {
-                        if (_receivedData.beginBalanceAngleArr180_2.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr180_2.Count() < _maxReceivedData &&
-                           _receivedData.BeginUnbalanceSensorArr180_2.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr180_2.Count() < _maxReceivedData)
-                        {
-                            _receivedData.beginBalanceAngleArr180_2.Add(controllerData.BeginBalanceAngle);
-                            _receivedData.MiddleBalanceAngleArr180_2.Add(controllerData.MiddleBalanceAngle);
-                            _receivedData.BeginUnbalanceSensorArr180_2.Add(controllerData.BeginUnbalanceSensor);
-                            _receivedData.MiddleUnbalanceSensorArr180_2.Add(controllerData.MiddleUnbalanceSensor);
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
                         }
                         else
                         {
-                            _receivedData.beginBalanceAngleArr180_2.RemoveAt(0);
-                            _receivedData.beginBalanceAngleArr180_2.Add(controllerData.BeginBalanceAngle);
-                            _calculator.BeginBalanceAngleArr180_2 = _receivedData.beginBalanceAngleArr180_2;
+                            if (firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginPowerSensor180.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginIndicationK180.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginPowerSensor180.Add(controllerData.SensorPower);
+                                    _calculator.calcData.BeginIndicationK180.Add(controllerData.IndicationK);
+                                    _calculator.calcData.mAngel_180 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.mAngel_180 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddlePowerSensor180.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleIndicationK180.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddlePowerSensor180.Add(controllerData.SensorPower);
+                                    _calculator.calcData.MiddleIndicationK180.Add(controllerData.IndicationK);
 
-                            _receivedData.MiddleBalanceAngleArr180_2.RemoveAt(0);
-                            _receivedData.MiddleBalanceAngleArr180_2.Add(controllerData.MiddleBalanceAngle);
-                            _calculator.MiddleBalanceAngleArr180_2 = _receivedData.MiddleBalanceAngleArr180_2;
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.mAngel_180 = 2; //массивы заполнены полностью
 
-                            _receivedData.BeginUnbalanceSensorArr180_2.RemoveAt(0);
-                            _receivedData.BeginUnbalanceSensorArr180_2.Add(controllerData.BeginUnbalanceSensor);
-                            _calculator.BeginUnbalanceSensorArr180_2 = _receivedData.BeginUnbalanceSensorArr180_2;
-
-                            _receivedData.MiddleUnbalanceSensorArr180_2.RemoveAt(0);
-                            _receivedData.MiddleUnbalanceSensorArr180_2.Add(controllerData.MiddleUnbalanceSensor);
-                            _calculator.MiddleUnbalanceSensorArr180_2 = _receivedData.MiddleUnbalanceSensorArr180_2;
-
-                            _calculator.ProductAngle(_calculator.BeginBalanceAngleArr180_2, _calculator.MiddleBalanceAngleArr180_2, _calculator.BeginUnbalanceSensorArr180_2, _calculator.MiddleUnbalanceSensorArr180_2);
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
                         }
-                    }
-                    break;
-
-                case 270:
-                    if (_receivedData.beginBalanceAngleArr270.Count() < _maxReceivedData && _receivedData.MiddleBalanceAngleArr270.Count() < _maxReceivedData &&
-                       _receivedData.BeginUnbalanceSensorArr270.Count() < _maxReceivedData && _receivedData.MiddleUnbalanceSensorArr270.Count() < _maxReceivedData)
-                    {
-                        _receivedData.beginBalanceAngleArr270.Add(controllerData.BeginBalanceAngle);
-                        _receivedData.MiddleBalanceAngleArr270.Add(controllerData.MiddleBalanceAngle);
-                        _receivedData.BeginUnbalanceSensorArr270.Add(controllerData.BeginUnbalanceSensor);
-                        _receivedData.MiddleUnbalanceSensorArr270.Add(controllerData.MiddleUnbalanceSensor);
-                    }
-                    else
-                    {
-                        _receivedData.beginBalanceAngleArr270.RemoveAt(0);
-                        _receivedData.beginBalanceAngleArr270.Add(controllerData.BeginBalanceAngle);
-                        _calculator.BeginBalanceAngleArr270 = _receivedData.beginBalanceAngleArr270;
-
-                        _receivedData.MiddleBalanceAngleArr270.RemoveAt(0);
-                        _receivedData.MiddleBalanceAngleArr270.Add(controllerData.MiddleBalanceAngle);
-                        _calculator.MiddleBalanceAngleArr270 = _receivedData.MiddleBalanceAngleArr270;
-
-                        _receivedData.BeginUnbalanceSensorArr270.RemoveAt(0);
-                        _receivedData.BeginUnbalanceSensorArr270.Add(controllerData.BeginUnbalanceSensor);
-                        _calculator.BeginUnbalanceSensorArr270 = _receivedData.BeginUnbalanceSensorArr270;
+                        break;
+                    case 270:
+                        if (_calculator.receivedData.MeasurementData.findCoordMass == true)
+                        {
+                            if (firstHalfofArrays) //первая половина массивов
+                            {
+                                if (_calculator.calcData.BeginBalanceAngleArr270.Count() < _maxReceivedData && //заполняем массивы
+                                    _calculator.calcData.BeginDisbalanceSensorArr270.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.BeginBalanceAngleArr270.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.BeginDisbalanceSensorArr270.Add(controllerData.SensorDisbalance);
+                                    _calculator.calcData.kcmAngel_270 = 0; // массивы не заполнены
+                                    _calculator.calcData.ArraysAreFilling = true;
+                                }
+                                else
+                                {
+                                    _calculator.calcData.kcmAngel_270 = 1; //массивы заполнены наполовину
+                                    _calculator.calcData.ArraysAreFilling = false;
+                                }
+                            }
+                            else //вторая половина массивов
+                            {
+                                if (_calculator.calcData.MiddleBalanceAngleArr270.Count() < _maxReceivedData &&
+                                    _calculator.calcData.MiddleDisbalanceSensorArr270.Count() < _maxReceivedData)
+                                {
+                                    _calculator.calcData.MiddleBalanceAngleArr270.Add(controllerData.SensorAngle);
+                                    _calculator.calcData.MiddleDisbalanceSensorArr270.Add(controllerData.SensorDisbalance);
 
                                     _calculator.calcData.ArraysAreFilling = true;
                                 }
@@ -249,58 +295,192 @@ namespace GravityCalc
             if (_calculator.calcData.kcmAngel_0 == 2 && _calculator.calcData.kcmAngel_90 == 2 && _calculator.calcData.kcmAngel_180 == 2 && _calculator.calcData.kcmAngel_270 == 2
             /*&& _calculator.calcData.mAngel_0 == 2 && _calculator.calcData.mAngel_180 == 2*/)
             {
-                calc.Angel_0 = true;
-            }
-            if (_calculator.BeginBalanceAngleArr90.Count() == 10)
-            {
-                calc.Angel_90 = true;
-            }
-            if (_calculator.BeginBalanceAngleArr180.Count() == 10)
-            {
-                calc.Angel_180 = true;
-            }
-            if (_calculator.BeginBalanceAngleArr270.Count() == 10)
-            {
-                calc.Angel_270 = true;
-            }
-            if (_calculator.BeginBalanceAngleArr0_2.Count() == 10)
-            {
-                calc.Angel_0_2 = true;
-            }
-            if (_calculator.BeginBalanceAngleArr180_2.Count() == 10)
-            {
-                calc.Angel_180_2 = true;
-            }
-
-            if (calc.Angel_0 == true && calc.Angel_90 == true && calc.Angel_180 == true && calc.Angel_270 == true && 
-                calc.Angel_0_2 == true && calc.Angel_180_2 == true)
-            {
-                _angel = true;
-            }
-
-            if(_angel == true && _nsp == true)
-            {
-                _calculator.SumValue();
-                _calculator.AngleNot();
-                _calculator.Computation_ma();
-                _calculator.Computation_mm();
-                _calculator.CalcRefAngle_ma();
-                _calculator.CalcRefAngle_mm();
-                _calculator.TranslatVal();
-                _calculator.Balanse_tg();
-                _calculator.WorkList1();
-                _calculator.WorkList2();
-                _calculator.NSP();
-                _dataProvider?.SendData(GetCalculatedData());
-            }
-            
+                _calculator.calcData.AllAngelFilling = true;
+            }          
         }
+
+
+        //расчет, после расчета надо сделать startSaveArrays = false
+
+
+
+        //    if(_angel == true && _nsp == true  )
+        //    {
+        //        if ( _receivedData.PassportData.KP == true)
+        //        {
+        //            _calculator.SumValue();
+        //            _calculator.AngleNot();
+        //            _calculator.Computation_ma();
+        //            _calculator.Computation_mm();
+        //            _calculator.CalcRefAngle_ma();
+        //            _calculator.CalcRefAngle_mm();
+        //            _calculator.Massa();
+        //            _calculator.TranslatVal();
+        //            _calculator.Balanse_tg();
+        //            _calculator.WorkList1();
+        //            _calculator.WorkList2();
+        //            _calculator.NSP();
+        //            _calculator.KP();
+        //            _dataProvider?.SendData(GetCalculatedData());
+        //        }
+        //        else
+        //        {
+        //            _calculator.SumValue();
+        //            _calculator.AngleNot();
+        //            _calculator.Computation_ma();
+        //            _calculator.Computation_mm();
+        //            _calculator.CalcRefAngle_ma();
+        //            _calculator.CalcRefAngle_mm();
+        //            _calculator.Massa();
+        //            _calculator.TranslatVal();
+        //            _calculator.Balanse_tg();
+        //            _calculator.WorkList1();
+        //            _calculator.WorkList2();
+        //            _calculator.NSP();
+        //            Console.WriteLine("Контрольное приспособление не используется");
+        //            _dataProvider?.SendData(GetCalculatedData());
+
+        //        }
+        //    }
+
+
+        //}
         public void SetPassportData(PassportData passportData)
         {
-            Console.WriteLine("{0} : Получены новые паспортные данные", _name);
+            // Console.WriteLine("{0} : Получены новые паспортные данные", _name);
             //_receivedData.ClearAllData();
-            _receivedData.PassportData = passportData;
+            _calculator.receivedData.PassportData = passportData;
+            _pd = true;
             
+        }
+        public void SetMeasurementData(MeasurementDataOut measurementData)
+        {
+            _calculator.receivedData.MeasurementData = measurementData;
+
+
+            if (measurementData.CalculationCalc) //расчет
+            {              
+                if (_calculator.receivedData.MeasurementData.KP == false)
+                {
+                    if (_calculator.calcData.AllAngelFilling == true && _nsp == true && _pd == true)
+                    {
+                        startSaveArrays = false;
+                        _calculator.calcData.AllAngelFilling = false;
+                        _dataProvider?.SendData(GetCalculatedData());
+                    }
+                }
+                else
+                {
+                    if (_calculator.calcData.AllAngelFilling == true && _nsp == true && _pd == true)
+                    {
+                        startSaveArrays = false;
+                        _calculator.calcData.AllAngelFilling = false;
+                        _dataProvider?.SendData(GetCalculatedData());
+                    }
+                }
+            }
+            else //снять измерения
+            {
+                startSaveArrays = true;
+
+                switch (_calculator.receivedData.MeasurementData.Fi)
+                {
+                    case 0:
+                        if (_calculator.calcData.BeginBalanceAngleArr0.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleBalanceAngleArr0.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr0.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleDisbalanceSensorArr0.Count() == _maxReceivedData
+                            )
+                        {
+                            _calculator.calcData.BeginBalanceAngleArr0.Clear();
+                            _calculator.calcData.MiddleBalanceAngleArr0.Clear();
+                            _calculator.calcData.BeginDisbalanceSensorArr0.Clear();
+                            _calculator.calcData.MiddleDisbalanceSensorArr0.Clear();
+
+                            firstHalfofArrays = true;
+                        }
+                        else if (_calculator.calcData.BeginBalanceAngleArr0.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr0.Count() == _maxReceivedData
+                            )
+                        {
+                            firstHalfofArrays = false;
+                        }
+                        else
+                            firstHalfofArrays = true;
+                        break;
+                    case 90:
+                        if (_calculator.calcData.BeginBalanceAngleArr90.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleBalanceAngleArr90.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr90.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleDisbalanceSensorArr90.Count() == _maxReceivedData
+                            )
+                        {
+                            _calculator.calcData.BeginBalanceAngleArr90.Clear();
+                            _calculator.calcData.MiddleBalanceAngleArr90.Clear();
+                            _calculator.calcData.BeginDisbalanceSensorArr90.Clear();
+                            _calculator.calcData.MiddleDisbalanceSensorArr90.Clear();
+
+                            firstHalfofArrays = true;
+                        }
+                        else if (_calculator.calcData.BeginBalanceAngleArr90.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr90.Count() == _maxReceivedData
+                            )
+                        {
+                            firstHalfofArrays = false;
+                        }
+                        else
+                            firstHalfofArrays = true;
+                        break;
+                    case 180:
+                        if (_calculator.calcData.BeginBalanceAngleArr180.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleBalanceAngleArr180.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr180.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleDisbalanceSensorArr180.Count() == _maxReceivedData
+                            )
+                        {
+                            _calculator.calcData.BeginBalanceAngleArr180.Clear();
+                            _calculator.calcData.MiddleBalanceAngleArr180.Clear();
+                            _calculator.calcData.BeginDisbalanceSensorArr180.Clear();
+                            _calculator.calcData.MiddleDisbalanceSensorArr180.Clear();
+
+                            firstHalfofArrays = true;
+                        }
+                        else if (_calculator.calcData.BeginBalanceAngleArr180.Count() == _maxReceivedData &&
+                                 _calculator.calcData.BeginDisbalanceSensorArr180.Count() == _maxReceivedData
+                             )
+                        {
+                            firstHalfofArrays = false;
+                        }
+                        else
+                            firstHalfofArrays = true;
+                        break;
+                    case 270:
+                        if (_calculator.calcData.BeginBalanceAngleArr270.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleBalanceAngleArr270.Count() == _maxReceivedData &&
+                            _calculator.calcData.BeginDisbalanceSensorArr270.Count() == _maxReceivedData &&
+                            _calculator.calcData.MiddleDisbalanceSensorArr270.Count() == _maxReceivedData
+                            )
+                        {
+                            _calculator.calcData.BeginBalanceAngleArr270.Clear();
+                            _calculator.calcData.MiddleBalanceAngleArr270.Clear();
+                            _calculator.calcData.BeginDisbalanceSensorArr270.Clear();
+                            _calculator.calcData.MiddleDisbalanceSensorArr270.Clear();
+
+                            firstHalfofArrays = true;
+                        }
+                        else if (_calculator.calcData.BeginBalanceAngleArr270.Count() == _maxReceivedData &&
+                                 _calculator.calcData.BeginDisbalanceSensorArr270.Count() == _maxReceivedData
+                             )
+                        {
+                            firstHalfofArrays = false;
+                        }
+                        else
+                            firstHalfofArrays = true;
+                        break;
+                }
+            }
+            
+
         }
         public CalculatedData GetCalculatedData()
         {
@@ -320,19 +500,6 @@ namespace GravityCalc
             //Console.WriteLine("{0} : Получены новые данные с контроллера", _name);
             _controllerIn = true;
             _calculator.receivedData.ControllerDataIn = сontrollerDataIn;
-        }
-
-        public void SetRecomValData(RecomValData recomValData)
-        {
-           // Console.WriteLine("{0} : Получены новые рекмоендуемые данные", _name);
-            _recomVal = true;
-            _receivedData.RecomValData = recomValData;
-        }
-        public void SetControllerDataIn(ControllerDataIn сontrollerDataIn)
-        {
-            //Console.WriteLine("{0} : Получены новые данные с контроллера", _name);
-            _controllerIn = true;
-            _receivedData.ControllerDataIn = сontrollerDataIn;
         }
 
         public void SetDataProvider(CalcDataProvider dataProvider)

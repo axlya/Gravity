@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>X:\GRAVITY_run</_PublishTargetUrl>
+    <History>True|2021-12-07T03:05:32.8238835Z;True|2021-12-07T12:47:10.2507896+10:00;True|2021-12-02T13:38:10.1519030+10:00;False|2021-12-02T13:36:40.4781807+10:00;False|2021-12-02T13:36:01.0402034+10:00;False|2021-12-02T13:34:53.0542200+10:00;True|2021-12-02T11:23:49.7657758+10:00;True|2021-12-02T11:08:34.7048830+10:00;False|2021-12-02T11:07:24.2734771+10:00;True|2021-12-02T10:56:45.4432661+10:00;True|2021-12-01T12:10:17.7837657+10:00;True|2021-12-01T10:41:41.2746844+10:00;False|2021-12-01T10:40:45.3325234+10:00;True|2021-12-01T09:52:46.2428297+10:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Errors.csv">
+      <publishTime>12/07/2021 12:09:52</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

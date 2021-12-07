@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "YI4ggFDtmzUAMe+EKHyVGnJW8Ye9NzoIefdx7DFgL9xvzOOAzO/k7P78BjY3/A9BInQmUix5pegwe2p79PdaVg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\axlya\\source\\repos\\Gravity\\GravityCalc\\GravityCalc.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\axlya\\.nuget\\packages\\csvhelper\\27.0.1\\csvhelper.27.0.1.nupkg.sha512",
+    "C:\\Users\\axlya\\.nuget\\packages\\mc.csvhelper.extensions\\1.0.0\\mc.csvhelper.extensions.1.0.0.nupkg.sha512",
+    "C:\\Users\\axlya\\.nuget\\packages\\mc.system.extensions\\1.0.0\\mc.system.extensions.1.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

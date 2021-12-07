@@ -14,8 +14,8 @@ namespace GravityData
     /// </summary>
     public class Emulator
     {
-            //обновление данных
-            public int UpdateDataValue { get; set; } = 1; //сек
+        //обновление данных
+        public int UpdateDataValue { get; set; } = 1; //сек
         //провайдер данных
         private DataProvider _dataProvider = null;
         private ICalculator _mainCalc = null;
@@ -94,75 +94,62 @@ namespace GravityData
                                 }
                             break;
 
-                      case 90:
-                            if (_passportData.Cargo == true)
-                            {
-                                _dataProvider.SendData(new ControllerData
+                          case 90:
+                                if (_passportData.Cargo == true)
                                 {
-                                    BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    BeginUnbalanceSensor = 350 + (new Random().Next(1, 650)),
-                                    MiddleUnbalanceSensor = 1600 + (new Random().Next(50, 700)),
-                                    K1 = 1,
-                                    K2 = 1,
-                                    P1 = 1,
-                                    P2 = 1,
-                                });
-                            }
-                        break;
+                                    _dataProvider.SendData(new ControllerDataOut
+                                    {
+                                        //BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //BeginDisbalanceSensor = 350 + (new Random().Next(1, 650)),
+                                        //MiddleDisbalanceSensor = 1600 + (new Random().Next(50, 700)),
+                                    });
+                                }
+                            break;
 
-                    case 180:
-                            if (_passportData.Cargo == true)
-                            {
-                                _dataProvider.SendData(new ControllerData
+                        case 180:
+                                if (_passportData.Cargo == true)
                                 {
-                                    BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    BeginUnbalanceSensor = 350 + (new Random().Next(1, 650)),
-                                    MiddleUnbalanceSensor = 1600 + (new Random().Next(50, 700)),
-                                    K1 = 1,
-                                    K2 = 1,
-                                    P1 = 1,
-                                    P2 = 1,
-                                });
-                                break;
-                            }
-                            else
-                            {
-                                _dataProvider.SendData(new ControllerData
+                                    _dataProvider.SendData(new ControllerDataOut
+                                    {
+                                        //BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //BeginDisbalanceSensor = 350 + (new Random().Next(1, 650)),
+                                        //MiddleDisbalanceSensor = 1600 + (new Random().Next(50, 700)),
+                                    });
+                                    break;
+                                }
+                                else
                                 {
-                                    BeginBalanceAngle = 5.9 + (new Random().Next(0, 9) / 1000.0),
-                                    MiddleBalanceAngle = 5.9 + (new Random().Next(0, 9) / 1000.0),
-                                    BeginUnbalanceSensor = 150 + (new Random().Next(1, 650)),
-                                    MiddleUnbalanceSensor = 1600 + (new Random().Next(50, 700)),
-                                    K1 = 1,
-                                    K2 = 1,
-                                    P1 = 1,
-                                    P2 = 1,
-                                });
-                            }
-                        break;
+                                    _dataProvider.SendData(new ControllerDataOut
+                                    {
+                                        //BeginBalanceAngle = 5.9 + (new Random().Next(0, 9) / 1000.0),
+                                        //MiddleBalanceAngle = 5.9 + (new Random().Next(0, 9) / 1000.0),
+                                        //BeginUnbalanceSensor = 150 + (new Random().Next(1, 650)),
+                                        //MiddleUnbalanceSensor = 1600 + (new Random().Next(50, 700)),
+                                        //IndicationK = 1,                                       
+                                        //BeginPowerSensor = 1,
+                                        //MiddlePowerSensor = 1,
+                                    });
+                                }
+                            break;
 
-                    case 270:
-                          if (_passportData.Cargo == true)
-                          {
-                                _dataProvider.SendData(new ControllerData
-                                {
-                                    BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
-                                    BeginUnbalanceSensor = 350 + (new Random().Next(1, 650)),
-                                    MiddleUnbalanceSensor = 1600 + (new Random().Next(50, 700)),
-                                    K1 = 1,
-                                    K2 = 1,
-                                    P1 = 1,
-                                    P2 = 1,
-                                });
-                          }
-                        break;
+                        case 270:
+                              if (_passportData.Cargo == true)
+                              {
+                                    _dataProvider.SendData(new ControllerDataOut
+                                    {
+                                        //BeginBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //MiddleBalanceAngle = 8.4 + (new Random().Next(0, 9) / 1000.0),
+                                        //BeginDisbalanceSensor = 350 + (new Random().Next(1, 650)),
+                                        //MiddleDisbalanceSensor = 1600 + (new Random().Next(50, 700)),
+                                    });
+                              }
+                            break;
+                    }
+                    Thread.Sleep(500 * UpdateDataValue);
                 }
-                Thread.Sleep(1000 * UpdateDataValue);
+                _generateDataEvent.Set();
             }
-            _generateDataEvent.Set();
-        }
     }
 }

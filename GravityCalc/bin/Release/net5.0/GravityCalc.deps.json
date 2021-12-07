@@ -1,0 +1,75 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "GravityCalc/1.0.0": {
+        "dependencies": {
+          "MC.CsvHelper.Extensions": "1.0.0"
+        },
+        "runtime": {
+          "GravityCalc.dll": {}
+        }
+      },
+      "CsvHelper/27.0.1": {
+        "runtime": {
+          "lib/net5.0/CsvHelper.dll": {
+            "assemblyVersion": "27.0.0.0",
+            "fileVersion": "27.0.1.0"
+          }
+        }
+      },
+      "MC.CsvHelper.Extensions/1.0.0": {
+        "dependencies": {
+          "CsvHelper": "27.0.1",
+          "MC.System.Extensions": "1.0.0"
+        },
+        "runtime": {
+          "lib/net5.0/CsvHelper.Extensions.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "MC.System.Extensions/1.0.0": {
+        "runtime": {
+          "lib/net5.0/System.Extensions.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GravityCalc/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CsvHelper/27.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ndJE6dMfB3Vv6j2y1XwuajO8lyHiQ2x2yZmaD+LkfW0GLwRy2jnqNB674/eKoUu8SlpYl08/1mdS7T6Mb1ktPw==",
+      "path": "csvhelper/27.0.1",
+      "hashPath": "csvhelper.27.0.1.nupkg.sha512"
+    },
+    "MC.CsvHelper.Extensions/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iDohWd8KHbsjtOmXJYwPry4r+nSpjN7GX+BZuYqaFWg+Art6jRwbCAfT114tK/Q58u0jljTaiL3IWbIeIgzTJQ==",
+      "path": "mc.csvhelper.extensions/1.0.0",
+      "hashPath": "mc.csvhelper.extensions.1.0.0.nupkg.sha512"
+    },
+    "MC.System.Extensions/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c21RLMk8yhK9ZNXTVgTtdvEpmJUE9qmwWbt/7rENdyhXMwauVeMNYHDlJHPm8P+wkREigu/EQDy+CB393JAhjQ==",
+      "path": "mc.system.extensions/1.0.0",
+      "hashPath": "mc.system.extensions.1.0.0.nupkg.sha512"
+    }
+  }
+}
