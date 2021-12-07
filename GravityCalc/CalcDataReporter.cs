@@ -10,7 +10,7 @@ namespace GravityCalc
     /// <summary>
     /// Получение данных от контроллера
     /// </summary>
-    public class CalcDataReporter : IObserver<ControllerData>
+    public class CalcDataReporter : IObserver<ControllerDataOut>
     {
         private IDisposable _unsubscriber;
         private string _instName;
@@ -35,7 +35,7 @@ namespace GravityCalc
         public string Name
         { get { return _instName; } }
 
-        public virtual void Subscribe(IObservable<ControllerData> provider)
+        public virtual void Subscribe(IObservable<ControllerDataOut> provider)
         {
             if (provider != null)
                 _unsubscriber = provider.Subscribe(this);
@@ -53,7 +53,7 @@ namespace GravityCalc
         }
 
         // Получены новые данные
-        public virtual void OnNext(ControllerData data)
+        public virtual void OnNext(ControllerDataOut data)
         {
             _mainCalc?.SetControllerData(data);
         }

@@ -9,7 +9,7 @@ using GravityCalc;
 namespace GravityWebExt.Models
 {
     /// <summary>
-    /// Передача данных PasportData подписчикам
+    /// Передача данных PassportData подписчикам
     /// </summary>
     public class WebDataProvider :IObservable<PassportData>
     {

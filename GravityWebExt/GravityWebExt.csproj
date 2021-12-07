@@ -12,16 +12,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\jquery-3.6.0.min.js" />
+    <None Remove="Errors.csv" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\jquery-3.6.0.min.js" />
+    <Content Include="Errors.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>

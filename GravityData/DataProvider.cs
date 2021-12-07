@@ -11,16 +11,16 @@ namespace GravityData
     /// <summary>
     /// Передача данных Data подписчикам
     /// </summary>
-    public class DataProvider :IObservable<ControllerData>
+    public class DataProvider :IObservable<ControllerDataOut>
     {
         public DataProvider()
         {
-            _observers = new List<IObserver<ControllerData>>();
+            _observers = new List<IObserver<ControllerDataOut>>();
         }
 
-        private List<IObserver<ControllerData>> _observers;
+        private List<IObserver<ControllerDataOut>> _observers;
 
-        public IDisposable Subscribe(IObserver<ControllerData> observer)
+        public IDisposable Subscribe(IObserver<ControllerDataOut> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -29,10 +29,10 @@ namespace GravityData
 
         private class Unsubscriber : IDisposable
         {
-            private List<IObserver<ControllerData>> _observers;
-            private IObserver<ControllerData> _observer;
+            private List<IObserver<ControllerDataOut>> _observers;
+            private IObserver<ControllerDataOut> _observer;
 
-            public Unsubscriber(List<IObserver<ControllerData>> observers, IObserver<ControllerData> observer)
+            public Unsubscriber(List<IObserver<ControllerDataOut>> observers, IObserver<ControllerDataOut> observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -45,7 +45,7 @@ namespace GravityData
             }
         }
 
-        public void SendData(ControllerData? data)
+        public void SendData(ControllerDataOut? data)
         {
             foreach (var observer in _observers)
             {

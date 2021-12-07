@@ -12,23 +12,29 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
+    <header>1
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 fixed-top">
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <partial name="_ConnectPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item @(curPage == "Index"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Расчётные данные</a>
+                        <li class="nav-item @(curPage == "ControlPanel"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ControlPanel">Контрольная панель</a>
                         </li>
-                        <li class="nav-item @(curPage == "Measurement"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Measurement">Данные датчиков</a>
+                        <li class="nav-item @(curPage == "RecomVal"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="RecomVal">Рекомендованные значения</a>
+                        </li>
+                        <li class="nav-item @(curPage == "MeasurementPanel"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MeasurementPanel">Измерительная панель</a>
+                        </li>
+                        <li class="nav-item @(curPage == "Calculate"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Calculate">Расчётные данные</a>
+                        </li>
+                        <li class="nav-item @(curPage == "Options"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Параметры</a>
                         </li>
                         <li class="nav-item @(curPage == "NSP"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="NSP">НСП</a>
-                        </li>
-
-                        <li class="nav-item @(curPage == "Options"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Настройки</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

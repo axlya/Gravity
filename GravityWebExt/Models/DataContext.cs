@@ -27,10 +27,16 @@ namespace GravityWebExt.Models
         /// NSP
         /// </summary>
         public DbSet<NSPWebData> NSP { get; set; }
+        public DbSet<RecomValWebData> RecomValWebData { get; set; }
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
             Database.EnsureCreated();
+        }
+
+        public static implicit operator DataContext(ControlPanelDataWeb v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

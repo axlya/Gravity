@@ -1,0 +1,241 @@
+﻿@model CalculatedDataWeb
+@{
+    ViewData["Title"] = "Расчётные данные";
+}
+@*<h1>@ViewData["Title"]</h1>*@
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="container">
+    <form method="post">
+        <h4>Рассчитанные рекомендуемые значения</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                    <th>Размерность</th>
+                </tr>
+            </thead>
+            <tbody>
+               
+                <tr>
+                    <td>Подходящие горизонтальное расстояние между осью наклона стенда и центром тяжести подвижного груза в его переднем положении </td>
+                    <td>K_ref</td>
+                    <td><span id="RefK">@Model.RefK.ToString("N3")</span></td>
+                    <td>мм</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Рассчитанное значение угла</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Средний угол равновесия - α</td>
+                    <td>∠ср</td>
+                    <td><span id="averageValue">@Model.AverageValue.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Поправка координат при определении КМЦ</td>
+                    <td>△</td>
+                    <td><span id="kcmDev">@Model.kcmDev.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Тарировка углов</td>
+                    <td></td>
+                    <td><span id="amendment">@Model.Amendment.ToString("N3")</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Итоговые значения КЦМ</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
+                    <th>M</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Координаты Центра Масс </td>
+                    <td><span id="res_X">@Model.RES_X.ToString("N3")</span></td>
+                    <td><span id="res_Y">@Model.RES_Y.ToString("N3")</span></td>
+                    <td><span id="res_Z">@Model.RES_Z.ToString("N3")</span></td>
+                    <td><span id="res_M">@Model.RES_M.ToString("N3")</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>KP</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Обозначение</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
+                    <th>M</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Расчет поправок</td>
+                    <td>p</td>
+                    <td><span id="_pX">@Model._pX.ToString("N3")</span></td>
+                    <td><span id="_pY">@Model._pY.ToString("N3")</span></td>
+                    <td><span id="_pZ">@Model._pZ.ToString("N3")</span></td>
+                    <td><span id="_pM">@Model._pM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Системат. отклонения после введения поправок</td>
+                    <td>△p</td>
+                    <td><span id="SystemDevX">@Model.SystemDevX.ToString("N3")</span></td>
+                    <td><span id="SystemDevY">@Model.SystemDevY.ToString("N3")</span></td>
+                    <td><span id="SystemDevZ">@Model.SystemDevZ.ToString("N3")</span></td>
+                    <td><span id="SystemDevM">@Model.SystemDevM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Расчет КЦМ и М изделия с учетом поправок</td>
+                    <td>KMCp</td>
+                    <td><span id="_kmcKPx">@Model._kmcKPx.ToString("N3")</span></td>
+                    <td><span id="_kmcKPy">@Model._kmcKPy.ToString("N3")</span></td>
+                    <td><span id="_kmcKPz">@Model._kmcKPz.ToString("N3")</span></td>
+                    <td><span id="_kmcKPm">@Model._kmcKPm.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Систематические погрешности изделия</td>
+                    <td>±p</td>
+                    <td><span id="SystemEerX">@Model.SystemEerX.ToString("N3")</span></td>
+                    <td><span id="SystemEerY">@Model.SystemEerY.ToString("N3")</span></td>
+                    <td><span id="SystemEerZ">@Model.SystemEerZ.ToString("N3")</span></td>
+                    <td><span id="SystemEerM">@Model.SystemEerM.ToString("N3")</span></td>
+                </tr>
+                <tr>
+                    <td>Границы погрешностей изделия</td>
+                    <td>±△p</td>
+                    <td><span id="GranKPx">@Model.GranKPx.ToString("N3")</span></td>
+                    <td><span id="GranKPy">@Model.GranKPy.ToString("N3")</span></td>
+                    <td><span id="GranKPz">@Model.GranKPz.ToString("N3")</span></td>
+                    <td><span id="GranKPm">@Model.GranKPm.ToString("N3")</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var timerId = setTimeout(function tick() { //рекурсивный setTimeout вызов более точный чем setInterval
+            getCalculatorData();
+            timerId = setTimeout(tick, timeInterval);
+        }, timeInterval);
+    });
+
+    var timeInterval = 1000;
+
+    function getCalculatorData() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetCalculatorDataRepeat", "Home")?random=" + Math.random(),
+            dataType: "json",
+            success: function (result) {
+                 //console.log(result);
+
+                $("#devPlane_xOy").text(parseFloat(result.devPlane_xOy).toFixed(3));
+                $("#devPlane_xOz").text(parseFloat(result.devPlane_xOz).toFixed(3));
+                $("#averageValue").text(parseFloat(result.averageValue).toFixed(3));
+                $("#kcmDev").text(parseFloat(result.kcmDev).toFixed(3));
+                $("#amendment").text(parseFloat(result.amendment).toFixed(3));
+                //
+                $("#res_X").text(parseFloat(result.reS_X).toFixed(3));
+                $("#res_Y").text(parseFloat(result.reS_Y).toFixed(3));
+                $("#res_Z").text(parseFloat(result.reS_Z).toFixed(3));
+                $("#res_M").text(parseFloat(result.reS_M).toFixed(3));
+                //
+                $("#averProdVal_X").text(parseFloat(result.averProdVal_X).toFixed(3));
+                $("#averProdVal_Y").text(parseFloat(result.averProdVal_Y).toFixed(3));
+                $("#averProdVal_Z").text(parseFloat(result.averProdVal_Z).toFixed(3));
+                $("#averProdValMas").text(parseFloat(result.averProdValMas).toFixed(3));
+                $("#erLimX1").text(parseFloat(result.erLimX1).toFixed(3));
+                $("#erLimY1").text(parseFloat(result.erLimY1).toFixed(3));
+                $("#erLimZ1").text(parseFloat(result.erLimZ1).toFixed(3));
+                $("#erLimM1").text(parseFloat(result.erLimM1).toFixed(3));
+                $("#erLimX2").text(parseFloat(result.erLimX2).toFixed(3));
+                $("#erLimY2").text(parseFloat(result.erLimY2).toFixed(3));
+                $("#erLimZ2").text(parseFloat(result.erLimZ2).toFixed(3));
+                $("#erLimM2").text(parseFloat(result.erLimM2).toFixed(3));
+                $("#nspMaxX").text(parseFloat(result.nsPmaxX).toFixed(3));
+                $("#nspMaxY").text(parseFloat(result.nsPmaxY).toFixed(3));
+                $("#nspMaxZ").text(parseFloat(result.nsPmaxZ).toFixed(3));
+                $("#nspMaxM").text(parseFloat(result.nsPmaxM).toFixed(3));
+                $("#erLimSx").text(parseFloat(result.erLimSx).toFixed(3));
+                $("#erLimSy").text(parseFloat(result.erLimSy).toFixed(3));
+                $("#erLimSz").text(parseFloat(result.erLimSz).toFixed(3));
+                $("#erLimSm").text(parseFloat(result.erLimSm).toFixed(3));
+                $("#kvesX").text(parseFloat(result.kvesX).toFixed(3));
+                $("#kvesY").text(parseFloat(result.kvesY).toFixed(3));
+                $("#kvesZ").text(parseFloat(result.kvesZ).toFixed(3));
+                $("#kvesM").text(parseFloat(result.kvesM).toFixed(3));
+                $("#sdev_reNsX").text(parseFloat(result.sdev_reNsX).toFixed(3));
+                $("#sdev_reNsY").text(parseFloat(result.sdev_reNsY).toFixed(3));
+                $("#sdev_reNsZ").text(parseFloat(result.sdev_reNsZ).toFixed(3));
+                $("#sdev_reNsM").text(parseFloat(result.sdev_reNsM).toFixed(3));
+                $("#granX").text(parseFloat(result.granX).toFixed(3));
+                $("#granY").text(parseFloat(result.granY).toFixed(3));
+                $("#granZ").text(parseFloat(result.granZ).toFixed(3));
+                $("#granM").text(parseFloat(result.granM).toFixed(3));
+
+                $("#_pX").text(parseFloat(result._pX).toFixed(3));
+                $("#_pY").text(parseFloat(result._pY).toFixed(3));
+                $("#_pZ").text(parseFloat(result._pZ).toFixed(3));
+                $("#_pM").text(parseFloat(result._pM).toFixed(3));
+
+                $("#SystemDevX").text(parseFloat(result.systemDevX).toFixed(3));
+                $("#SystemDevY").text(parseFloat(result.systemDevY).toFixed(3));
+                $("#SystemDevZ").text(parseFloat(result.systemDevZ).toFixed(3));
+                $("#SystemDevM").text(parseFloat(result.systemDevM).toFixed(3));
+
+                $("#_kmcKPx").text(parseFloat(result._kmcKPx).toFixed(3));
+                $("#_kmcKPy").text(parseFloat(result._kmcKPy).toFixed(3));
+                $("#_kmcKPz").text(parseFloat(result._kmcKPz).toFixed(3));
+                $("#_kmcKPm").text(parseFloat(result._kmcKPm).toFixed(3));
+
+                $("#SystemEerX").text(parseFloat(result.systemEerX).toFixed(3));
+                $("#SystemEerY").text(parseFloat(result.systemEerY).toFixed(3));
+                $("#SystemEerZ").text(parseFloat(result.systemEerZ).toFixed(3));
+                $("#SystemEerM").text(parseFloat(result.systemEerM).toFixed(3));
+
+                $("#GranKPx").text(parseFloat(result.granKPx).toFixed(3));
+                $("#GranKPy").text(parseFloat(result.granKPy).toFixed(3));
+                $("#GranKPz").text(parseFloat(result.granKPz).toFixed(3));
+                $("#GranKPm").text(parseFloat(result.granKPm).toFixed(3));
+                $("#RefK").text(parseFloat(result.refK).toFixed(3));
+
+                //RecomValData
+                $("#Ma").text(parseFloat(result.ma).toFixed(3));
+                $("#Mm").text(parseFloat(result.mm).toFixed(3));
+                $("#AngleKcm").text(parseFloat(result.angleKcm).toFixed(3));
+                $("#AngleMas").text(parseFloat(result.angleMas).toFixed(3));
+                $("#AngleNotMas").text(parseFloat(result.angleNotMas).toFixed(3));
+            },
+            error: function (result) {
+
+            }
+        });
+    }
+</script>

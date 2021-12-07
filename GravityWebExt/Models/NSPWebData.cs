@@ -27,6 +27,7 @@ namespace GravityWebExt.Models
         public double _devEx { get; set; }
         public double _devMAx { get; set; }
         public double _devMMx { get; set; }
+        public double _devMASSx { get; set; }
 
         public double _devSy { get; set; }
         public double _devHy { get; set; }
@@ -44,6 +45,8 @@ namespace GravityWebExt.Models
         public double _devEy { get; set; }
         public double _devMAy { get; set; }
         public double _devMMy { get; set; }
+        public double _devMASSy { get; set; }
+
         public double _devSz { get; set; }
         public double _devHz { get; set; }
         public double _devLz { get; set; }
@@ -60,6 +63,8 @@ namespace GravityWebExt.Models
         public double _devEz { get; set; }
         public double _devMAz { get; set; }
         public double _devMMz { get; set; }
+        public double _devMASSz { get; set; }
+
         public double _devSm { get; set; }
         public double _devHm { get; set; }
         public double _devLm { get; set; }
@@ -76,6 +81,7 @@ namespace GravityWebExt.Models
         public double _devEm { get; set; }
         public double _devMAm { get; set; }
         public double _devMMm { get; set; }
+        public double _devMASSm { get; set; }
 
         public double _devSx2 { get; set; }
         public double _devHx2 { get; set; }
@@ -93,6 +99,7 @@ namespace GravityWebExt.Models
         public double _devEx2 { get; set; }
         public double _devMAx2 { get; set; }
         public double _devMMx2 { get; set; }
+        public double _devMASSx2 { get; set; }
 
         public double _devSy2 { get; set; }
         public double _devHy2 { get; set; }
@@ -110,6 +117,8 @@ namespace GravityWebExt.Models
         public double _devEy2 { get; set; }
         public double _devMAy2 { get; set; }
         public double _devMMy2 { get; set; }
+        public double _devMASSy2 { get; set; }
+
         public double _devSz2 { get; set; }
         public double _devHz2 { get; set; }
         public double _devLz2 { get; set; }
@@ -126,6 +135,7 @@ namespace GravityWebExt.Models
         public double _devEz2 { get; set; }
         public double _devMAz2 { get; set; }
         public double _devMMz2 { get; set; }
+        public double _devMASSz2 { get; set; }
 
         public double _devSm2 { get; set; }
         public double _devHm2 { get; set; }
@@ -143,12 +153,104 @@ namespace GravityWebExt.Models
         public double _devEm2 { get; set; }
         public double _devMAm2 { get; set; }
         public double _devMMm2 { get; set; }
+        public double _devMASSm2 { get; set; }
+        public double AverProdValMas { get; set; }
+        /// <summary>
+        /// Среднее значение X изделия для НСП
+        /// </summary>
+        public double AverProdVal_X { get; set; }
 
+        /// <summary>
+        /// Среднее значение Y изделия для НСП
+        /// </summary>
+        public double AverProdVal_Y { get; set; }
+
+        /// <summary>
+        /// Среднее значение Z изделия для НСП
+        /// </summary>
+        public double AverProdVal_Z { get; set; }
+
+        /// <summary>
+        /// Среднеквадратичное отклонения средних арифм
+        /// </summary>
+        public double devMnsp { get; set; }
+        /// <summary>
+        /// Среднеквадратичное отклонения средних арифм
+        /// </summary>
+        public double devXnsp { get; set; }
+        /// <summary>
+        /// Среднеквадратичное отклонения средних арифм
+        /// </summary>
+        public double devYnsp { get; set; }
+        /// <summary>
+        /// Среднеквадратичное отклонения средних арифм
+        /// </summary>
+        public double devZnsp { get; set; }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////Определение NSP
+        // - Граница суммарной не исключённой систематической погрешности c "+" Δθ=1,1√Σ(+Δi)2
+        public double ErLimX1 { get; set; }
+        public double ErLimY1 { get; set; }
+        public double ErLimZ1 { get; set; }
+        public double ErLimM1 { get; set; }
+        // - Граница суммарной не исключённой систематической погрешности c "-" Δθ=1,1√Σ(-Δi)2
+        public double ErLimX2 { get; set; }
+        public double ErLimY2 { get; set; }
+        public double ErLimZ2 { get; set; }
+        public double ErLimM2 { get; set; }
+
+        /// <summary>
+        ///  Δθi - НСП(max)
+        /// </summary>
+
+        public double NSPmaxX { get; set; }
+        public double NSPmaxY { get; set; }
+        public double NSPmaxZ { get; set; }
+        public double NSPmaxM { get; set; }
+
+
+        /// <summary>
+        /// СКО НСП - (Sθ) Средне квадратичное отклонение суммарных НСП
+        /// </summary>
+        public double ErLimSx { get; set; }
+        public double ErLimSy { get; set; }
+        public double ErLimSz { get; set; }
+        public double ErLimSm { get; set; }
+
+        /// <summary>
+        /// Коэффициент Стьюдента 
+        /// </summary>
+        const double KF_t = 2.262;
+
+        /// <summary>
+        /// Весовой Коэффициент
+        /// </summary>
+        public double KvesX { get; set; }
+        public double KvesY { get; set; }
+        public double KvesZ { get; set; }
+        public double KvesM { get; set; }
+
+        /// <summary>
+        /// Cсуммарное среднее квадратическое отклонение (СКОΣ)
+        /// </summary>
+        public double Sdev_reNsX { get; set; }
+        public double Sdev_reNsY { get; set; }
+        public double Sdev_reNsZ { get; set; }
+        public double Sdev_reNsM { get; set; }
+
+        /// <summary>
+        /// Границы погрешности
+        /// </summary>
+        public double granX { get; set; }
+        public double granY { get; set; }
+        public double granZ { get; set; }
+        public double granM { get; set; }
         public GravityCalc.NSPData SetDataForCalculate()
         {
             GravityCalc.NSPData data = new();
             data.DefaultInit();
-            //X1_________________________________________________________________________
+        //X1_________________________________________________________________________
             data._devSx = this._devSx;
             data._devHx = this._devHx;
             data._devLx = this._devLx;
@@ -165,7 +267,8 @@ namespace GravityWebExt.Models
             data._devEx = this._devEx;
             data._devMAx = this._devMAx;
             data._devMMx = this._devMMx;
-            //Y1_________________________________________________________________________
+            data._devMASSx = this._devMASSx;
+        //Y1_________________________________________________________________________
             data._devSy = this._devSy;
             data._devHy = this._devHy;
             data._devLy = this._devLy;
@@ -182,7 +285,8 @@ namespace GravityWebExt.Models
             data._devEy = this._devEy;
             data._devMAy = this._devMAy;
             data._devMMy = this._devMMy;
-            //Z1_________________________________________________________________________
+            data._devMASSy = this._devMASSy;
+        //Z1_________________________________________________________________________
             data._devSz = this._devSz;
             data._devHz = this._devHz;
             data._devLz = this._devLz;
@@ -199,7 +303,8 @@ namespace GravityWebExt.Models
             data._devEz = this._devEz;
             data._devMAz = this._devMAz;
             data._devMMz = this._devMMz;
-            //M1_________________________________________________________________________
+            data._devMASSz = this._devMASSz;
+        //M1_________________________________________________________________________
             data._devSm = this._devSm;
             data._devHm = this._devHm;
             data._devLm = this._devLm;
@@ -216,7 +321,8 @@ namespace GravityWebExt.Models
             data._devEm = this._devEm;
             data._devMAm = this._devMAm;
             data._devMMm = this._devMMm;
-            //X2_________________________________________________________________________
+            data._devMASSm = this._devMASSm;
+        //X2_________________________________________________________________________
             data._devSx2 = this._devSx2;
             data._devHx2 = this._devHx2;
             data._devLx2 = this._devLx2;
@@ -233,7 +339,8 @@ namespace GravityWebExt.Models
             data._devEx2 = this._devEx2;
             data._devMAx2 = this._devMAx2;
             data._devMMx2 = this._devMMx2;
-            //Y2_________________________________________________________________________
+            data._devMASSx2 = this._devMASSx2;
+        //Y2_________________________________________________________________________
             data._devSy2 = this._devSy2;
             data._devHy2 = this._devHy2;
             data._devLy2 = this._devLy2;
@@ -250,7 +357,8 @@ namespace GravityWebExt.Models
             data._devEy2 = this._devEy2;
             data._devMAy2 = this._devMAy2;
             data._devMMy2 = this._devMMy2;
-            //Z2_________________________________________________________________________
+            data._devMASSy2 = this._devMASSy2;
+        //Z2_________________________________________________________________________
             data._devSz2 = this._devSz2;
             data._devHz2 = this._devHz2;
             data._devLz2 = this._devLz2;
@@ -267,7 +375,8 @@ namespace GravityWebExt.Models
             data._devEz2 = this._devEz2;
             data._devMAz2 = this._devMAz2;
             data._devMMz2 = this._devMMz2;
-            //M2_________________________________________________________________________
+            data._devMASSz2 = this._devMASSz2;
+        //M2_________________________________________________________________________
             data._devSm2 = this._devSm2;
             data._devHm2 = this._devHm2;
             data._devLm2 = this._devLm2;
@@ -284,6 +393,44 @@ namespace GravityWebExt.Models
             data._devEm2 = this._devEm2;
             data._devMAm2 = this._devMAm2;
             data._devMMm2 = this._devMMm2;
+            data._devMASSm2 = this._devMASSm2;
+
+            data.AverProdValMas = this.AverProdValMas;
+            data.AverProdVal_X = this.AverProdVal_X;
+            data.AverProdVal_Y = this.AverProdVal_Y;
+            data.AverProdVal_Z = this.AverProdVal_Z;
+            data.devMnsp = this.devMnsp;
+            data.devXnsp = this.devXnsp; 
+            data.devYnsp = this.devYnsp;
+            data.devZnsp = this.devZnsp;
+            data.ErLimX1 = this.ErLimX1;
+            data.ErLimY1 = this.ErLimY1; 
+            data.ErLimZ1 = this.ErLimZ1;
+            data.ErLimM1 = this.ErLimM1;
+            data.ErLimX2 = this.ErLimX2;
+            data.ErLimY2 = this.ErLimY2;
+            data.ErLimZ2 = this.ErLimZ2;
+            data.ErLimM2 = this.ErLimM2;
+            data.NSPmaxX = this.NSPmaxX;
+            data.NSPmaxY = this.NSPmaxY;
+            data.NSPmaxZ = this.NSPmaxZ;
+            data.NSPmaxM = this.NSPmaxM;
+            data.ErLimSx = this.ErLimSx;
+            data.ErLimSy = this.ErLimSy;
+            data.ErLimSz = this.ErLimSz;
+            data.ErLimSm = this.ErLimSm;
+            data.KvesX = this.KvesX;
+            data.KvesY = this.KvesY;
+            data.KvesZ = this.KvesZ;
+            data.KvesM = this.KvesM;
+            data.Sdev_reNsX = this.Sdev_reNsX;
+            data.Sdev_reNsY = this.Sdev_reNsY;
+            data.Sdev_reNsZ = this.Sdev_reNsZ;
+            data.Sdev_reNsM = this.Sdev_reNsM;
+            data.granX = this.granX;
+            data.granY = this.granY;
+            data.granZ = this.granZ;
+            data.granM = this.granM;
 
 
             return data;

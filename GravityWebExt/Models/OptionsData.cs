@@ -13,156 +13,162 @@ namespace GravityWebExt.Models
     {
         public int Id { get; set; }
         /// <summary>
-        /// Геометрические параметры стенда
+        /// Корректирующий груз для КЦМ
         /// </summary>
-        public double S { get; set; }
+        public double PasMm { get; set; }
         /// <summary>
-        /// (±Δ)S - допустимое отклонение геометрических параметров стенда
+        /// Отклонения корректирующего груза для КЦМ
         /// </summary>
-        public double DevS { get; set; }
+        public double PasDevMm { get; set; }
         /// <summary>
-        /// Геометрические параметры стенда
+        /// Корректирующий груз для М
         /// </summary>
-        public double H { get; set; }
+        public double PasMa { get; set; }
         /// <summary>
-        /// (±Δ)H - допустимое отклонение геометрических параметров стенда
+        /// Отклонения корректирующего груза для М
         /// </summary>
-        public double DevH { get; set; }
+        public double PasDevMa { get; set; }
         /// <summary>
-        /// Горизонтальное расстояния от оси наклона до оси ролика в системе координат стола
+        ///Горизонтальное расстояние между осью наклона стенда и центром тяжести подвижного груза в его переднем положении (постоянное значение станка от центра изделия до центра линейки)
         /// </summary>
-        public double L { get; set; }
+        public double PasK { get; set; }
+        public double PasDevK { get; set; }
         /// <summary>
-        /// (±Δ)L - допустимое отклонение горизонтального расстояния от оси наклона до оси ролика в системе координат стола
+        /// Горизонтальное расстояние между осью наклона стенда и осью поворота планшайбы
         /// </summary>
-        public double DevL { get; set; }
+        public double PasS { get; set; }
         /// <summary>
-        /// Вертикальное расстояния от оси наклона до оси ролика в системе координат стола
+        /// (±Δ)S 
         /// </summary>
-        public double Q { get; set; }
+        public double PasDevS { get; set; }
         /// <summary>
-        /// (±Δ)Q - допустимое отклонение вертикального расстояния от оси наклона до оси ролика в системе координат стола
+        /// Вертикальное расстояние между осью наклона стенда и установочной поверхностью планшайбы стенда
         /// </summary>
-        public double DevQ { get; set; }
+        public double PasH { get; set; }
+        /// <summary>
+        /// (±Δ)H
+        /// </summary>
+        public double PasDevH { get; set; }
+        /// <summary>
+        /// Горизонтальное расстояние между осью наклона стенда ицентром опорного ролика
+        /// </summary>
+        public double PasL { get; set; }
+        /// <summary>
+        /// (±Δ)L 
+        /// </summary>
+        public double PasDevL { get; set; }
+        /// <summary>
+        /// Вертикальное расстояние между осью наклона стенда и центром опорного ролика
+        /// </summary>
+        public double PasQ { get; set; }
+        /// <summary>
+        /// (±Δ)Q 
+        /// </summary>
+        public double PasDevQ { get; set; }
         /// <summary>
         /// ±ΔР - погрешность измерения усилия датчиком дисбаланса
         /// </summary>
-        public double DevP { get; set; }
+        public double PasDevPdisbal { get; set; }
+        /// <summary>
+        /// ±ΔР - погрешность измерение усилия датчиком силы
+        /// </summary>
+        public double PasDevPpower { get; set; }
         /// <summary>
         /// ±Δξ - погрешность определения угла наклона 
         /// </summary>
-        public double DevEpsilon { get; set; }
+        public double PasDevEpsilon { get; set; }
         /// <summary>
         /// ±Δφ - Неисключенная систематическая погрешность (НСП) углов поворота платформы
         /// </summary>
-        public double DevFi { get; set; }
+        public double PasDevFi { get; set; }
         /// <summary>
-        /// Груз разгрузки (корректирующий противовес)   
+        /// Горизонтальное расстояние между осью наклона стенда и осью подвеса грузов противовеса
         /// </summary>
-        public double Pasport_mm { get; set; }
+        public double PasD { get; set; }
         /// <summary>
-        /// (±Δ)_m_m - допустимое отклонение противовеса
+        /// (±Δ)D 
         /// </summary>
-        public double DevPas_mm { get; set; }
+        public double PasDevD { get; set; }
         /// <summary>
-        /// Расстояние установки эталонного груза от оси наклона
+        /// Вертикальное расстояние между осью наклона стенда и осью подвеса грузов противовеса
         /// </summary>
-        public double D { get; set; }
+        public double PasE { get; set; }
         /// <summary>
-        /// (±Δ)D - допустимое отклонение расстояния установки эталонного груза от оси наклона
+        /// (±Δ)E
         /// </summary>
-        public double DevD { get; set; }
+        public double PasDevE { get; set; }
         /// <summary>
-        /// Геометрические параметры стенда
+        /// Координаты переходника по оси Х
         /// </summary>
-        public double E { get; set; }
+        public double PerX { get; set; } //PerX
         /// <summary>
-        /// (±Δ)E - допустимое отклонение геометрических параметров стенда
+        /// (±Δ)PerХ - допустимое отклонение переходника в системе координат переходника
         /// </summary>
-        public double DevE { get; set; }
+        public double PerDevX { get; set; } //PerDevX
         /// <summary>
-        /// подвижный груз - Mmpg (эталонный груз) 
+        /// Координаты переходника по оси Y
         /// </summary>
-        public double Pasport_ma { get; set; }
+        public double PerY { get; set; } //PerY
         /// <summary>
-        /// (±Δ)_m_a - допустимое отклонение корректирующего противовеса 
+        /// (±Δ)PerY - допустимое отклонение переходника в системе координат переходника 
         /// </summary>
-        public double DevPasport_ma { get; set; }
+        public double PerDevY { get; set; } //PerDevY
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Координаты переходника по оси Z
         /// </summary>
-        public double Xper { get; set; }
+        public double PerZ { get; set; } //PerZ
         /// <summary>
-        /// (±Δ)Хper - допустимое отклонение КЦМ переходника в системе координат переходника
+        /// (±Δ)PerZ - допустимое отклонение переходника в системе координат переходника
         /// </summary>
-        public double DevХper { get; set; }
+        public double PerDevZ { get; set; } //PerDevX
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Масса переходника
         /// </summary>
-        public double Yper { get; set; }
+        public double PerMas { get; set; } //PerMas
         /// <summary>
-        /// (±Δ)Yper - допустимое отклонение КЦМ переходника в системе координат переходника 
+        /// (±Δ)PerMas - допустимое отклонение массы переходника 
         /// </summary>
-        public double DevYper { get; set; }
+        public double PerDevMas { get; set; } //PerDevMas
         /// <summary>
-        /// Координаты центра масс переходника в системе координат переходника
+        /// Высота переходника 
         /// </summary>
-        public double Zper { get; set; }
+        public double PerH { get; set; } //PerH
         /// <summary>
-        /// (±Δ)Zper - допустимое отклонение КЦМ переходника в системе координат переходника
+        /// (±Δ)PerH - допустимое отклонение длины переходника 
         /// </summary>
-        public double DevZper { get; set; }
+        public double PerDevH { get; set; } //PerDevH
         /// <summary>
-        /// масса переходника
+        /// Координаты КП по Х
         /// </summary>
-        public double MassPer { get; set; }
+        public double KpX { get; set; } //KpX
         /// <summary>
-        /// (±Δ)_m_per - допустимое отклонение массы переходника 
+        /// (±Δ)KpX
         /// </summary>
-        public double DevMassPer { get; set; }
+        public double KpDevX { get; set; } //KpDevX
         /// <summary>
-        /// высота переходника 
+        /// Координаты КП по Y
         /// </summary>
-        public double HPer { get; set; }
+        public double KpY { get; set; } //KpY
         /// <summary>
-        /// (±Δ)_h_p - допустимое отклонение высоты переходника 
+        /// (±Δ)KpY
         /// </summary>
-        public double DevHPer { get; set; }
+        public double KpDevY { get; set; } //KpDevY
         /// <summary>
-        /// Координаты КП
+        /// Координаты КП по Z
         /// </summary>
-        public double Xkp { get; set; }
+        public double KpZ { get; set; } //KpZ
         /// <summary>
-        /// (±Δ)Xkp - допустимое отклонение
+        /// (±Δ)KpZ
         /// </summary>
-        public double DevXkp { get; set; }
-        /// <summary>
-        /// Координаты КП
-        /// </summary>
-        public double Ykp { get; set; }
-        /// <summary>
-        /// (±Δ)Ykp - допустимое отклонение
-        /// </summary>
-        public double DevYkp { get; set; }
-        /// <summary>
-        /// Координаты КП
-        /// </summary>
-        public double Zkp { get; set; }
-        /// <summary>
-        /// (±Δ)Zkp - допустимое отклонение
-        /// </summary>
-        public double DevZkp { get; set; }
+        public double KpDevZ { get; set; } //KpDevZ
         /// <summary>
         /// Масса КП
         /// </summary>
-        public double MassKp { get; set; }
+        public double KpMas { get; set; } //KpMas
         /// <summary>
-        /// (±Δ)_m_kp  - допустимое отклонение массы КП
+        /// (±Δ)KpMas
         /// </summary>
-        public double DevMassKp { get; set; }
-        /// <summary>
-        /// Масса изделия
-        /// </summary>
+        public double KpDevMas { get; set; } //KpDevMas
         public double MassProd { get; set; }
         /// <summary>
         /// Координаты изделия по КД
@@ -184,51 +190,21 @@ namespace GravityWebExt.Models
         /// Δ - участвует в формуле для поправки углов (стд отклонение углов)
         /// </summary
         public double Dev { get; set; }
-        //// <summary>
-        /// Массив эталоной массы подвижного груза (4 элемента массива)
-        /// </summary>
-        public double ArrRef_ma1 { get; set; }
-        public double ArrRef_ma2 { get; set; }
-        public double ArrRef_ma3 { get; set; }
-        public double ArrRef_ma4 { get; set; }
+        
         /// <summary>
-        /// DevArrRef_ma - допустипое отклонение эталонной массы подвижного груза  (4 элемента массива))
+        /// Груз разгрузки
         /// </summary>
-        public double DevArrRef_ma1 { get; set; }
-        public double DevArrRef_ma2 { get; set; }
-        public double DevArrRef_ma3 { get; set; }
-        public double DevArrRef_ma4 { get; set; }
-        /// <summary>
-        /// Для наклона стенда при подвижном грузе 
-        /// </  summary>
-        public double Epsilon_ma { get; set; }
-        //// <summary>
-        /// Массив эталоной массы груза - разгрузки (4 элемента массива)
-        /// </summary>
-        public double ArrRef_mm1 { get; set; }
-        public double ArrRef_mm2 { get; set; }
-        public double ArrRef_mm3 { get; set; }
-        public double ArrRef_mm4 { get; set; }
-        /// <summary>
-        /// DevArrRef_ma - допустипое отклонение эталонной массы груза - разгрузки
-        /// </summary>
-        public double DevArrRef_mm1 { get; set; }
-        public double DevArrRef_mm2 { get; set; }
-        public double DevArrRef_mm3 { get; set; }
-        public double DevArrRef_mm4 { get; set; }
-        /// <summary>
-        /// Для наклона стенда при использование груза - разгрузки
-        /// </  summary>
-        public double Epsilon_mm { get; set; }
+        public bool Cargo { get; set; }
+        public bool KP { get; set; }
+
         /// <summary>
         /// Подвижный груз
         /// </summary>
-        public bool Cargo { get; set; }
-
-        
-
-        //// методы
-
+        public double MassPG { get; set; }
+        /// <summary>
+        /// Отклонения подвижного груза
+        /// </summary>
+        public double DevMassPG { get; set; }
         /// <summary>
         /// Создание структуры данных для расчёта
         /// </summary>
@@ -238,55 +214,52 @@ namespace GravityWebExt.Models
             PassportData data = new();
             
             data.DefaultInit();
-            data.S = this.S;
-            data.DevS = this.DevS;
-            data.H = this.H;
-            data.DevH = this.DevH;
-            data.L = this.L;
-            data.DevL = this.DevL;
-            data.Q = this.Q;
-            data.DevQ = this.DevQ;
-            data.DevP = this.DevP;
-            data.DevEpsilon = this.DevEpsilon;
-            data.DevFi = this.DevFi;
-            data.Pasport_mm = this.Pasport_mm;
-            data.DevPas_mm = this.DevPas_mm;
-            data.D = this.D;
-            data.DevD = this.DevD;
-            data.E = this.E;
-            data.DevE = this.DevE;
-            data.Pasport_ma = this.Pasport_ma;
-            data.DevPasport_ma = this.DevPasport_ma;
-            data.Xper = this.Xper;
-            data.DevХper = this.DevХper;
-            data.Yper = this.Yper;
-            data.DevYper = this.DevYper;
-            data.Zper = this.Zper;
-            data.DevZper = this.DevZper;
-            data.MassPer = this.MassPer;
-            data.DevMassPer = this.DevMassPer;
-            data.Hper = this.HPer;
-            data.DevHPer = this.DevHPer;
-            data.Xkp = this.Xkp;
-            data.DevXkp = this.DevXkp;
-            data.Ykp = this.Ykp;
-            data.DevYkp = this.DevYkp;
-            data.Zkp = this.Zkp;
-            data.DevZkp = this.DevZkp;
-            data.DevMassKp = this.DevMassKp;
-            data.MassProd = this.MassProd;
-            data.Xprod = this.Xprod;
-            data.Yprod = this.Yprod;
-            data.Zprod = this.Zprod;
+            data.PasMm = this.PasMm;
+            data.PasDevMm = this.PasDevMm;
+            data.PasMa = this.PasMa;
+            data.PasDevMa = this.PasDevMa;
+            data.PasK = this.PasK;
+            data.PasS = this.PasS;
+            data.PasDevS = this.PasDevS;
+            data.PasH = this.PasH;
+            data.PasDevH = this.PasDevH;
+            data.PasL = this.PasL;
+            data.PasDevL = this.PasDevL;
+            data.PasQ = this.PasQ;
+            data.PasDevQ = this.PasDevQ;
+            data.PasDevPdisbal = this.PasDevPdisbal;
+            data.PasDevPpower = this.PasDevPpower;
+            data.PasDevEpsilon = this.PasDevEpsilon;
+            data.PasDevFi = this.PasDevFi;
+            data.PasD = this.PasD;
+            data.PasDevD = this.PasDevD;
+            data.PasE = this.PasE;
+            data.PasDevE = this.PasDevE;
+            data.PerX = this.PerX;
+            data.PerDevX = this.PerDevX;
+            data.PerY = this.PerY;
+            data.PerDevY = this.PerDevY;
+            data.PerZ = this.PerZ;
+            data.PerDevZ = this.PerDevZ;
+            data.PerMas = this.PerMas;
+            data.PerDevMas = this.PerDevMas;
+            data.PerH = this.PerH;
+            data.PerDevH = this.PerDevH;
+            data.KpX = this.KpX;
+            data.KpDevX = this.KpDevX;
+            data.KpY = this.KpY;
+            data.KpDevY = this.KpDevY;
+            data.KpZ = this.KpZ;
+            data.KpDevZ = this.KpDevZ;
+            data.KpDevMas = this.KpDevMas;
+            
             data.Fi = this.Fi;
             data.Dev = this.Dev;
-            data.Epsilon_ma = this.Epsilon_ma;
-            data.Epsilon_ma = this.Epsilon_ma;
-            data.ArrRef_ma = new double [] { this.ArrRef_ma1, this.ArrRef_ma2, this.ArrRef_ma3, this.ArrRef_ma4};
-            data.ArrRef_mm = new double[] { this.ArrRef_mm1, this.ArrRef_mm2, this.ArrRef_mm3, this.ArrRef_mm4};
-            data.DevArrRef_ma = new double[] { this.DevArrRef_ma1, this.DevArrRef_ma2, this.DevArrRef_ma3, this.DevArrRef_ma4};
-            data.DevArrRef_mm = new double[] { this.DevArrRef_mm1, this.DevArrRef_mm2, this.DevArrRef_mm3, this.DevArrRef_mm4 };
+        
             data.Cargo = this.Cargo;
+            data.KP = this.KP;
+            data.PasMassPG = this.MassPG;
+            data.PasDevMassPG = this.DevMassPG;
 
             return data;
         } 
