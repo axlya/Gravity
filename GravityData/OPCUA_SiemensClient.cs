@@ -54,77 +54,31 @@ namespace GravityData
             _dataProvider = dataProvider;
         }
 
-        public void SetLogger (ILogger logger)
+        public string ServerUrl { get; set; }
+        public string NamespaceUri { get; set; }
+
+        public void CreateConnection()
         {
-            _logger = logger;
-        }
-        public bool IsConnected()
-        {
-            return _isConnected;
+            m_Server = new UAClientHelperAPI();
+            m_Server.CertificateValidationNotification += new CertificateValidationEventHandler(m_Server_CertificateEvent);
         }
 
-        private void WriteErrorLog(string text)
+        [Obsolete]
+        public void ConnectToServer()
         {
-            if (_logger != null)
-                _logger.LogError(text);
-            else
-                Console.WriteLine(text);
-        }
+            // Hook up to the KeepAlive event
+            m_Server.KeepAliveNotification += new KeepAliveEventHandler(Notification_KeepAlive);
 
-        private void WriteInfoLog(string text)
-        {
-            if (_logger != null)
-                _logger.LogInformation(text);
-            else
-                Console.WriteLine(text);
-        }
-
-        public void SetData(ControllerDataIn dataIn)
-        {
-            if (_isConnected)
+            // Connect to the server
+            try
             {
-                try
-                {
-                    WriteVal("ns=4;i=42", dataIn.GoJackUp.ToString());
-                    WriteVal("ns=4;i=46", dataIn.GoJackDown.ToString());
-                    WriteVal("ns=4;i=44", dataIn.GoCargoLeft.ToString());
-                    WriteVal("ns=4;i=43", dataIn.GoCargoRight.ToString());
-                    if (dataIn.ResetErrors == 1) //очистка ошибок
-                    {
-                        WriteVal("ns=4;i=60", "999");
-                        errors.ClearAllErrors();
-                    }
-                }
-                catch (Exception)
-                {
-                    
-                }
+                // Connect with URL from Server URL text box
+                m_Server.Connect(ServerUrl, "none", MessageSecurityMode.None, false, "", "");
+
             }
-        }
-        /// <summary>
-        /// Установить сигнал для связи с контроллером
-        /// </summary>
-        public void SetConnectSignal()
-        {
-            if (_isConnected)
+            catch (Exception ex)
             {
-                try
-                {
-                    WriteVal("ns=4;i=30", "2");
-                }
-                catch (Exception)
-                {
-                    _isConnected = false;
-                    SendDisconnectSignal();
-                }
-            }
-        }
-
-        public void Start()
-        {
-            if (_dataProvider == null)
-            {
-                WriteErrorLog("Провайдер данных не установлен! Работа модуля прекращена\n");
+                Console.WriteLine("Connect failed:\n\n" + ex.Message);
                 return;
             }
 
@@ -177,166 +131,42 @@ namespace GravityData
             }
             _generateDataEvent.Set();
 
-            Disconnect();
-        }
-        /// <summary>
-        /// Уведомить о обрыве связи
-        /// </summary>
-        public void SendDisconnectSignal()
-        {
-            errors.ClearAllErrors();
-            ControllerDataOut controllerDataOut = new ControllerDataOut();
-            controllerDataOut.DefaultInit();
-            _dataProvider.SendData(controllerDataOut);
-            WriteErrorLog("Нет связи с контроллером! Попытка нового соединения...\n");
-        }
-
-        public void Disconnect()
-        {
-            _isConnected = false;
-            if (mySession != null && !mySession.Disposed)
-            {
-                try
-                {
-                    myClientHelperAPI.Disconnect();
-                    mySession = myClientHelperAPI.Session;
-
-                    WriteInfoLog("Успешное отключение от контроллера");
-                }
-                catch
-                {
-
-                }
-            }
-
-        }
-
-        public void Connect()
-        {
-            Disconnect();
-            GetEndpoints();
+            // Read Namespace Table
             try
             {
-                //Register mandatory events (cert and keep alive)
-                myClientHelperAPI.KeepAliveNotification += new KeepAliveEventHandler(Notification_KeepAlive);
-                myClientHelperAPI.CertificateValidationNotification += new CertificateValidationEventHandler(Notification_ServerCertificate);
+                List<string> nodesToRead = new List<string>();
+                List<string> results = new List<string>();
 
-                //Check for a selected endpoint
-                if (mySelectedEndpoint != null)
+                nodesToRead.Add("ns=0;i=" + Variables.Server_NamespaceArray.ToString());
+
+                // Read the namespace array
+                results = m_Server.ReadValues(nodesToRead);
+
+                if (results.Count != 1)
                 {
-                    //Call connect
-                    myClientHelperAPI.Connect(mySelectedEndpoint, false, "", "").Wait();
-                    //Extract the session object for further direct session interactions
-                    mySession = myClientHelperAPI.Session;
-                    _isConnected = true;
-
-                    WriteInfoLog("Успешное подключение к контроллеру");
-
+                    throw new Exception("Reading namespace table returned unexptected result");
                 }
-                else
+
+                // Try to find the namespace URI entered by the user
+                string[] nameSpaceArray = results[0].Split(';');
+                ushort i;
+                for (i = 0; i < nameSpaceArray.Length; i++)
                 {
-                    WriteErrorLog("Не удалось подключиться к Endpoint!\n");
-                   // Connect();                    
-                }
-            }
-            catch (Exception ex)
-            {
-                WriteErrorLog("Не удалось подключится к контроллеру по адресу " + Url + " Текст ошибки: " + ex.Message);
-            }
-
-        }
-
-        public void GetEndpoints()
-        {
-            bool foundEndpoints = false;
-
-            try
-            {
-                ApplicationDescriptionCollection servers = myClientHelperAPI.FindServers(Url);
-                foreach (ApplicationDescription ad in servers)
-                {
-                    foreach (string url in ad.DiscoveryUrls)
+                    if (nameSpaceArray[i] == NamespaceUri)
                     {
-                        try
-                        {
-                            EndpointDescriptionCollection endpoints = myClientHelperAPI.GetEndpoints(url);
-                            foundEndpoints = foundEndpoints || endpoints.Count > 0;
-                            foreach (EndpointDescription ep in endpoints)
-                            {
-                                //берем первый endpoint
-                                mySelectedEndpoint = ep;
-                                break;
-                            }
-                        }
-                        catch (ServiceResultException sre)
-                        {
-                            //If an url in ad.DiscoveryUrls can not be reached, myClientHelperAPI will throw an Exception
-                            WriteErrorLog(sre.Message+'\n');
-                        }
-                    }
-                    if (!foundEndpoints)
-                    {
-                        WriteErrorLog("Не найдены EndPoints\n");                       
+                        m_NameSpaceIndex = i;
                     }
                 }
+
+                // Check if the namespace was found
+                if (m_NameSpaceIndex == 0)
+                {
+                    throw new Exception("Namespace " + NamespaceUri + " not found in server namespace table");
+                }
             }
             catch (Exception ex)
             {
-                WriteErrorLog(ex.Message + '\n');
-            }
-        }
-
-        public string ReadValToStr(string id)
-        {
-            List<String> nodeIdStrings = new List<String>();
-            List<String> values = new List<String>();
-            nodeIdStrings.Add(id);
-            try
-            {
-                values = myClientHelperAPI.ReadValues(nodeIdStrings);
-                return values.ElementAt<String>(0);
-            }
-            catch (Exception ex)
-            {
-                WriteErrorLog(ex.Message + '\n');
-                SendDisconnectSignal();
-            }
-
-            return Defines.UNDEF_STR_VALUE;
-        }
-
-        public double ReadVal(string id)
-        {
-            string str = ReadValToStr(id);
-            if (str != Defines.UNDEF_STR_VALUE)
-                return Convert.ToDouble(str);
-            else
-            {
-                WriteErrorLog("Ошибка чтения параметра " + id + '\n');
-                return Defines.UNDEF_DBL_VALUE;
-            }
-        }
-
-
-
-        public void WriteVal(string id, string text) 
-        {
-            if (_isConnected)
-            {
-                List<String> nodeIdStrings = new List<String>();
-                List<String> values = new List<string>();
-                nodeIdStrings.Add(id);
-                values.Add(text);
-                try
-                {
-                    myClientHelperAPI.WriteValues(values, nodeIdStrings);
-                }
-                catch (Exception ex)
-                {
-                    WriteErrorLog("Ошибка записи параметра " + id + ", сообщение: " + ex.Message + '\n');
-                    SendDisconnectSignal();
-                   // throw ex;
-                }
+                Console.WriteLine("Reading namespace table failed:\n\n" + ex.Message);
             }
         }
 
@@ -346,12 +176,8 @@ namespace GravityData
         }
         private void Notification_KeepAlive(Session sender, KeepAliveEventArgs e)
         {
-            if (e.Status.StatusCode == StatusCodes.BadNoCommunication)
-            {
-                SendDisconnectSignal();
-                _isConnected = false;
-                Disconnect();
-            }
+            // Connection handling not implemented
+            ;
         }
 
     }

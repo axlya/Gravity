@@ -2,6 +2,7 @@
 @model GravityWebExt.Models.MeasurementData
 @{
     ViewData["Title"] = "Контрольная панель";
+    MeasurementData data = Model?.ElementAt(0);
 }
 
 
@@ -11,59 +12,134 @@
 
 <style type="text/css">
 
-    
+    /* Кнопка выбора*/
+    form {
+        width: 150px;
+        margin-right: 50px;
+    }
 
-    #border {
+    input[type="radio"] {
+        display: none;
+    }
+
         border: 2px solid #DEE2E6;
     }
 
-        #border:hover {
             border: 2px solid #1E90FF;
         }
+
+
+
+
+    /* для элемента input c type="checkbox" */
+    .custom-checkbox {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
+
+        /* для элемента label, связанного с .custom-checkbox */
+        .custom-checkbox + label {
+            display: inline-flex;
+            align-items: center;
+            user-select: none;
+        }
+
+            /* создание в label псевдоэлемента before со следующими стилями */
+            .custom-checkbox + label::before {
+                content: '';
+                display: inline-block;
+                width: 28px;
+                height: 28px;
+                flex-shrink: 0;
+                flex-grow: 0;
+                border: 1px solid #1E90FF;
+                border-radius: 0.25em;
+                margin-right: 0.5em;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: 50% 50%;
+            }
+
+        /* стили при наведении курсора на checkbox */
+        .custom-checkbox:not(:disabled):not(:checked) + label:hover::before {
+            border-color: blue;
+        }
+
+        /* стили для активного чекбокса (при нажатии на него) */
+        .custom-checkbox:not(:disabled):active + label::before {
+            background-color: #b3d7ff;
+            border-color: #b3d7ff;
+        }
+
+        /* стили для чекбокса, находящегося в фокусе */
+        .custom-checkbox:focus + label::before {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
+        .custom-checkbox:focus:not(:checked) + label::before {
+            border-color: #80bdff;
+        }
+
+        /* стили для чекбокса, находящегося в состоянии checked */
+        .custom-checkbox:checked + label::before {
+            border-color: #0b76ef;
+            background-color: #0b76ef;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+        }
+
+        /* стили для чекбокса, находящегося в состоянии disabled */
+        .custom-checkbox:disabled + label::before {
+            background-color: #e9ecef;
+        }
+
+    .checkbox {
+        margin-bottom: 1em;
+    }
 </style>
 
 
 <div class="container">
     <form asp-action="MeasurementPanel" asp-controller="Home">
-        <div class="row" style="background: #F2F2F2;">
-            <div id="border" class="col" style="background: #F2F2F2;">
-                <h5 align="center">Данные для нахождения <strong>КЦМ</strong> изделия</h5><br />
-                <div class="dropdown" style="margin-bottom:10px">
-                    <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
-                            style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
-                        &nbsp;Выбрать &nbsp;угол&nbsp;
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
-                            <button type="button" class="btn " data-toggle="modal" data-target="#kmc0" \
-                                    style="color:black; border: 1px solid #1E90FF;
-                            border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                0°
-                            </button>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <button type="button" class="btn " data-toggle="modal" data-target="#kmc90" \
-                                    style="color:black; border: 1px solid #1E90FF;
-                            border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                90°
-                            </button>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <button type="button" class="btn " data-toggle="modal" data-target="#kmc180" \
-                                    style="color:black; border: 1px solid #1E90FF;
-                            border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                180°
-                            </button>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <button type="button" class="btn " data-toggle="modal" data-target="#kmc270" \
-                                    style="color:black; border: 1px solid #1E90FF;
-                            border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                270°
-                            </button>
-                        </a>
-                    </div>
+    <div class="row" style="background: #F2F2F2;">
+            <h5 align="center">Данные для нахождения <strong>КЦМ</strong> изделия</h5><br />
+            <div class="dropdown" style="margin-bottom:10px">
+                <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
+                        style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
+                    &nbsp;Выбрать &nbsp;угол&nbsp;
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc0" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            0°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc90" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            90°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc180" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            180°
+                        </button>
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <button type="button" class="btn " data-toggle="modal" data-target="#kmc270" \
+                                style="color:black; border: 1px solid #1E90FF;
+						border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                            270°
+                        </button>
+                    </a>
                 </div>
+            </div>
                 <div class="form-group row">
                     <table class="table table-striped" style="margin-left:0px">
                         <tr>
@@ -81,70 +157,36 @@
                             </td>
                         </tr>
                     </table>
-                </div>
-            </div>
-            <div id="border" class="col" style="background: #F2F2F2;">
-                <h5 align="center">Данные для нахождения <strong>МАССЫ</strong> изделия</h5><br />
-                <div class="dropdown" style="margin-bottom:10px">
-                    <div class="dropdown" style="margin-bottom:10px">
-                        <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
-                                style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
-                            &nbsp;Выбрать &nbsp;угол&nbsp;
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                                <button type="button" class="btn " data-toggle="modal" data-target="#m0" \
-                                        style="color:black; border: 1px solid #1E90FF;
-                                border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                    0°
-                                </button>
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <button type="button" class="btn " data-toggle="modal" data-target="#m180" \
-                                        style="color:black; border: 1px solid #1E90FF;
-                                border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
-                                    180°
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <table class="table table-striped" style="margin-left:0px">
-                        <tr>
-                            <td style="padding-left: 25px">
-                                <label class="col-sm-2 col-form-label" id="mfi0" style="margin-left:15px; "> <span id="mfi0border" style="border: 1px double black; border-radius: 10px; padding: 4px 8px 4px 8px">&nbsp;0°&nbsp;</span> </label>
-                            </td>
-                            <td>
-                                <label class="col-sm-2 col-form-label" id="mfi180"> <span id="mfi180border" style="border: 1px double black; border-radius: 10px;  padding: 4px 8px 4px 8px">180°</span> </label>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
         </div>
-
-
-        <br>
-        <div class="row" style="background: #F2F2F2;">
-            <div class="col" style="background: #F2F2F2;">
-
-                <div class="form-group row" style="margin:10px;">
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" asp-for="CoordMass" value="0" id="coordmass1" checked>
-                        <label class="form-check-label" for="coordmass1">КЦМ&nbsp;&nbsp;</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" asp-for="CoordMass" value="1" id="coordmass2">
-                        <label class="form-check-label" for="coordmass2">Масса</label>
+            <h5 align="center">Данные для нахождения <strong>МАССЫ</strong> изделия</h5><br />
+            <div class="dropdown" style="margin-bottom:10px">
+                <div class="dropdown" style="margin-bottom:10px">
+                    <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown"
+                            style="background: #1E90FF; position: relative; left: 50%; transform: translate(-50%, 0);">
+                        &nbsp;Выбрать &nbsp;угол&nbsp;
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">
+                            <button type="button" class="btn " data-toggle="modal" data-target="#m0" \
+                                    style="color:black; border: 1px solid #1E90FF;
+							border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                                0°
+                            </button>
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <button type="button" class="btn " data-toggle="modal" data-target="#m180" \
+                                    style="color:black; border: 1px solid #1E90FF;
+							border-radius: 5px; position: relative; left: 50%; transform: translate(-50%, 0); background:white">
+                                180°
+                            </button>
+                        </a>
                     </div>
                 </div>
-
-                <div class="form-group col-sm-4">
-                    <label for="Fi" class="col-form-label">Угол</label>
-                    <select asp-for="Fi" asp-items="@Model.Angles" class="form-control" id="Fi">
-                    </select>
-                </div>
+            </div>
+                    <tr>
+                    </tr>
+                                    </select>
+                                </div>
 
                 <button type="submit" class="btn btn-primary" id="startCalcBut" name="submitButton" value="measurement" style="margin:10px;">
                     Снять показания
@@ -153,613 +195,371 @@
                    <span class="spinner-grow spinner-grow-sm" id="calcButSpin" hidden></span>
                 @*</button>*@
 
-            </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <form action="">
+                                    <input type="radio" id="kcm" name="sex" />
+                                    <label for="kcm" id="kcm">КЦМ</label>
+                                    <input type="radio" id="masa" name="sex" />
+                                    <label for="masa" id="masa">Массы</label>
+                                </form>
+                            </div>
+                            </div>
         </div>
-        <br>
-        <div class="row" style="background: #F2F2F2;">
-            <div class="col" style="background: #F2F2F2;">
-                <div class="form-group row" style="margin-left:30px;">
-                    <input asp-for="KP" class="form-check-input" type="checkbox" id="kp">
-                    <label class="form-check-label" for="kp">КП</label>
+    </div>
+
+
+    <!-- The Modal -->
+    <div class="modal fade" id="kmc0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border:2px solid #007BFF; margin:0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <button type="submit" class="btn btn-primary" id="calculation" name="submitButton" value="calculate" style="margin-left:12px;" disabled>
-                    Расчет
-                </button>
-            </div>
-        </div>
-
-
-        <div class="modal fade" id="kmc0">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border:2px solid #007BFF; margin:0px">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginBalanceAngle0_1">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 0 ? Model._calculatedData.BeginBalanceAngleArr0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_1">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 0 ? Model._calculatedData.BeginDisbalanceSensorArr0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_1">@(Model._calculatedData.MiddleBalanceAngleArr0.Count()> 0 ? Model._calculatedData.MiddleBalanceAngleArr0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_1">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr0[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginBalanceAngle0_2">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 1 ? Model._calculatedData.BeginBalanceAngleArr0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_2">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 1 ? Model._calculatedData.BeginDisbalanceSensorArr0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_2">@(Model._calculatedData.MiddleBalanceAngleArr0.Count()> 1 ? Model._calculatedData.MiddleBalanceAngleArr0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_2">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 1 ? Model._calculatedData.MiddleDisbalanceSensorArr0[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginBalanceAngle0_3">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 2 ? Model._calculatedData.BeginBalanceAngleArr0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_3">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 2 ? Model._calculatedData.BeginDisbalanceSensorArr0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_3">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 2 ? Model._calculatedData.MiddleBalanceAngleArr0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_3">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 2 ? Model._calculatedData.MiddleDisbalanceSensorArr0[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginBalanceAngle0_4">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 3 ? Model._calculatedData.BeginBalanceAngleArr0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_4">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 3 ? Model._calculatedData.BeginDisbalanceSensorArr0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_4">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 3 ? Model._calculatedData.MiddleBalanceAngleArr0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_4">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 3 ? Model._calculatedData.MiddleDisbalanceSensorArr0[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginBalanceAngle0_5">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 4 ? Model._calculatedData.BeginBalanceAngleArr0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_5">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 4 ? Model._calculatedData.BeginDisbalanceSensorArr0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_5">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 4 ? Model._calculatedData.MiddleBalanceAngleArr0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_5">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 4 ? Model._calculatedData.MiddleDisbalanceSensorArr0[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginBalanceAngle0_6">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 5 ? Model._calculatedData.BeginBalanceAngleArr0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_6">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 5 ? Model._calculatedData.BeginDisbalanceSensorArr0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_6">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 5 ? Model._calculatedData.MiddleBalanceAngleArr0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_6">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 5 ? Model._calculatedData.MiddleDisbalanceSensorArr0[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginBalanceAngle0_7">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 6 ? Model._calculatedData.BeginBalanceAngleArr0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_7">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 6 ? Model._calculatedData.BeginDisbalanceSensorArr0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_7">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 6 ? Model._calculatedData.MiddleBalanceAngleArr0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_7">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 6 ? Model._calculatedData.MiddleDisbalanceSensorArr0[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginBalanceAngle0_8">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 7 ? Model._calculatedData.BeginBalanceAngleArr0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_8">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 7 ? Model._calculatedData.BeginDisbalanceSensorArr0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_8">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 7 ? Model._calculatedData.MiddleBalanceAngleArr0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_8">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 7 ? Model._calculatedData.MiddleDisbalanceSensorArr0[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginBalanceAngle0_9">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 8 ? Model._calculatedData.BeginBalanceAngleArr0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_9">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 8 ? Model._calculatedData.BeginDisbalanceSensorArr0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_9">@(Model._calculatedData.MiddleBalanceAngleArr0.Count() > 8 ? Model._calculatedData.MiddleBalanceAngleArr0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_9">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 8 ? Model._calculatedData.MiddleDisbalanceSensorArr0[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginBalanceAngle0_10">@(Model._calculatedData.BeginBalanceAngleArr0.Count() > 9 ? Model._calculatedData.BeginBalanceAngleArr0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor0_10">@(Model._calculatedData.BeginDisbalanceSensorArr0.Count() > 9 ? Model._calculatedData.BeginDisbalanceSensorArr0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle0_10">@(Model._calculatedData.MiddleBalanceAngleArr0.Count()> 9 ? Model._calculatedData.MiddleBalanceAngleArr0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor0_10">@(Model._calculatedData.MiddleDisbalanceSensorArr0.Count() > 9 ? Model._calculatedData.MiddleDisbalanceSensorArr0[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="kmc90">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginBalanceAngle90_1">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 0 ? Model._calculatedData.BeginBalanceAngleArr90[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_1">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 0 ? Model._calculatedData.BeginDisbalanceSensorArr90[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_1">@(Model._calculatedData.MiddleBalanceAngleArr90.Count()> 0 ? Model._calculatedData.MiddleBalanceAngleArr90[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_1">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr90[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginBalanceAngle90_2">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 1 ? Model._calculatedData.BeginBalanceAngleArr90[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_2">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 1 ? Model._calculatedData.BeginDisbalanceSensorArr90[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_2">@(Model._calculatedData.MiddleBalanceAngleArr90.Count()> 1 ? Model._calculatedData.MiddleBalanceAngleArr90[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_2">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 1 ? Model._calculatedData.MiddleDisbalanceSensorArr90[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginBalanceAngle90_3">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 2 ? Model._calculatedData.BeginBalanceAngleArr90[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_3">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 2 ? Model._calculatedData.BeginDisbalanceSensorArr90[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_3">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 2 ? Model._calculatedData.MiddleBalanceAngleArr90[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_3">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 2 ? Model._calculatedData.MiddleDisbalanceSensorArr90[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginBalanceAngle90_4">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 3 ? Model._calculatedData.BeginBalanceAngleArr90[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_4">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 3 ? Model._calculatedData.BeginDisbalanceSensorArr90[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_4">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 3 ? Model._calculatedData.MiddleBalanceAngleArr90[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_4">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 3 ? Model._calculatedData.MiddleDisbalanceSensorArr90[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginBalanceAngle90_5">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 4 ? Model._calculatedData.BeginBalanceAngleArr90[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_5">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 4 ? Model._calculatedData.BeginDisbalanceSensorArr90[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_5">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 4 ? Model._calculatedData.MiddleBalanceAngleArr90[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_5">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 4 ? Model._calculatedData.MiddleDisbalanceSensorArr90[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginBalanceAngle90_6">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 5 ? Model._calculatedData.BeginBalanceAngleArr90[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_6">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 5 ? Model._calculatedData.BeginDisbalanceSensorArr90[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_6">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 5 ? Model._calculatedData.MiddleBalanceAngleArr90[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_6">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 5 ? Model._calculatedData.MiddleDisbalanceSensorArr90[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginBalanceAngle90_7">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 6 ? Model._calculatedData.BeginBalanceAngleArr90[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_7">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 6 ? Model._calculatedData.BeginDisbalanceSensorArr90[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_7">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 6 ? Model._calculatedData.MiddleBalanceAngleArr90[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_7">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 6 ? Model._calculatedData.MiddleDisbalanceSensorArr90[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginBalanceAngle90_8">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 7 ? Model._calculatedData.BeginBalanceAngleArr90[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_8">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 7 ? Model._calculatedData.BeginDisbalanceSensorArr90[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_8">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 7 ? Model._calculatedData.MiddleBalanceAngleArr90[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_8">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 7 ? Model._calculatedData.MiddleDisbalanceSensorArr90[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginBalanceAngle90_9">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 8 ? Model._calculatedData.BeginBalanceAngleArr90[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_9">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 8 ? Model._calculatedData.BeginDisbalanceSensorArr90[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_9">@(Model._calculatedData.MiddleBalanceAngleArr90.Count() > 8 ? Model._calculatedData.MiddleBalanceAngleArr90[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_9">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr90[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginBalanceAngle90_10">@(Model._calculatedData.BeginBalanceAngleArr90.Count() > 9 ? Model._calculatedData.BeginBalanceAngleArr90[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor90_10">@(Model._calculatedData.BeginDisbalanceSensorArr90.Count() > 9 ? Model._calculatedData.BeginDisbalanceSensorArr90[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle90_10">@(Model._calculatedData.MiddleBalanceAngleArr90.Count()> 9 ? Model._calculatedData.MiddleBalanceAngleArr90[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor90_10">@(Model._calculatedData.MiddleDisbalanceSensorArr90.Count() > 9 ? Model._calculatedData.MiddleDisbalanceSensorArr90[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="kmc90">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="kmc180">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginBalanceAngle180_1">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 0 ? Model._calculatedData.BeginBalanceAngleArr180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_1">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 0 ? Model._calculatedData.BeginDisbalanceSensorArr180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_1">@(Model._calculatedData.MiddleBalanceAngleArr180.Count()> 0 ? Model._calculatedData.MiddleBalanceAngleArr180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_1">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr180[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginBalanceAngle180_2">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 1 ? Model._calculatedData.BeginBalanceAngleArr180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_2">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 1 ? Model._calculatedData.BeginDisbalanceSensorArr180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_2">@(Model._calculatedData.MiddleBalanceAngleArr180.Count()> 1 ? Model._calculatedData.MiddleBalanceAngleArr180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_2">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 1 ? Model._calculatedData.MiddleDisbalanceSensorArr180[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginBalanceAngle180_3">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 2 ? Model._calculatedData.BeginBalanceAngleArr180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_3">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 2 ? Model._calculatedData.BeginDisbalanceSensorArr180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_3">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 2 ? Model._calculatedData.MiddleBalanceAngleArr180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_3">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 2 ? Model._calculatedData.MiddleDisbalanceSensorArr180[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginBalanceAngle180_4">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 3 ? Model._calculatedData.BeginBalanceAngleArr180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_4">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 3 ? Model._calculatedData.BeginDisbalanceSensorArr180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_4">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 3 ? Model._calculatedData.MiddleBalanceAngleArr180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_4">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 3 ? Model._calculatedData.MiddleDisbalanceSensorArr180[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginBalanceAngle180_5">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 4 ? Model._calculatedData.BeginBalanceAngleArr180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_5">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 4 ? Model._calculatedData.BeginDisbalanceSensorArr180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_5">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 4 ? Model._calculatedData.MiddleBalanceAngleArr180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_5">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 4 ? Model._calculatedData.MiddleDisbalanceSensorArr180[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginBalanceAngle180_6">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 5 ? Model._calculatedData.BeginBalanceAngleArr180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_6">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 5 ? Model._calculatedData.BeginDisbalanceSensorArr180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_6">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 5 ? Model._calculatedData.MiddleBalanceAngleArr180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_6">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 5 ? Model._calculatedData.MiddleDisbalanceSensorArr180[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginBalanceAngle180_7">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 6 ? Model._calculatedData.BeginBalanceAngleArr180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_7">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 6 ? Model._calculatedData.BeginDisbalanceSensorArr180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_7">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 6 ? Model._calculatedData.MiddleBalanceAngleArr180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_7">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 6 ? Model._calculatedData.MiddleDisbalanceSensorArr180[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginBalanceAngle180_8">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 7 ? Model._calculatedData.BeginBalanceAngleArr180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_8">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 7 ? Model._calculatedData.BeginDisbalanceSensorArr180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_8">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 7 ? Model._calculatedData.MiddleBalanceAngleArr180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_8">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 7 ? Model._calculatedData.MiddleDisbalanceSensorArr180[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginBalanceAngle180_9">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 8 ? Model._calculatedData.BeginBalanceAngleArr180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_9">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 8 ? Model._calculatedData.BeginDisbalanceSensorArr180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_9">@(Model._calculatedData.MiddleBalanceAngleArr180.Count() > 8 ? Model._calculatedData.MiddleBalanceAngleArr180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_9">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr180[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginBalanceAngle180_10">@(Model._calculatedData.BeginBalanceAngleArr180.Count() > 9 ? Model._calculatedData.BeginBalanceAngleArr180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor180_10">@(Model._calculatedData.BeginDisbalanceSensorArr180.Count() > 9 ? Model._calculatedData.BeginDisbalanceSensorArr180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle180_10">@(Model._calculatedData.MiddleBalanceAngleArr180.Count()> 9 ? Model._calculatedData.MiddleBalanceAngleArr180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor180_10">@(Model._calculatedData.MiddleDisbalanceSensorArr180.Count() > 9 ? Model._calculatedData.MiddleDisbalanceSensorArr180[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="kmc180">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="kmc270">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginBalanceAngle270_1">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 0 ? Model._calculatedData.BeginBalanceAngleArr270[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_1">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 0 ? Model._calculatedData.BeginDisbalanceSensorArr270[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_1">@(Model._calculatedData.MiddleBalanceAngleArr270.Count()> 0 ? Model._calculatedData.MiddleBalanceAngleArr270[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_1">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr270[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginBalanceAngle270_2">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 1 ? Model._calculatedData.BeginBalanceAngleArr270[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_2">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 1 ? Model._calculatedData.BeginDisbalanceSensorArr270[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_2">@(Model._calculatedData.MiddleBalanceAngleArr270.Count()> 1 ? Model._calculatedData.MiddleBalanceAngleArr270[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_2">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 1 ? Model._calculatedData.MiddleDisbalanceSensorArr270[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginBalanceAngle270_3">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 2 ? Model._calculatedData.BeginBalanceAngleArr270[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_3">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 2 ? Model._calculatedData.BeginDisbalanceSensorArr270[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_3">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 2 ? Model._calculatedData.MiddleBalanceAngleArr270[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_3">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 2 ? Model._calculatedData.MiddleDisbalanceSensorArr270[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginBalanceAngle270_4">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 3 ? Model._calculatedData.BeginBalanceAngleArr270[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_4">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 3 ? Model._calculatedData.BeginDisbalanceSensorArr270[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_4">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 3 ? Model._calculatedData.MiddleBalanceAngleArr270[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_4">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 3 ? Model._calculatedData.MiddleDisbalanceSensorArr270[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginBalanceAngle270_5">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 4 ? Model._calculatedData.BeginBalanceAngleArr270[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_5">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 4 ? Model._calculatedData.BeginDisbalanceSensorArr270[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_5">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 4 ? Model._calculatedData.MiddleBalanceAngleArr270[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_5">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 4 ? Model._calculatedData.MiddleDisbalanceSensorArr270[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginBalanceAngle270_6">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 5 ? Model._calculatedData.BeginBalanceAngleArr270[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_6">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 5 ? Model._calculatedData.BeginDisbalanceSensorArr270[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_6">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 5 ? Model._calculatedData.MiddleBalanceAngleArr270[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_6">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 5 ? Model._calculatedData.MiddleDisbalanceSensorArr270[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginBalanceAngle270_7">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 6 ? Model._calculatedData.BeginBalanceAngleArr270[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_7">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 6 ? Model._calculatedData.BeginDisbalanceSensorArr270[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_7">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 6 ? Model._calculatedData.MiddleBalanceAngleArr270[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_7">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 6 ? Model._calculatedData.MiddleDisbalanceSensorArr270[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginBalanceAngle270_8">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 7 ? Model._calculatedData.BeginBalanceAngleArr270[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_8">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 7 ? Model._calculatedData.BeginDisbalanceSensorArr270[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_8">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 7 ? Model._calculatedData.MiddleBalanceAngleArr270[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_8">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 7 ? Model._calculatedData.MiddleDisbalanceSensorArr270[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginBalanceAngle270_9">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 8 ? Model._calculatedData.BeginBalanceAngleArr270[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_9">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 8 ? Model._calculatedData.BeginDisbalanceSensorArr270[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_9">@(Model._calculatedData.MiddleBalanceAngleArr270.Count() > 8 ? Model._calculatedData.MiddleBalanceAngleArr270[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_9">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 0 ? Model._calculatedData.MiddleDisbalanceSensorArr270[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginBalanceAngle270_10">@(Model._calculatedData.BeginBalanceAngleArr270.Count() > 9 ? Model._calculatedData.BeginBalanceAngleArr270[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginDisbalanceSensor270_10">@(Model._calculatedData.BeginDisbalanceSensorArr270.Count() > 9 ? Model._calculatedData.BeginDisbalanceSensorArr270[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleBalanceAngle270_10">@(Model._calculatedData.MiddleBalanceAngleArr270.Count()> 9 ? Model._calculatedData.MiddleBalanceAngleArr270[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleDisbalanceSensor270_10">@(Model._calculatedData.MiddleDisbalanceSensorArr270.Count() > 9 ? Model._calculatedData.MiddleDisbalanceSensorArr270[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="kmc270">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="m0">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginPowerSensor0_1">@(Model._calculatedData.BeginPowerSensor0.Count() > 0 ? Model._calculatedData.BeginPowerSensor0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_1">@(Model._calculatedData.BeginIndicationK0.Count() > 0 ? Model._calculatedData.BeginIndicationK0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_1">@(Model._calculatedData.MiddlePowerSensor0.Count()> 0 ? Model._calculatedData.MiddlePowerSensor0[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_1">@(Model._calculatedData.MiddleIndicationK0.Count() > 0 ? Model._calculatedData.MiddleIndicationK0[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginPowerSensor0_2">@(Model._calculatedData.BeginPowerSensor0.Count() > 1 ? Model._calculatedData.BeginPowerSensor0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_2">@(Model._calculatedData.BeginIndicationK0.Count() > 1 ? Model._calculatedData.BeginIndicationK0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_2">@(Model._calculatedData.MiddlePowerSensor0.Count()> 1 ? Model._calculatedData.MiddlePowerSensor0[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_2">@(Model._calculatedData.MiddleIndicationK0.Count() > 1 ? Model._calculatedData.MiddleIndicationK0[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginPowerSensor0_3">@(Model._calculatedData.BeginPowerSensor0.Count() > 2 ? Model._calculatedData.BeginPowerSensor0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_3">@(Model._calculatedData.BeginIndicationK0.Count() > 2 ? Model._calculatedData.BeginIndicationK0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_3">@(Model._calculatedData.MiddlePowerSensor0.Count() > 2 ? Model._calculatedData.MiddlePowerSensor0[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_3">@(Model._calculatedData.MiddleIndicationK0.Count() > 2 ? Model._calculatedData.MiddleIndicationK0[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginPowerSensor0_4">@(Model._calculatedData.BeginPowerSensor0.Count() > 3 ? Model._calculatedData.BeginPowerSensor0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_4">@(Model._calculatedData.BeginIndicationK0.Count() > 3 ? Model._calculatedData.BeginIndicationK0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_4">@(Model._calculatedData.MiddlePowerSensor0.Count() > 3 ? Model._calculatedData.MiddlePowerSensor0[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_4">@(Model._calculatedData.MiddleIndicationK0.Count() > 3 ? Model._calculatedData.MiddleIndicationK0[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginPowerSensor0_5">@(Model._calculatedData.BeginPowerSensor0.Count() > 4 ? Model._calculatedData.BeginPowerSensor0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_5">@(Model._calculatedData.BeginIndicationK0.Count() > 4 ? Model._calculatedData.BeginIndicationK0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_5">@(Model._calculatedData.MiddlePowerSensor0.Count() > 4 ? Model._calculatedData.MiddlePowerSensor0[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_5">@(Model._calculatedData.MiddleIndicationK0.Count() > 4 ? Model._calculatedData.MiddleIndicationK0[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginPowerSensor0_6">@(Model._calculatedData.BeginPowerSensor0.Count() > 5 ? Model._calculatedData.BeginPowerSensor0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_6">@(Model._calculatedData.BeginIndicationK0.Count() > 5 ? Model._calculatedData.BeginIndicationK0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_6">@(Model._calculatedData.MiddlePowerSensor0.Count() > 5 ? Model._calculatedData.MiddlePowerSensor0[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_6">@(Model._calculatedData.MiddleIndicationK0.Count() > 5 ? Model._calculatedData.MiddleIndicationK0[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginPowerSensor0_7">@(Model._calculatedData.BeginPowerSensor0.Count() > 6 ? Model._calculatedData.BeginPowerSensor0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_7">@(Model._calculatedData.BeginIndicationK0.Count() > 6 ? Model._calculatedData.BeginIndicationK0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_7">@(Model._calculatedData.MiddlePowerSensor0.Count() > 6 ? Model._calculatedData.MiddlePowerSensor0[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_7">@(Model._calculatedData.MiddleIndicationK0.Count() > 6 ? Model._calculatedData.MiddleIndicationK0[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginPowerSensor0_8">@(Model._calculatedData.BeginPowerSensor0.Count() > 7 ? Model._calculatedData.BeginPowerSensor0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_8">@(Model._calculatedData.BeginIndicationK0.Count() > 7 ? Model._calculatedData.BeginIndicationK0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_8">@(Model._calculatedData.MiddlePowerSensor0.Count() > 7 ? Model._calculatedData.MiddlePowerSensor0[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_8">@(Model._calculatedData.MiddleIndicationK0.Count() > 7 ? Model._calculatedData.MiddleIndicationK0[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginPowerSensor0_9">@(Model._calculatedData.BeginPowerSensor0.Count() > 8 ? Model._calculatedData.BeginPowerSensor0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_9">@(Model._calculatedData.BeginIndicationK0.Count() > 8 ? Model._calculatedData.BeginIndicationK0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_9">@(Model._calculatedData.MiddlePowerSensor0.Count() > 8 ? Model._calculatedData.MiddlePowerSensor0[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_9">@(Model._calculatedData.MiddleIndicationK0.Count() > 0 ? Model._calculatedData.MiddleIndicationK0[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginPowerSensor0_10">@(Model._calculatedData.BeginPowerSensor0.Count() > 9 ? Model._calculatedData.BeginPowerSensor0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK0_10">@(Model._calculatedData.BeginIndicationK0.Count() > 9 ? Model._calculatedData.BeginIndicationK0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor0_10">@(Model._calculatedData.MiddlePowerSensor0.Count()> 9 ? Model._calculatedData.MiddlePowerSensor0[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK0_10">@(Model._calculatedData.MiddleIndicationK0.Count() > 9 ? Model._calculatedData.MiddleIndicationK0[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="m0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="m180">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>α2Σ</th>
-                                    <th>P1α</th>
-                                    <th>α2Σ</th>
-                                    <th>P2α</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="beginPowerSensor180_1">@(Model._calculatedData.BeginPowerSensor180.Count() > 0 ? Model._calculatedData.BeginPowerSensor180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_1">@(Model._calculatedData.BeginIndicationK180.Count() > 0 ? Model._calculatedData.BeginIndicationK180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_1">@(Model._calculatedData.MiddlePowerSensor180.Count()> 0 ? Model._calculatedData.MiddlePowerSensor180[0].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_1">@(Model._calculatedData.MiddleIndicationK180.Count() > 0 ? Model._calculatedData.MiddleIndicationK180[0].ToString(): "NaN")</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span id="beginPowerSensor180_2">@(Model._calculatedData.BeginPowerSensor180.Count() > 1 ? Model._calculatedData.BeginPowerSensor180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_2">@(Model._calculatedData.BeginIndicationK180.Count() > 1 ? Model._calculatedData.BeginIndicationK180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_2">@(Model._calculatedData.MiddlePowerSensor180.Count()> 1 ? Model._calculatedData.MiddlePowerSensor180[1].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_2">@(Model._calculatedData.MiddleIndicationK180.Count() > 1 ? Model._calculatedData.MiddleIndicationK180[1].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span id="beginPowerSensor180_3">@(Model._calculatedData.BeginPowerSensor180.Count() > 2 ? Model._calculatedData.BeginPowerSensor180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_3">@(Model._calculatedData.BeginIndicationK180.Count() > 2 ? Model._calculatedData.BeginIndicationK180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_3">@(Model._calculatedData.MiddlePowerSensor180.Count() > 2 ? Model._calculatedData.MiddlePowerSensor180[2].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_3">@(Model._calculatedData.MiddleIndicationK180.Count() > 2 ? Model._calculatedData.MiddleIndicationK180[2].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span id="beginPowerSensor180_4">@(Model._calculatedData.BeginPowerSensor180.Count() > 3 ? Model._calculatedData.BeginPowerSensor180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_4">@(Model._calculatedData.BeginIndicationK180.Count() > 3 ? Model._calculatedData.BeginIndicationK180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_4">@(Model._calculatedData.MiddlePowerSensor180.Count() > 3 ? Model._calculatedData.MiddlePowerSensor180[3].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_4">@(Model._calculatedData.MiddleIndicationK180.Count() > 3 ? Model._calculatedData.MiddleIndicationK180[3].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span id="beginPowerSensor180_5">@(Model._calculatedData.BeginPowerSensor180.Count() > 4 ? Model._calculatedData.BeginPowerSensor180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_5">@(Model._calculatedData.BeginIndicationK180.Count() > 4 ? Model._calculatedData.BeginIndicationK180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_5">@(Model._calculatedData.MiddlePowerSensor180.Count() > 4 ? Model._calculatedData.MiddlePowerSensor180[4].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_5">@(Model._calculatedData.MiddleIndicationK180.Count() > 4 ? Model._calculatedData.MiddleIndicationK180[4].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><span id="beginPowerSensor180_6">@(Model._calculatedData.BeginPowerSensor180.Count() > 5 ? Model._calculatedData.BeginPowerSensor180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_6">@(Model._calculatedData.BeginIndicationK180.Count() > 5 ? Model._calculatedData.BeginIndicationK180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_6">@(Model._calculatedData.MiddlePowerSensor180.Count() > 5 ? Model._calculatedData.MiddlePowerSensor180[5].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_6">@(Model._calculatedData.MiddleIndicationK180.Count() > 5 ? Model._calculatedData.MiddleIndicationK180[5].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><span id="beginPowerSensor180_7">@(Model._calculatedData.BeginPowerSensor180.Count() > 6 ? Model._calculatedData.BeginPowerSensor180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_7">@(Model._calculatedData.BeginIndicationK180.Count() > 6 ? Model._calculatedData.BeginIndicationK180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_7">@(Model._calculatedData.MiddlePowerSensor180.Count() > 6 ? Model._calculatedData.MiddlePowerSensor180[6].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_7">@(Model._calculatedData.MiddleIndicationK180.Count() > 6 ? Model._calculatedData.MiddleIndicationK180[6].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><span id="beginPowerSensor180_8">@(Model._calculatedData.BeginPowerSensor180.Count() > 7 ? Model._calculatedData.BeginPowerSensor180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_8">@(Model._calculatedData.BeginIndicationK180.Count() > 7 ? Model._calculatedData.BeginIndicationK180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_8">@(Model._calculatedData.MiddlePowerSensor180.Count() > 7 ? Model._calculatedData.MiddlePowerSensor180[7].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_8">@(Model._calculatedData.MiddleIndicationK180.Count() > 7 ? Model._calculatedData.MiddleIndicationK180[7].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><span id="beginPowerSensor180_9">@(Model._calculatedData.BeginPowerSensor180.Count() > 8 ? Model._calculatedData.BeginPowerSensor180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_9">@(Model._calculatedData.BeginIndicationK180.Count() > 8 ? Model._calculatedData.BeginIndicationK180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_9">@(Model._calculatedData.MiddlePowerSensor180.Count() > 8 ? Model._calculatedData.MiddlePowerSensor180[8].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_9">@(Model._calculatedData.MiddleIndicationK180.Count() > 0 ? Model._calculatedData.MiddleIndicationK180[8].ToString(): "NaN")</span></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><span id="beginPowerSensor180_10">@(Model._calculatedData.BeginPowerSensor180.Count() > 9 ? Model._calculatedData.BeginPowerSensor180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="beginIndicationK180_10">@(Model._calculatedData.BeginIndicationK180.Count() > 9 ? Model._calculatedData.BeginIndicationK180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middlePowerSensor180_10">@(Model._calculatedData.MiddlePowerSensor180.Count()> 9 ? Model._calculatedData.MiddlePowerSensor180[9].ToString(): "NaN")</span></td>
-                                    <td><span id="middleIndicationK180_10">@(Model._calculatedData.MiddleIndicationK180.Count() > 9 ? Model._calculatedData.MiddleIndicationK180[9].ToString(): "NaN")</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="m180">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table class="table table-striped" style="border: 2px solid #007BFF; margin: 0px ">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>α2Σ</th>
+                                <th>P1α</th>
+                                <th>α2Σ</th>
+                                <th>P2α</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        @*<div class="row">
-            <div class="col" style="background: #F2F2F2;">
-                <div id="resizable1" class="ui-widget-content">
-                    <div id="chart1" style="height:100%; width:90%;"></div>
-                </div>
+        <div class="col" style="background: #F2F2F2;">
+            <div id="resizable1" class="ui-widget-content">
+                <div id="chart1" style="height:100%; width:90%;"></div>
             </div>
-            <div class="col" style="background: #F2F2F2;">
-                <div id="resizable1" class="ui-widget-content">
-                    <div id="chart2" style="height:100%; width:90%;"></div>
-                </div>
+        </div>
+        <div class="col" style="background: #F2F2F2;">
+            <div id="resizable1" class="ui-widget-content">
+                <div id="chart2" style="height:100%; width:90%;"></div>
             </div>
-        </div>*@
-
-    </form>
-    <br />
+        </div>
+<br />
 
 </div>
 
@@ -768,384 +568,12 @@
 
 <script src="~/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-        $(document).ready(function ()
-        {          
-            timerId = setTimeout(function tick() { //рекурсивный setTimeout вызов более точный чем setInterval
-                getCalcData();
-                timerId = setTimeout(tick, timeInterval);
-            }, timeInterval);
-        });
-
-        var timeInterval = 1000;
-
-        function getCalcData() {
-            $.ajax({
-                method: "GET",
-                url: "@Url.Action("GetCalculatorDataRepeat", "Home")?random=" + Math.random(),
-                dataType: "json",
-                success: function (result) {
-                    console.log(result);
-                    switch (result.kcmAngel_0) {
-                        case 0:
-                            $("#kcmfi0").css("color", "black");
-                            $("#kcmfi0border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#kcmfi0").css("color", "blue");
-                            $("#kcmfi0border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#kcmfi0").css("color", "green");
-                            $("#kcmfi0border").css("border-color", "green");
-                            break;
-                    }
-                    switch (result.kcmAngel_90) {
-                        case 0:
-                            $("#kcmfi90").css("color", "black");
-                            $("#kcmfi90border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#kcmfi90").css("color", "blue");
-                            $("#kcmfi90border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#kcmfi90").css("color", "green");
-                            $("#kcmfi90border").css("border-color", "green");
-                            break;
-                    }
-                    switch (result.kcmAngel_180) {
-                        case 0:
-                            $("#kcmfi180").css("color", "black");
-                            $("#kcmfi180border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#kcmfi180").css("color", "blue");
-                            $("#kcmfi180border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#kcmfi180").css("color", "green");
-                            $("#kcmfi180border").css("border-color", "green");
-                            break;
-                    }
-                    switch (result.kcmAngel_270) {
-                        case 0:
-                            $("#kcmfi270").css("color", "black");
-                            $("#kcmf270border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#kcmfi270").css("color", "blue");
-                            $("#kcmfi270border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#kcmfi270").css("color", "green");
-                            $("#kcmfi270border").css("border-color", "green");
-                            break;
-                    }
-
-                    switch (result.mAngel_0) {
-                        case 0:
-                            $("#mfi0").css("color", "black");
-                            $("#mfi0border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#mfi0").css("color", "blue");
-                            $("#mfi0border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#mfi0").css("color", "green");
-                            $("#mfi0border").css("border-color", "green");
-                            break;
-                    }
-                    switch (result.mAngel_180) {
-                        case 0:
-                            $("#mfi180").css("color", "black");
-                            $("#mfi180border").css("border-color", "black");
-                            break;
-                        case 1:
-                            $("#mfi180").css("color", "blue");
-                            $("#mfi180border").css("border-color", "blue");
-                            break;
-                        case 2:
-                            $("#mfi180").css("color", "green");
-                            $("#mfi180border").css("border-color", "green");
-                            break;
-                    }
-
-                    if (result.arraysAreFilling == true) {
-                        $("#startCalcBut").text("Показания снимаются, подождите...");
-                        $("#startCalcBut").prop('disabled', true);
-                        $("#calcButSpin").removeAttr("hidden");
-                        //$("#startCalcBut_add").removeAttr("hidden");
-
-                    }
-                    else {
-                        $("#startCalcBut").text("Снять показания");
-                        $("#startCalcBut").prop('disabled', false);
-                        $("#calcButSpin").attr("hidden", "hidden");
-                        //$("#startCalcBut_add").attr("hidden", "hidden");
-                    }
-                   
-                    if (result.allAngelFilling == false) {
-                        $("#calculation").text("Расчет");
-                        $("#calculation").prop('disabled', true);
-                        //$("#calculationSpin").removeAttr("hidden");
-                        //$("#calculation_no").removeAttr("hidden");
-                    }
-                    else {
-                        $("#calculation").text("Расчет");
-                        $("#calculation").prop('disabled', false);
-                       // $("#calculationSpin").removeAttr("hidden");
-                       //$("#calculation_no").removeAttr("hidden");
-                    }
-
-                    $("#beginBalanceAngle0_1").text(parseFloat(result.beginBalanceAngleArr0[0]).toFixed(3));
-                    $("#beginBalanceAngle0_7").text(parseFloat(result.beginBalanceAngleArr0[6]).toFixed(3));
-                    $("#beginBalanceAngle0_8").text(parseFloat(result.beginBalanceAngleArr0[7]).toFixed(3));
-                    $("#beginBalanceAngle0_9").text(parseFloat(result.beginBalanceAngleArr0[8]).toFixed(3));
-                    $("#beginBalanceAngle0_10").text(parseFloat(result.beginBalanceAngleArr0[9]).toFixed(3));
-
-                    $("#beginBalanceAngle90_1").text(parseFloat(result.beginBalanceAngleArr90[0]).toFixed(3));
-                    $("#beginBalanceAngle90_2").text(parseFloat(result.beginBalanceAngleArr90[1]).toFixed(3));
-                    $("#beginBalanceAngle90_3").text(parseFloat(result.beginBalanceAngleArr90[2]).toFixed(3));
-                    $("#beginBalanceAngle90_4").text(parseFloat(result.beginBalanceAngleArr90[3]).toFixed(3));
-                    $("#beginBalanceAngle90_5").text(parseFloat(result.beginBalanceAngleArr90[4]).toFixed(3));
-                    $("#beginBalanceAngle90_6").text(parseFloat(result.beginBalanceAngleArr90[5]).toFixed(3));
-                    $("#beginBalanceAngle90_7").text(parseFloat(result.beginBalanceAngleArr90[6]).toFixed(3));
-                    $("#beginBalanceAngle90_8").text(parseFloat(result.beginBalanceAngleArr90[7]).toFixed(3));
-                    $("#beginBalanceAngle90_9").text(parseFloat(result.beginBalanceAngleArr90[8]).toFixed(3));
-                    $("#beginBalanceAngle90_10").text(parseFloat(result.beginBalanceAngleArr90[9]).toFixed(3));
-
-                    $("#beginBalanceAngle180_1").text(parseFloat(result.beginBalanceAngleArr180[0]).toFixed(3));
-                    $("#beginBalanceAngle180_2").text(parseFloat(result.beginBalanceAngleArr180[1]).toFixed(3));
-                    $("#beginBalanceAngle180_3").text(parseFloat(result.beginBalanceAngleArr180[2]).toFixed(3));
-                    $("#beginBalanceAngle180_4").text(parseFloat(result.beginBalanceAngleArr180[3]).toFixed(3));
-                    $("#beginBalanceAngle180_5").text(parseFloat(result.beginBalanceAngleArr180[4]).toFixed(3));
-                    $("#beginBalanceAngle180_6").text(parseFloat(result.beginBalanceAngleArr180[5]).toFixed(3));
-                    $("#beginBalanceAngle180_7").text(parseFloat(result.beginBalanceAngleArr180[6]).toFixed(3));
-                    $("#beginBalanceAngle180_8").text(parseFloat(result.beginBalanceAngleArr180[7]).toFixed(3));
-                    $("#beginBalanceAngle180_9").text(parseFloat(result.beginBalanceAngleArr180[8]).toFixed(3));
-                    $("#beginBalanceAngle180_10").text(parseFloat(result.beginBalanceAngleArr180[9]).toFixed(3));
-
-                    $("#beginBalanceAngle270_1").text(parseFloat(result.beginBalanceAngleArr270[0]).toFixed(3));
-                    $("#beginBalanceAngle270_2").text(parseFloat(result.beginBalanceAngleArr270[1]).toFixed(3));
-                    $("#beginBalanceAngle270_3").text(parseFloat(result.beginBalanceAngleArr270[2]).toFixed(3));
-                    $("#beginBalanceAngle270_4").text(parseFloat(result.beginBalanceAngleArr270[3]).toFixed(3));
-                    $("#beginBalanceAngle270_5").text(parseFloat(result.beginBalanceAngleArr270[4]).toFixed(3));
-                    $("#beginBalanceAngle270_6").text(parseFloat(result.beginBalanceAngleArr270[5]).toFixed(3));
-                    $("#beginBalanceAngle270_7").text(parseFloat(result.beginBalanceAngleArr270[6]).toFixed(3));
-                    $("#beginBalanceAngle270_8").text(parseFloat(result.beginBalanceAngleArr270[7]).toFixed(3));
-                    $("#beginBalanceAngle270_9").text(parseFloat(result.beginBalanceAngleArr270[8]).toFixed(3));
-                    $("#beginBalanceAngle270_10").text(parseFloat(result.beginBalanceAngleArr270[9]).toFixed(3));
 
 
-                    $("#middleBalanceAngle0_1").text(parseFloat(result.middleBalanceAngleArr0[0]).toFixed(3));
-                    $("#middleBalanceAngle0_2").text(parseFloat(result.middleBalanceAngleArr0[1]).toFixed(3));
-                    $("#middleBalanceAngle0_3").text(parseFloat(result.middleBalanceAngleArr0[2]).toFixed(3));
-                    $("#middleBalanceAngle0_4").text(parseFloat(result.middleBalanceAngleArr0[3]).toFixed(3));
-                    $("#middleBalanceAngle0_5").text(parseFloat(result.middleBalanceAngleArr0[4]).toFixed(3));
-                    $("#middleBalanceAngle0_6").text(parseFloat(result.middleBalanceAngleArr0[5]).toFixed(3));
-                    $("#middleBalanceAngle0_7").text(parseFloat(result.middleBalanceAngleArr0[6]).toFixed(3));
-                    $("#middleBalanceAngle0_8").text(parseFloat(result.middleBalanceAngleArr0[7]).toFixed(3));
-                    $("#middleBalanceAngle0_9").text(parseFloat(result.middleBalanceAngleArr0[8]).toFixed(3));
-                    $("#middleBalanceAngle0_10").text(parseFloat(result.middleBalanceAngleArr0[9]).toFixed(3));
 
-                    $("#middleBalanceAngle90_1").text(parseFloat(result.middleBalanceAngleArr90[0]).toFixed(3));
-                    $("#middleBalanceAngle90_2").text(parseFloat(result.middleBalanceAngleArr90[1]).toFixed(3));
-                    $("#middleBalanceAngle90_3").text(parseFloat(result.middleBalanceAngleArr90[2]).toFixed(3));
-                    $("#middleBalanceAngle90_4").text(parseFloat(result.middleBalanceAngleArr90[3]).toFixed(3));
-                    $("#middleBalanceAngle90_5").text(parseFloat(result.middleBalanceAngleArr90[4]).toFixed(3));
-                    $("#middleBalanceAngle90_6").text(parseFloat(result.middleBalanceAngleArr90[5]).toFixed(3));
-                    $("#middleBalanceAngle90_7").text(parseFloat(result.middleBalanceAngleArr90[6]).toFixed(3));
-                    $("#middleBalanceAngle90_8").text(parseFloat(result.middleBalanceAngleArr90[7]).toFixed(3));
-                    $("#middleBalanceAngle90_9").text(parseFloat(result.middleBalanceAngleArr90[8]).toFixed(3));
-                    $("#middleBalanceAngle90_10").text(parseFloat(result.middleBalanceAngleArr90[9]).toFixed(3));
 
-                    $("#middleBalanceAngle180_1").text(parseFloat(result.middleBalanceAngleArr180[0]).toFixed(3));
-                    $("#middleBalanceAngle180_2").text(parseFloat(result.middleBalanceAngleArr180[1]).toFixed(3));
-                    $("#middleBalanceAngle180_3").text(parseFloat(result.middleBalanceAngleArr180[2]).toFixed(3));
-                    $("#middleBalanceAngle180_4").text(parseFloat(result.middleBalanceAngleArr180[3]).toFixed(3));
-                    $("#middleBalanceAngle180_5").text(parseFloat(result.middleBalanceAngleArr180[4]).toFixed(3));
-                    $("#middleBalanceAngle180_6").text(parseFloat(result.middleBalanceAngleArr180[5]).toFixed(3));
-                    $("#middleBalanceAngle180_7").text(parseFloat(result.middleBalanceAngleArr180[6]).toFixed(3));
-                    $("#middleBalanceAngle180_8").text(parseFloat(result.middleBalanceAngleArr180[7]).toFixed(3));
-                    $("#middleBalanceAngle180_9").text(parseFloat(result.middleBalanceAngleArr180[8]).toFixed(3));
-                    $("#middleBalanceAngle180_10").text(parseFloat(result.middleBalanceAngleArr180[9]).toFixed(3));
 
-                    $("#middleBalanceAngle270_1").text(parseFloat(result.middleBalanceAngleArr270[0]).toFixed(3));
-                    $("#middleBalanceAngle270_2").text(parseFloat(result.middleBalanceAngleArr270[1]).toFixed(3));
-                    $("#middleBalanceAngle270_3").text(parseFloat(result.middleBalanceAngleArr270[2]).toFixed(3));
-                    $("#middleBalanceAngle270_4").text(parseFloat(result.middleBalanceAngleArr270[3]).toFixed(3));
-                    $("#middleBalanceAngle270_5").text(parseFloat(result.middleBalanceAngleArr270[4]).toFixed(3));
-                    $("#middleBalanceAngle270_6").text(parseFloat(result.middleBalanceAngleArr270[5]).toFixed(3));
-                    $("#middleBalanceAngle270_7").text(parseFloat(result.middleBalanceAngleArr270[6]).toFixed(3));
-                    $("#middleBalanceAngle270_8").text(parseFloat(result.middleBalanceAngleArr270[7]).toFixed(3));
-                    $("#middleBalanceAngle270_9").text(parseFloat(result.middleBalanceAngleArr270[8]).toFixed(3));
-                    $("#middleBalanceAngle270_10").text(parseFloat(result.middleBalanceAngleArr270[9]).toFixed(3));
 
-                    $("#beginDisbalanceSensor0_1").text(parseFloat(result.beginDisbalanceSensorArr0[0]).toFixed(3));
-                    $("#beginDisbalanceSensor0_2").text(parseFloat(result.beginDisbalanceSensorArr0[1]).toFixed(3));
-                    $("#beginDisbalanceSensor0_3").text(parseFloat(result.beginDisbalanceSensorArr0[2]).toFixed(3));
-                    $("#beginDisbalanceSensor0_4").text(parseFloat(result.beginDisbalanceSensorArr0[3]).toFixed(3));
-                    $("#beginDisbalanceSensor0_5").text(parseFloat(result.beginDisbalanceSensorArr0[4]).toFixed(3));
-                    $("#beginDisbalanceSensor0_6").text(parseFloat(result.beginDisbalanceSensorArr0[5]).toFixed(3));
-                    $("#beginDisbalanceSensor0_7").text(parseFloat(result.beginDisbalanceSensorArr0[6]).toFixed(3));
-                    $("#beginDisbalanceSensor0_8").text(parseFloat(result.beginDisbalanceSensorArr0[7]).toFixed(3));
-                    $("#beginDisbalanceSensor0_9").text(parseFloat(result.beginDisbalanceSensorArr0[8]).toFixed(3));
-                    $("#beginDisbalanceSensor0_10").text(parseFloat(result.beginDisbalanceSensorArr0[9]).toFixed(3));
-
-                    $("#beginDisbalanceSensor90_1").text(parseFloat(result.beginDisbalanceSensorArr90[0]).toFixed(3));
-                    $("#beginDisbalanceSensor90_2").text(parseFloat(result.beginDisbalanceSensorArr90[1]).toFixed(3));
-                    $("#beginDisbalanceSensor90_3").text(parseFloat(result.beginDisbalanceSensorArr90[2]).toFixed(3));
-                    $("#beginDisbalanceSensor90_4").text(parseFloat(result.beginDisbalanceSensorArr90[3]).toFixed(3));
-                    $("#beginDisbalanceSensor90_5").text(parseFloat(result.beginDisbalanceSensorArr90[4]).toFixed(3));
-                    $("#beginDisbalanceSensor90_6").text(parseFloat(result.beginDisbalanceSensorArr90[5]).toFixed(3));
-                    $("#beginDisbalanceSensor90_7").text(parseFloat(result.beginDisbalanceSensorArr90[6]).toFixed(3));
-                    $("#beginDisbalanceSensor90_8").text(parseFloat(result.beginDisbalanceSensorArr90[7]).toFixed(3));
-                    $("#beginDisbalanceSensor90_9").text(parseFloat(result.beginDisbalanceSensorArr90[8]).toFixed(3));
-                    $("#beginDisbalanceSensor90_10").text(parseFloat(result.beginDisbalanceSensorArr90[9]).toFixed(3));
-
-                    $("#beginDisbalanceSensor180_1").text(parseFloat(result.beginDisbalanceSensorArr180[0]).toFixed(3));
-                    $("#beginDisbalanceSensor180_2").text(parseFloat(result.beginDisbalanceSensorArr180[1]).toFixed(3));
-                    $("#beginDisbalanceSensor180_3").text(parseFloat(result.beginDisbalanceSensorArr180[2]).toFixed(3));
-                    $("#beginDisbalanceSensor180_4").text(parseFloat(result.beginDisbalanceSensorArr180[3]).toFixed(3));
-                    $("#beginDisbalanceSensor180_5").text(parseFloat(result.beginDisbalanceSensorArr180[4]).toFixed(3));
-                    $("#beginDisbalanceSensor180_6").text(parseFloat(result.beginDisbalanceSensorArr180[5]).toFixed(3));
-                    $("#beginDisbalanceSensor180_7").text(parseFloat(result.beginDisbalanceSensorArr180[6]).toFixed(3));
-                    $("#beginDisbalanceSensor180_8").text(parseFloat(result.beginDisbalanceSensorArr180[7]).toFixed(3));
-                    $("#beginDisbalanceSensor180_9").text(parseFloat(result.beginDisbalanceSensorArr180[8]).toFixed(3));
-                    $("#beginDisbalanceSensor180_10").text(parseFloat(result.beginDisbalanceSensorArr180[9]).toFixed(3));
-
-                    $("#beginDisbalanceSensor270_1").text(parseFloat(result.beginDisbalanceSensorArr270[0]).toFixed(3));
-                    $("#beginDisbalanceSensor270_2").text(parseFloat(result.beginDisbalanceSensorArr270[1]).toFixed(3));
-                    $("#beginDisbalanceSensor270_3").text(parseFloat(result.beginDisbalanceSensorArr270[2]).toFixed(3));
-                    $("#beginDisbalanceSensor270_4").text(parseFloat(result.beginDisbalanceSensorArr270[3]).toFixed(3));
-                    $("#beginDisbalanceSensor270_5").text(parseFloat(result.beginDisbalanceSensorArr270[4]).toFixed(3));
-                    $("#beginDisbalanceSensor270_6").text(parseFloat(result.beginDisbalanceSensorArr270[5]).toFixed(3));
-                    $("#beginDisbalanceSensor270_7").text(parseFloat(result.beginDisbalanceSensorArr270[6]).toFixed(3));
-                    $("#beginDisbalanceSensor270_8").text(parseFloat(result.beginDisbalanceSensorArr270[7]).toFixed(3));
-                    $("#beginDisbalanceSensor270_9").text(parseFloat(result.beginDisbalanceSensorArr270[8]).toFixed(3));
-                    $("#beginDisbalanceSensor270_10").text(parseFloat(result.beginDisbalanceSensorArr270[9]).toFixed(3));
-
-                    $("#middleDisbalanceSensor0_1").text(parseFloat(result.middleDisbalanceSensorArr0[0]).toFixed(3));
-                    $("#middleDisbalanceSensor0_2").text(parseFloat(result.middleDisbalanceSensorArr0[1]).toFixed(3));
-                    $("#middleDisbalanceSensor0_3").text(parseFloat(result.middleDisbalanceSensorArr0[2]).toFixed(3));
-                    $("#middleDisbalanceSensor0_4").text(parseFloat(result.middleDisbalanceSensorArr0[3]).toFixed(3));
-                    $("#middleDisbalanceSensor0_5").text(parseFloat(result.middleDisbalanceSensorArr0[4]).toFixed(3));
-                    $("#middleDisbalanceSensor0_6").text(parseFloat(result.middleDisbalanceSensorArr0[5]).toFixed(3));
-                    $("#middleDisbalanceSensor0_7").text(parseFloat(result.middleDisbalanceSensorArr0[6]).toFixed(3));
-                    $("#middleDisbalanceSensor0_8").text(parseFloat(result.middleDisbalanceSensorArr0[7]).toFixed(3));
-                    $("#middleDisbalanceSensor0_9").text(parseFloat(result.middleDisbalanceSensorArr0[8]).toFixed(3));
-                    $("#middleDisbalanceSensor0_10").text(parseFloat(result.middleDisbalanceSensorArr0[9]).toFixed(3));
-
-                    $("#middleDisbalanceSensor90_1").text(parseFloat(result.middleDisbalanceSensorArr90[0]).toFixed(3));
-                    $("#middleDisbalanceSensor90_2").text(parseFloat(result.middleDisbalanceSensorArr90[1]).toFixed(3));
-                    $("#middleDisbalanceSensor90_3").text(parseFloat(result.middleDisbalanceSensorArr90[2]).toFixed(3));
-                    $("#middleDisbalanceSensor90_4").text(parseFloat(result.middleDisbalanceSensorArr90[3]).toFixed(3));
-                    $("#middleDisbalanceSensor90_5").text(parseFloat(result.middleDisbalanceSensorArr90[4]).toFixed(3));
-                    $("#middleDisbalanceSensor90_6").text(parseFloat(result.middleDisbalanceSensorArr90[5]).toFixed(3));
-                    $("#middleDisbalanceSensor90_7").text(parseFloat(result.middleDisbalanceSensorArr90[6]).toFixed(3));
-                    $("#middleDisbalanceSensor90_8").text(parseFloat(result.middleDisbalanceSensorArr90[7]).toFixed(3));
-                    $("#middleDisbalanceSensor90_9").text(parseFloat(result.middleDisbalanceSensorArr90[8]).toFixed(3));
-                    $("#middleDisbalanceSensor90_10").text(parseFloat(result.middleDisbalanceSensorArr90[9]).toFixed(3));
-
-                    $("#middleDisbalanceSensor180_1").text(parseFloat(result.middleDisbalanceSensorArr180[0]).toFixed(3));
-                    $("#middleDisbalanceSensor180_2").text(parseFloat(result.middleDisbalanceSensorArr180[1]).toFixed(3));
-                    $("#middleDisbalanceSensor180_3").text(parseFloat(result.middleDisbalanceSensorArr180[2]).toFixed(3));
-                    $("#middleDisbalanceSensor180_4").text(parseFloat(result.middleDisbalanceSensorArr180[3]).toFixed(3));
-                    $("#middleDisbalanceSensor180_5").text(parseFloat(result.middleDisbalanceSensorArr180[4]).toFixed(3));
-                    $("#middleDisbalanceSensor180_6").text(parseFloat(result.middleDisbalanceSensorArr180[5]).toFixed(3));
-                    $("#middleDisbalanceSensor180_7").text(parseFloat(result.middleDisbalanceSensorArr180[6]).toFixed(3));
-                    $("#middleDisbalanceSensor180_8").text(parseFloat(result.middleDisbalanceSensorArr180[7]).toFixed(3));
-                    $("#middleDisbalanceSensor180_9").text(parseFloat(result.middleDisbalanceSensorArr180[8]).toFixed(3));
-                    $("#middleDisbalanceSensor180_10").text(parseFloat(result.middleDisbalanceSensorArr180[9]).toFixed(3));
-
-                    $("#middleDisbalanceSensor270_1").text(parseFloat(result.middleDisbalanceSensorArr270[0]).toFixed(3));
-                    $("#middleDisbalanceSensor270_2").text(parseFloat(result.middleDisbalanceSensorArr270[1]).toFixed(3));
-                    $("#middleDisbalanceSensor270_3").text(parseFloat(result.middleDisbalanceSensorArr270[2]).toFixed(3));
-                    $("#middleDisbalanceSensor270_4").text(parseFloat(result.middleDisbalanceSensorArr270[3]).toFixed(3));
-                    $("#middleDisbalanceSensor270_5").text(parseFloat(result.middleDisbalanceSensorArr270[4]).toFixed(3));
-                    $("#middleDisbalanceSensor270_6").text(parseFloat(result.middleDisbalanceSensorArr270[5]).toFixed(3));
-                    $("#middleDisbalanceSensor270_7").text(parseFloat(result.middleDisbalanceSensorArr270[6]).toFixed(3));
-                    $("#middleDisbalanceSensor270_8").text(parseFloat(result.middleDisbalanceSensorArr270[7]).toFixed(3));
-                    $("#middleDisbalanceSensor270_9").text(parseFloat(result.middleDisbalanceSensorArr270[8]).toFixed(3));
-                    $("#middleDisbalanceSensor270_10").text(parseFloat(result.middleDisbalanceSensorArr270[9]).toFixed(3));
-
-                    $("#beginPowerSensor0_1").text(parseFloat(result.beginPowerSensor0[0]).toFixed(3));
-                    $("#beginPowerSensor0_2").text(parseFloat(result.beginPowerSensor0[1]).toFixed(3));
-                    $("#beginPowerSensor0_3").text(parseFloat(result.beginPowerSensor0[2]).toFixed(3));
-                    $("#beginPowerSensor0_4").text(parseFloat(result.beginPowerSensor0[3]).toFixed(3));
-                    $("#beginPowerSensor0_5").text(parseFloat(result.beginPowerSensor0[4]).toFixed(3));
-                    $("#beginPowerSensor0_6").text(parseFloat(result.beginPowerSensor0[5]).toFixed(3));
-                    $("#beginPowerSensor0_7").text(parseFloat(result.beginPowerSensor0[6]).toFixed(3));
-                    $("#beginPowerSensor0_8").text(parseFloat(result.beginPowerSensor0[7]).toFixed(3));
-                    $("#beginPowerSensor0_9").text(parseFloat(result.beginPowerSensor0[8]).toFixed(3));
-                    $("#beginPowerSensor0_10").text(parseFloat(result.beginPowerSensor0[9]).toFixed(3));
-
-                    $("#beginPowerSensor180_1").text(parseFloat(result.beginPowerSensor180[0]).toFixed(3));
-                    $("#beginPowerSensor180_2").text(parseFloat(result.beginPowerSensor180[1]).toFixed(3));
-                    $("#beginPowerSensor180_3").text(parseFloat(result.beginPowerSensor180[2]).toFixed(3));
-                    $("#beginPowerSensor180_4").text(parseFloat(result.beginPowerSensor180[3]).toFixed(3));
-                    $("#beginPowerSensor180_5").text(parseFloat(result.beginPowerSensor180[4]).toFixed(3));
-                    $("#beginPowerSensor180_6").text(parseFloat(result.beginPowerSensor180[5]).toFixed(3));
-                    $("#beginPowerSensor180_7").text(parseFloat(result.beginPowerSensor180[6]).toFixed(3));
-                    $("#beginPowerSensor180_8").text(parseFloat(result.beginPowerSensor180[7]).toFixed(3));
-                    $("#beginPowerSensor180_9").text(parseFloat(result.beginPowerSensor180[8]).toFixed(3));
-                    $("#beginPowerSensor180_10").text(parseFloat(result.beginPowerSensor180[9]).toFixed(3));
-
-                    $("#middlePowerSensor0_1").text(parseFloat(result.middlePowerSensor0[0]).toFixed(3));
-                    $("#middlePowerSensor0_2").text(parseFloat(result.middlePowerSensor0[1]).toFixed(3));
-                    $("#middlePowerSensor0_3").text(parseFloat(result.middlePowerSensor0[2]).toFixed(3));
-                    $("#middlePowerSensor0_4").text(parseFloat(result.middlePowerSensor0[3]).toFixed(3));
-                    $("#middlePowerSensor0_5").text(parseFloat(result.middlePowerSensor0[4]).toFixed(3));
-                    $("#middlePowerSensor0_6").text(parseFloat(result.middlePowerSensor0[5]).toFixed(3));
-                    $("#middlePowerSensor0_7").text(parseFloat(result.middlePowerSensor0[6]).toFixed(3));
-                    $("#middlePowerSensor0_8").text(parseFloat(result.middlePowerSensor0[7]).toFixed(3));
-                    $("#middlePowerSensor0_9").text(parseFloat(result.middlePowerSensor0[8]).toFixed(3));
-                    $("#middlePowerSensor0_10").text(parseFloat(result.middlePowerSensor0[9]).toFixed(3));
-
-                    $("#middlePowerSensor180_1").text(parseFloat(result.middlePowerSensor180[0]).toFixed(3));
-                    $("#middlePowerSensor180_2").text(parseFloat(result.middlePowerSensor180[1]).toFixed(3));
-                    $("#middlePowerSensor180_3").text(parseFloat(result.middlePowerSensor180[2]).toFixed(3));
-                    $("#middlePowerSensor180_4").text(parseFloat(result.middlePowerSensor180[3]).toFixed(3));
-                    $("#middlePowerSensor180_5").text(parseFloat(result.middlePowerSensor180[4]).toFixed(3));
-                    $("#middlePowerSensor180_6").text(parseFloat(result.middlePowerSensor180[5]).toFixed(3));
-                    $("#middlePowerSensor180_7").text(parseFloat(result.middlePowerSensor180[6]).toFixed(3));
-                    $("#middlePowerSensor180_8").text(parseFloat(result.middlePowerSensor180[7]).toFixed(3));
-                    $("#middlePowerSensor180_9").text(parseFloat(result.middlePowerSensor180[8]).toFixed(3));
-                    $("#middlePowerSensor180_10").text(parseFloat(result.middlePowerSensor180[9]).toFixed(3));
-
-                    $("#beginIndicationK0_1").text(parseFloat(result.beginIndicationK0[0]).toFixed(3));
-                    $("#beginIndicationK0_2").text(parseFloat(result.beginIndicationK0[1]).toFixed(3));
-                    $("#beginIndicationK0_3").text(parseFloat(result.beginIndicationK0[2]).toFixed(3));
-                    $("#beginIndicationK0_4").text(parseFloat(result.beginIndicationK0[3]).toFixed(3));
-                    $("#beginIndicationK0_5").text(parseFloat(result.beginIndicationK0[4]).toFixed(3));
-                    $("#beginIndicationK0_6").text(parseFloat(result.beginIndicationK0[5]).toFixed(3));
-                    $("#beginIndicationK0_7").text(parseFloat(result.beginIndicationK0[6]).toFixed(3));
-                    $("#beginIndicationK0_8").text(parseFloat(result.beginIndicationK0[7]).toFixed(3));
-                    $("#beginIndicationK0_9").text(parseFloat(result.beginIndicationK0[8]).toFixed(3));
-                    $("#beginIndicationK0_10").text(parseFloat(result.beginIndicationK0[9]).toFixed(3));
-
-                    $("#beginIndicationK180_1").text(parseFloat(result.beginIndicationK180[0]).toFixed(3));
-                    $("#beginIndicationK180_2").text(parseFloat(result.beginIndicationK180[1]).toFixed(3));
-                    $("#beginIndicationK180_3").text(parseFloat(result.beginIndicationK180[2]).toFixed(3));
-                    $("#beginIndicationK180_4").text(parseFloat(result.beginIndicationK180[3]).toFixed(3));
-                    $("#beginIndicationK180_5").text(parseFloat(result.beginIndicationK180[4]).toFixed(3));
-                    $("#beginIndicationK180_6").text(parseFloat(result.beginIndicationK180[5]).toFixed(3));
-                    $("#beginIndicationK180_7").text(parseFloat(result.beginIndicationK180[6]).toFixed(3));
-                    $("#beginIndicationK180_8").text(parseFloat(result.beginIndicationK180[7]).toFixed(3));
-                    $("#beginIndicationK180_9").text(parseFloat(result.beginIndicationK180[8]).toFixed(3));
-                    $("#beginIndicationK180_10").text(parseFloat(result.beginIndicationK180[9]).toFixed(3));
-
-                    $("#middleIndicationK0_1").text(parseFloat(result.middleIndicationK0[0]).toFixed(3));
-                    $("#middleIndicationK0_2").text(parseFloat(result.middleIndicationK0[1]).toFixed(3));
-                    $("#middleIndicationK0_3").text(parseFloat(result.middleIndicationK0[2]).toFixed(3));
-                    $("#middleIndicationK0_4").text(parseFloat(result.middleIndicationK0[3]).toFixed(3));
-                    $("#middleIndicationK0_5").text(parseFloat(result.middleIndicationK0[4]).toFixed(3));
-                    $("#middleIndicationK0_6").text(parseFloat(result.middleIndicationK0[5]).toFixed(3));
-                    $("#middleIndicationK0_7").text(parseFloat(result.middleIndicationK0[6]).toFixed(3));
-                    $("#middleIndicationK0_8").text(parseFloat(result.middleIndicationK0[7]).toFixed(3));
-                    $("#middleIndicationK0_9").text(parseFloat(result.middleIndicationK0[8]).toFixed(3));
-                    $("#middleIndicationK0_10").text(parseFloat(result.middleIndicationK0[9]).toFixed(3));
 
                     $("#middleIndicationK180_1").text(parseFloat(result.middleIndicationK180[0]).toFixed(3));
                     $("#middleIndicationK180_2").text(parseFloat(result.middleIndicationK180[1]).toFixed(3));
@@ -1158,10 +586,35 @@
                     $("#middleIndicationK180_9").text(parseFloat(result.middleIndicationK180[8]).toFixed(3));
                     $("#middleIndicationK180_10").text(parseFloat(result.middleIndicationK180[9]).toFixed(3));
 
+        var plot1 = $.jqplot('chart1', [s1, s2], {
+            title: 'диаграмма дисбаланса',
+            captureRightClick: true,
+            seriesDefaults: {
+                renderer: $.jqplot.BarRenderer,
+                rendererOptions: {
+                    // Put a 30 pixel margin between bars.
+                    barMargin: 30,
+                    // Highlight bars when mouse button pressed.
+                    // Disables default highlighting on mouse over.
+                    highlightMouseDown: true,
+                    smooth: true,
                 },
-                error: function (result) {
+                pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
+                shadowAngle: 135,
+            },
+            axes: {
+                xaxis: {
+                    label: 'Ось X',
+                    // renderer: $.jqplot.CategoryAxisRenderer
+                    // padMin: 0
+                },
+                yaxis: {
+                    label: 'Ось Y',
+                    //   padMin: 0
                 }
-            });
+            },
+            }
+        });
         }
 
 
@@ -1217,17 +670,23 @@
         //        }
         //    });
 
+        // Bind a listener to the "jqplotDataClick" event.  Here, simply change
+        // the text of the info3 element to show what series and ponit were
+        // clicked along with the data for that point.
+        //$('#chart1').bind('jqplotDataClick',
+        //    function (ev, seriesIndex, pointIndex, data) {
+        //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
+        //    }
+        //);
+
+    });
+    $(document).ready(function () {
 
 
-        //    // Bind a listener to the "jqplotDataClick" event.  Here, simply change
-        //    // the text of the info3 element to show what series and ponit were
-        //    // clicked along with the data for that point.
-        //    //$('#chart1').bind('jqplotDataClick',
-        //    //    function (ev, seriesIndex, pointIndex, data) {
-        //    //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
-        //    //    }
-        //    //);
-
+        ////динамическое изменение размера
+        //$("resizable1").resizable({ delay: 20 });
+        //$("resizable1").bind("resize", function (event, ui) {
+        //    plot1.replot({ resetAxes: true });
         //});
         //$(document).ready(function () {
 
@@ -1239,59 +698,13 @@
         //    //    plot1.replot({ resetAxes: true });
         //    //});
 
-        //    var s1 = [5.9, 6.1, 6.2, 5.9, 6, 5.8, 6.1];
-        //    var s2 = [6, 6, 6, 6, 6, 6, 6];
-
-        //    var labels = ["Текущее значение", "Среднее значение"];
-
-
-        //    var plot1 = $.jqplot('chart2', [s1, s2], {
-        //        title: 'диаграмма дисбаланса',
-        //        captureRightClick: true,
-        //        seriesDefaults: {
-        //            renderer: $.jqplot.BarRenderer,
-        //            rendererOptions: {
-        //                // Put a 30 pixel margin between bars.
-        //                barMargin: 30,
-        //                // Highlight bars when mouse button pressed.
-        //                // Disables default highlighting on mouse over.
-        //                highlightMouseDown: true,
-        //                smooth: true,
-        //            },
-        //            pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
-        //            shadowAngle: 135,
-        //        },
-        //        axes: {
-        //            xaxis: {
-        //                label: 'Ось X',
-        //                // renderer: $.jqplot.CategoryAxisRenderer
-        //                // padMin: 0
-        //            },
-        //            yaxis: {
-        //                label: 'Ось Y',
-        //                //   padMin: 0
-        //            }
-        //        },
-        //        legend: {
-        //            show: true,
-        //            location: 'e',
-        //            placement: 'outside',
-        //            labels: labels,
-        //        }
-        //    });
 
 
 
-        //    // Bind a listener to the "jqplotDataClick" event.  Here, simply change
-        //    // the text of the info3 element to show what series and ponit were
-        //    // clicked along with the data for that point.
-        //    //$('#chart1').bind('jqplotDataClick',
-        //    //    function (ev, seriesIndex, pointIndex, data) {
-        //    //        $('#info1').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
-        //    //    }
-        //    //);
 
-        //});
+
+
+
 
 </script>
 

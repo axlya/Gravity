@@ -104,7 +104,6 @@ namespace Siemens.UAClientHelper
             catch (Exception)
             {
                 //handle Exception here
-                throw;
             }
         }
 
@@ -126,10 +125,8 @@ namespace Siemens.UAClientHelper
                 client.Dispose();
                 return endpoints;
             }
-            catch (Exception)
             {
                 //handle Exception here
-                throw;
             }
         }
         #endregion
@@ -189,10 +186,8 @@ namespace Siemens.UAClientHelper
 
                 mSession.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
             }
-            catch (Exception)
             {
                 //handle Exception here
-                throw;
             }
         }
 
@@ -252,10 +247,8 @@ namespace Siemens.UAClientHelper
 
                 mSession.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -269,10 +262,8 @@ namespace Siemens.UAClientHelper
                 mSession.Close(10000);
                 mSession.Dispose();
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
         #endregion
@@ -346,10 +337,8 @@ namespace Siemens.UAClientHelper
                 mSession.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out continuationPoint, out referenceDescriptionCollection);
                 return referenceDescriptionCollection;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -381,10 +370,8 @@ namespace Siemens.UAClientHelper
 
                 return referenceDescriptionCollection;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -417,10 +404,8 @@ namespace Siemens.UAClientHelper
 
                 return referenceDescriptionCollection;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
         #endregion
@@ -446,10 +431,8 @@ namespace Siemens.UAClientHelper
                 subscription.Create();
                 return subscription;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -488,10 +471,8 @@ namespace Siemens.UAClientHelper
                 subscription.ApplyChanges();
                 return monitoredItem;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -535,10 +516,8 @@ namespace Siemens.UAClientHelper
                 subscription.ApplyChanges();
                 return monitoredItem;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -556,10 +535,8 @@ namespace Siemens.UAClientHelper
                 subscription.ApplyChanges();
                 return null;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -573,10 +550,8 @@ namespace Siemens.UAClientHelper
                 //Delete the subscription and all items submitted
                 subscription.Delete(true);
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
         #endregion
@@ -598,10 +573,8 @@ namespace Siemens.UAClientHelper
                 node = mSession.ReadNode(nodeId);
                 return node;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -724,7 +697,6 @@ namespace Siemens.UAClientHelper
                 }
                 return resultStrings;
             }
-            catch (System.NullReferenceException)
             {
                 Console.Write("Нет ссылки на данные (NullReferenceException) \n");
                 //throw ex;
@@ -735,7 +707,6 @@ namespace Siemens.UAClientHelper
             {
                 //handle Exception here
                 Console.Write(ex.Message + '\n');
-                throw ex;
                 //resultStrings.Add(Defines.UNDEF_STR_VALUE);
                 //return resultStrings;
             }
@@ -765,10 +736,8 @@ namespace Siemens.UAClientHelper
                 {
                     dataValue = mSession.ReadValue(nodeId);
                 }
-                catch (Exception)
                 {
                     //handle Exception here
-                    throw;
                 }
 
                 //Get the data type of the read dataValue
@@ -836,10 +805,8 @@ namespace Siemens.UAClientHelper
                     }
                 }
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
         #endregion
@@ -874,10 +841,8 @@ namespace Siemens.UAClientHelper
             {
                 mSession.ReadValues(nodeIds, types, out values, out serviceResults);
             }
-            catch (Exception ex)
             {
                 //Handle Exception here
-                throw ex;
             }
 
             //Check result codes
@@ -1035,10 +1000,8 @@ namespace Siemens.UAClientHelper
             {
                 mSession.Write(null, valuesToWrite, out results, out diag);
             }
-            catch (Exception ex)
             {
                 //Handle Exception here
-                throw ex;
             }
 
             //Check result codes
@@ -1080,10 +1043,8 @@ namespace Siemens.UAClientHelper
 
                 return registeredNodeIdStrings;
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 
@@ -1104,10 +1065,8 @@ namespace Siemens.UAClientHelper
                 //Register nodes                
                 mSession.UnregisterNodes(null, nodesToUnregister);
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
         #endregion
@@ -1254,10 +1213,8 @@ namespace Siemens.UAClientHelper
                 }
 
             }
-            catch (Exception ex)
             {
                 //handle Exception here
-                throw ex;
             }
         }
 

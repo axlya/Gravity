@@ -123,133 +123,19 @@ namespace GravityWebExt.Models
         public double granZ { get; set; }
         public double granM { get; set; }
 
-
-
-        //////////////////////////////////////////////// Итоговые значения для КП
-        /// <summary>
-        /// Разница
-        /// </summary>
-        public double _pX { get; set; }
-        /// <summary>
-        /// Разница
-        /// </summary>
-        public double _pY { get; set; }
-        /// <summary>
-        /// Разница
-        /// </summary>
-        public double _pZ { get; set; }
-        /// <summary>
-        /// Разница
-        /// </summary>
-        public double _pM { get; set; }
-        /// <summary>
-        /// Системные отклоениня после введения поправок
-        /// </summary>
-        public double SystemDevX { get; set; }
-        /// <summary>
-        /// Системные отклоениня после введения поправок
-        /// </summary>
-        public double SystemDevY { get; set; }
-        /// <summary>
-        /// Системные отклоениня после введения поправок
-        /// </summary>
-        public double SystemDevZ { get; set; }
-        /// <summary>
-        /// Системные отклоениня после введения поправок
-        /// </summary>
-        public double SystemDevM { get; set; }
-        /// <summary>
-        /// КЦМ изделия при использование метода замещения
-        /// </summary>
-        public double _kmcKPx { get; set; }
-        /// <summary>
-        /// КЦМ изделия при использование метода замещения
-        /// </summary>
-        public double _kmcKPy { get; set; }
-        /// <summary>
-        /// КЦМ изделия при использование метода замещения
-        /// </summary>
-        public double _kmcKPz { get; set; }
-        /// <summary>
-        /// КЦМ изделия при использование метода замещения
-        /// </summary>
-        public double _kmcKPm { get; set; }
-        /// <summary>
-        /// Системные погрешности изделия при использование КП
-        /// </summary>
-        public double SystemEerX { get; set; }
-        /// <summary>
-        /// Системные погрешности изделия при использование КП
-        /// </summary>
-        public double SystemEerY { get; set; }
-        /// <summary>
-        /// Системные погрешности изделия при использование КП
-        /// </summary>
-        public double SystemEerZ { get; set; }
-        /// <summary>
-        /// Системные погрешности изделия при использование КП
-        /// </summary>
-        public double SystemEerM { get; set; }
-        /// <summary>
-        /// Граница погрешности изделия при методе замещения
-        /// </summary>
-        public double GranKPx { get; set; }
-        /// <summary>
-        /// Граница погрешности изделия при методе замещения
-        /// </summary>
-        public double GranKPy { get; set; }
-        /// <summary>
-        /// Граница погрешности изделия при методе замещения
-        /// </summary>
-        public double GranKPz { get; set; }
-        /// <summary>
-        /// Граница погрешности изделия при методе замещения
-        /// </summary>
-        public double GranKPm { get; set; }
-
-        /// <summary>
-        /// Все углы заполнены 
-        /// </summary>
-        public bool AllAngelFilling { get; set; }
-        public bool ArraysAreFilling { get; set; } //массивы находятся в процессе заполнения 
-        public int kcmAngel_0 { get; set; } //0 - массивы не заполнены, 1 - массивы заполены на половину, 2 - массивы заполнены полностью
-        public int kcmAngel_90 { get; set; }
-        public int kcmAngel_180 { get; set; }
-        public int kcmAngel_270 { get; set; }
-        public int mAngel_0 { get; set; }
-        public int mAngel_180 { get; set; }
-
-        public List<double> BeginBalanceAngleArr0 { get; set; }
-        public List<double> MiddleBalanceAngleArr0 { get; set; }
-        public List<double> BeginDisbalanceSensorArr0 { get; set; }
-        public List<double> MiddleDisbalanceSensorArr0 { get; set; }
-        public List<double> BeginBalanceAngleArr90 { get; set; }
-        public List<double> MiddleBalanceAngleArr90 { get; set; }
-        public List<double> BeginDisbalanceSensorArr90 { get; set; }
-        public List<double> MiddleDisbalanceSensorArr90 { get; set; }
-        public List<double> BeginBalanceAngleArr180 { get; set; }
-        public List<double> MiddleBalanceAngleArr180 { get; set; }
-        public List<double> BeginDisbalanceSensorArr180 { get; set; }
-        public List<double> MiddleDisbalanceSensorArr180 { get; set; }
-        public List<double> BeginBalanceAngleArr270 { get; set; }
-        public List<double> MiddleBalanceAngleArr270 { get; set; }
-        public List<double> BeginDisbalanceSensorArr270 { get; set; }
-        public List<double> MiddleDisbalanceSensorArr270 { get; set; }
-        public List<double> BeginPowerSensor0 { get; set; }
-        public List<double> MiddlePowerSensor0 { get; set; }
-        public List<double> BeginPowerSensor180 { get; set; }
-        public List<double> MiddlePowerSensor180 { get; set; }
-        public List<double> BeginIndicationK0 { get; set; }
-        public List<double> MiddleIndicationK0 { get; set; }
-        public List<double> BeginIndicationK180 { get; set; }
-        public List<double> MiddleIndicationK180 { get; set; }
-
-        
+        public CalculatedDataWeb()
+        {
+        }
         public CalculatedDataWeb(CalculatedData calculatedData)
         {
-            
-            RefK = calculatedData.RefK;            
-          
+            Id = 1;
+            Result_ma = calculatedData.Result_ma;
+            RefAngle_ma = calculatedData.RefAngle_ma;
+            Result_mm = calculatedData.Result_mm;
+            RefAngle_mm = calculatedData.RefAngle_mm;
+            A_not = calculatedData.A_not;
+            DevPlane_xOy = calculatedData.DevPlane_xOy; //Нужны градусы\минуты\секунды
+            DevPlane_xOz = calculatedData.DevPlane_xOz;
             RES_X = calculatedData.RES_X;
             RES_Z = calculatedData.RES_Z;
             RES_Y = calculatedData.RES_Y;
@@ -257,66 +143,39 @@ namespace GravityWebExt.Models
             AverageValue = calculatedData.AverageValue;
             kcmDev = calculatedData.kcmDev;
             Amendment = calculatedData.Amendment;
-           
-            /////////////////////////////////////////////////////
-            _pX = calculatedData._pX;
-            _pY = calculatedData._pY;
-            _pZ = calculatedData._pZ;
-            _pM = calculatedData._pM;
-            SystemDevX = calculatedData.SystemDevX;
-            SystemDevY = calculatedData.SystemDevY;
-            SystemDevZ = calculatedData.SystemDevZ;
-            SystemDevM = calculatedData.SystemDevM;
-            _kmcKPx = calculatedData._kmcKPx;
-            _kmcKPy = calculatedData._kmcKPy;
-            _kmcKPz = calculatedData._kmcKPz;
-            _kmcKPm = calculatedData._kmcKPm;
-            SystemEerX = calculatedData.SystemEerX;
-            SystemEerY = calculatedData.SystemEerY;
-            SystemEerZ = calculatedData.SystemEerZ;
-            SystemEerM = calculatedData.SystemEerM;
-            GranKPx = calculatedData.GranKPx;
-            GranKPy = calculatedData.GranKPy;
-            GranKPz = calculatedData.GranKPz;
-            GranKPm = calculatedData.GranKPm;
-            /////////////////////////////////////////////////////////
-            AllAngelFilling = calculatedData.AllAngelFilling;
-            ArraysAreFilling = calculatedData.ArraysAreFilling;
-            kcmAngel_0 = calculatedData.kcmAngel_0;
-            kcmAngel_90 = calculatedData.kcmAngel_90;
-            kcmAngel_180 = calculatedData.kcmAngel_180;
-            kcmAngel_270 = calculatedData.kcmAngel_270;
-            mAngel_0 = calculatedData.mAngel_0;
-            mAngel_180 = calculatedData.mAngel_180;
-
-            BeginBalanceAngleArr0 = calculatedData.BeginBalanceAngleArr0 ?? new ();
-            MiddleBalanceAngleArr0 = calculatedData.MiddleBalanceAngleArr0 ?? new();
-            BeginDisbalanceSensorArr0 = calculatedData.BeginDisbalanceSensorArr0 ?? new();
-            MiddleDisbalanceSensorArr0 = calculatedData.MiddleDisbalanceSensorArr0 ?? new();
-            BeginBalanceAngleArr90 = calculatedData.BeginBalanceAngleArr90 ?? new();
-            MiddleBalanceAngleArr90 = calculatedData.MiddleBalanceAngleArr90 ?? new();
-            BeginDisbalanceSensorArr90 = calculatedData.BeginDisbalanceSensorArr90 ?? new();
-            MiddleDisbalanceSensorArr90 = calculatedData.MiddleDisbalanceSensorArr90 ?? new();
-            BeginBalanceAngleArr180 = calculatedData.BeginBalanceAngleArr180 ?? new();
-            MiddleBalanceAngleArr180 = calculatedData.MiddleBalanceAngleArr180 ?? new();
-            BeginDisbalanceSensorArr180 = calculatedData.BeginDisbalanceSensorArr180 ?? new();
-            MiddleDisbalanceSensorArr180 = calculatedData.MiddleDisbalanceSensorArr180 ?? new();
-            BeginBalanceAngleArr270 = calculatedData.BeginBalanceAngleArr270 ?? new();
-            MiddleBalanceAngleArr270 = calculatedData.MiddleBalanceAngleArr270 ?? new();
-            BeginDisbalanceSensorArr270 = calculatedData.BeginDisbalanceSensorArr270 ?? new();
-            MiddleDisbalanceSensorArr270 = calculatedData.MiddleDisbalanceSensorArr270 ?? new();
-            BeginPowerSensor0 = calculatedData.BeginPowerSensor0 ?? new();
-            MiddlePowerSensor0 = calculatedData.MiddlePowerSensor0 ?? new();
-            BeginPowerSensor180 = calculatedData.BeginPowerSensor180 ?? new();
-            MiddlePowerSensor180 = calculatedData.MiddlePowerSensor180 ?? new();
-            BeginIndicationK0 = calculatedData.BeginIndicationK0 ?? new();
-            MiddleIndicationK0 = calculatedData.MiddleIndicationK0 ?? new();
-            BeginIndicationK180 = calculatedData.BeginIndicationK180 ?? new();
-            MiddleIndicationK180 = calculatedData.MiddleIndicationK180 ?? new();
-
-
-
-
-    }
+            AverProdValMas = calculatedData.AverProdValMas;
+            AverProdVal_X = calculatedData.AverProdVal_X;
+            AverProdVal_Y = calculatedData.AverProdVal_Y;
+            AverProdVal_Z = calculatedData.AverProdVal_Z;
+            ErLimX1 = calculatedData.ErLimX1;
+            ErLimY1 = calculatedData.ErLimY1;
+            ErLimZ1 = calculatedData.ErLimZ1;
+            ErLimM1 = calculatedData.ErLimM1;
+            ErLimX2 = calculatedData.ErLimX2;
+            ErLimY2 = calculatedData.ErLimY2;
+            ErLimZ2 = calculatedData.ErLimZ2;
+            ErLimM2 = calculatedData.ErLimM2;
+            NSPmaxX = calculatedData.NSPmaxX;
+            NSPmaxY = calculatedData.NSPmaxY;
+            NSPmaxZ = calculatedData.NSPmaxZ;
+            NSPmaxM = calculatedData.NSPmaxM;
+            ErLimSx = calculatedData.ErLimSx;
+            ErLimSy = calculatedData.ErLimSy;
+            ErLimSz = calculatedData.ErLimSz;
+            ErLimSm = calculatedData.ErLimSm;
+            KvesX = calculatedData.KvesX;
+            KvesY = calculatedData.KvesY;
+            KvesZ = calculatedData.KvesZ;
+            KvesM = calculatedData.KvesM;
+            Sdev_reNsX = calculatedData.Sdev_reNsX;
+            Sdev_reNsY = calculatedData.Sdev_reNsY;
+            Sdev_reNsZ = calculatedData.Sdev_reNsZ;
+            Sdev_reNsM = calculatedData.Sdev_reNsM;
+            granX = calculatedData.granX;
+            granY = calculatedData.granY;
+            granZ = calculatedData.granZ;
+            granM = calculatedData.granM;
+            
+        }
     }
 }

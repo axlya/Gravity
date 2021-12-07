@@ -49,27 +49,15 @@ namespace GravityWebExt.Models
         /// <summary>
         /// Положение домкрата
         /// </summary>
-        public double JackPos { get; set; }
         /// <summary>
-        /// Положение подвижного груза
         /// </summary>
-        public double CargoPos { get; set; }
         /// <summary>
-        /// Связь с устройством
         /// </summary>
-        public double ConnectDevice { get; set; }
         /// <summary>
-        /// Включение\ Выключение системы
         /// </summary>
-        public double PowerSystem { get; set; }
         /// <summary>
-        /// Включение\Выключение двигателя трения №1
-        /// </summary>
-        public double OutFrictionMotor1 { get; set; }
         /// <summary>
-        /// Включение\Выключение двигателя трения №2
         /// </summary>
-        public double OutFrictionMotor2 { get; set; }
         /// <summary>
         /// Датчик угловых перемещений
         /// </summary>
@@ -82,33 +70,12 @@ namespace GravityWebExt.Models
         /// Датчик силы измеретильной головки
         /// </summary>
         public double SensorPower { get; set; }
-        /// <summary>
-        /// Датчик линейного передвижения в начальной зоны работы 
-        /// </summary
-        public double IndicationK { get; set; }
-        /// <summary>
-        /// Список ошибок
-        /// </summary>
-        public Dictionary<double, string> ErrorsList { get; set; }
 
         public ControlPanelDataWeb()
         {
         }
         public ControlPanelDataWeb(ControllerDataOut controllerData)
         {
-            //BeginBalanceAngle = controllerData.BeginBalanceAngle;
-            //MiddleBalanceAngle = controllerData.MiddleBalanceAngle;
-            //BeginUnbalanceSensor = controllerData.BeginDisbalanceSensor;
-            //MiddleUnbalanceSensor = controllerData.MiddleDisbalanceSensor;           
-            //BeginPowerSensor = controllerData.BeginPowerSensor;
-            //MiddlePowerSensor = controllerData.MiddlePowerSensor;
-            
-            JackPos = controllerData.JackPos;
-            CargoPos = controllerData.CargoPos;
-            ConnectDevice = controllerData.ConnectDevice;
-            PowerSystem = controllerData.PowerSystem;
-            OutFrictionMotor1 = controllerData.OutFrictionMotor1;
-            OutFrictionMotor2 = controllerData.OutFrictionMotor2;
 
             SensorAngle = controllerData.SensorAngle;
             SensorDisbalance = controllerData.SensorDisbalance;
@@ -116,7 +83,7 @@ namespace GravityWebExt.Models
             IndicationK = controllerData.IndicationK;
 
            ErrorsList = controllerData.ErrorsList ?? new();
-
+            
         }
     }
 }

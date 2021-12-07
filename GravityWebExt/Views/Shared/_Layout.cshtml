@@ -10,6 +10,33 @@
     <title>@ViewData["Title"] - Gravity</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        .LampOff {
+            height: 30px;
+            width: 30px;
+            background-color: #818181;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+           
+        }
+        .LampGreen {
+            height: 30px;
+            width: 30px;
+            background-color: #00FF00;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .LampRed {
+            height: 30px;
+            width: 30px;
+            background-color: #FF0000;
+            border: 0.15em solid white;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
     <header>1
@@ -30,8 +57,8 @@
                         <li class="nav-item @(curPage == "Calculate"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Calculate">Расчётные данные</a>
                         </li>
-                        <li class="nav-item @(curPage == "Options"? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Options">Параметры</a>
+                        <li class="nav-item @(curPage == "Measurement"? "active" : "")">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Measurement">Данные датчиков</a>
                         </li>
                         <li class="nav-item @(curPage == "NSP"? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="NSP">НСП</a>

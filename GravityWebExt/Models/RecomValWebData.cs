@@ -62,7 +62,6 @@ namespace GravityWebExt.Models
         public double ArrMasMm5 { get; set; }
         public double ArrMasMm6 { get; set; }
 
-
         //___________________________________________________ Рекомендуемые значения 
         public double Ma { get; set; }
         public double Mm { get; set; }
@@ -86,8 +85,10 @@ namespace GravityWebExt.Models
 
             data.EpsilonMa = this.EpsilonMa;
             data.EpsilonMm = this.EpsilonMm;
-            data.ArrMasMa = new double[] { this.ArrMasMa6, this.ArrMasMa1, this.ArrMasMa2, this.ArrMasMa3, this.ArrMasMa4, this.ArrMasMa5 };           
+            data.ArrMasMa = new double[] { this.ArrMasMa6, this.ArrMasMa1, this.ArrMasMa2, this.ArrMasMa3, this.ArrMasMa4, this.ArrMasMa5 };
+            data.DevArrMasMa = new double[] { this.DevArrMasMa6, this.DevArrMasMa1, this.DevArrMasMa2, this.DevArrMasMa3, this.DevArrMasMa4, this.DevArrMasMa5 };
             data.ArrMasMm = new double[] { this.ArrMasMm6, this.ArrMasMm1, this.ArrMasMm2, this.ArrMasMm3, this.ArrMasMm4, this.ArrMasMm5 };
+            data.DevArrMasMm = new double[] { this.DevArrMasMm6, this.DevArrMasMm1, this.DevArrMasMm2, this.DevArrMasMm3, this.DevArrMasMm4, this.DevArrMasMm5 };
             
             return data;
         }

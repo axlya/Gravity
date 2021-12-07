@@ -62,13 +62,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Угол наклона при нахождении M изделия </td>
                     <td>ξ<sub>m</sub></td>
                     <td><input type="text" class="form-control input" name="EpsilonMa" value="@recomValData?.EpsilonMa.ToString()" /></td>
                     <td>°</td>
                 </tr>
                 <tr>
-                    <td>Эталонные значения массы корректирующих грузов при нахождении М</td>
                     <td>m<sub>э</sub></td>
                     <td><input type="text" class="form-control input" name="ArrMasMa6" value="@recomValData?.ArrMasMa6.ToString()" /></td>
                     <td><input type="text" class="form-control input" name="ArrMasMa1" value="@recomValData?.ArrMasMa1.ToString()" /></td>
@@ -79,13 +77,11 @@
                     <td>мм</td>
                 </tr>
                 <tr>
-                    <td>Угол для наклона при нахождении КЦМ изделия </td>
                     <td>ξ<sub>кцм</sub></td>
                     <td><input type="text" class="form-control input" name="EpsilonMm" value="@recomValData?.EpsilonMm.ToString()" /></td>
                     <td>°</td>
                 </tr>
                 <tr>
-                    <td>Эталонные значения массы корректирующих грузов при нахождении КЦМ</td>
                     <td>m<sub>m</sub></td>
                     <td><input type="text" class="form-control input" name="ArrMasMm6" value="@recomValData?.ArrMasMm6.ToString()" /></td>
                     <td><input type="text" class="form-control input" name="ArrMasMm1" value="@recomValData?.ArrMasMm1.ToString()" /></td>
@@ -95,10 +91,20 @@
                     <td><input type="text" class="form-control input" name="ArrMasMm5" value="@recomValData?.ArrMasMm5.ToString()" /></td>
                     <td>мм</td>
                 </tr>
+                <tr>
+                    <td>Отклонения эталонных значений массы корректирующих грузов при нахождение КЦМ</td>
+                    <td>Δm<sub>m</sub></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm6" value="@recomValData?.DevArrMasMm6.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm1" value="@recomValData?.DevArrMasMm1.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm2" value="@recomValData?.DevArrMasMm2.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm3" value="@recomValData?.DevArrMasMm3.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm4" value="@recomValData?.DevArrMasMm4.ToString()" /></td>
+                    <td><input type="text" class="form-control input" name="DevArrMasMm5" value="@recomValData?.DevArrMasMm5.ToString()" /></td>
+                    <td>мм</td>
+                </tr>
             </tbody>
-        </table>        
+        </table>
         <div class="row">
-            <input type="submit" class="form-control input" value="Расчет" />
         </div>
         <br />
         <h4>Рассчитанные Рекомендуемые значения</h4>
@@ -113,7 +119,6 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Подходящая масса при нахождении М</td>
                     <td>M<sub>э</sub></td>
                     <td><span id="Ma">@recomValData?.Ma.ToString("N3")</span></td>
                     <td>кг</td>
@@ -125,18 +130,16 @@
                     <td>°</td>
                 </tr>
                 <tr>
-                    <td>Подходящая масса при нахождении КЦМ</td>
                     <td>M<sub>m</sub></td>
                     <td><span id="AngleKcm">@recomValData?.AngleKcm.ToString("N3")</span></td>
                     <td>кг</td>
                 </tr>
                 <tr>
-                    <td>Подходящий угол равновесия стенда при нахождении КЦМ </td>
                     <td>∠<sub>кмц</sub></td>
                     <td><span id="Mm">@recomValData?.Mm.ToString("N3")</span></td>
                     <td>°</td>
                 </tr>
-
+                
                 <tr>
                     <td>Подходящий угол равновесия стенда без использования грузов </td>
                     <td>∠</td>

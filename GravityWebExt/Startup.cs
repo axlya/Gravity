@@ -65,14 +65,11 @@ namespace GravityWebExt
             services.AddSingleton<WebToControllerDataProvider>();       // провайдер данных Web для контроллера (ControllerDataIn)
             services.AddSingleton<WebToCalculatorDataProvider>();       // провайдер данных Web для калькулятора (MeasurementDataOut)
             //подписчики
-            services.AddSingleton<WebDataReporter>();                   // получатель данных от контроллера (Web)
-            services.AddSingleton<WebCalcDataReporter>();               // получатель данных от калькулятора (Web)
-            services.AddSingleton<CalcWebReporter>();                   // получатель данных калькулятора (Web - PassportData)
-            services.AddSingleton<CalcWebNSPReporter>();                // получатель данных калькулятора (Web - NSP Data)
-            services.AddSingleton<CalcWebRecomValDataReporter>();       // получатель данных калькулятора (Web - NSP Data)
-            services.AddSingleton<CalcWebMeasurementReporter>();        // получатель данных калькулятора (Web - MeasurementDataOut)
-            services.AddSingleton<CalcDataReporter>();                  // получатель данных контроллера (калькулятор)
-            services.AddSingleton<DataReporter>();                      // получатель данных от Web (контроллер)
+            services.AddSingleton<WebDataReporter>(); //получатель данных от контроллера (Web)
+            services.AddSingleton<WebCalcDataReporter>(); //получатель данных от калькулятора (Web)
+            services.AddSingleton<CalcWebReporter>(); // получатель данных калькулятора (Web - PassportData)
+            services.AddSingleton<CalcWebNSPReporter>(); // получатель данных калькулятора (Web - NSP Data)
+            services.AddSingleton<CalcDataReporter>(); // получатель данных контроллера (калькулятор)
             //
             //services.AddSingleton<Emulator>();                        // эмулятор контроллера
             services.AddSingleton<OPCUA_SiemensClient>();               // контроллер Siemens
@@ -81,20 +78,8 @@ namespace GravityWebExt
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //[Obsolete]
-        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, 
-            WebNSPDataProvider webNSPDataProvider, CalcDataProvider calcDataProvider,CalcWebReporter calcReporter, CalcWebNSPReporter calcNspReporter, WebCalcDataReporter webCalcDataReporter,
-            /*Emulator emu,*/ MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter, OPCUA_SiemensClient siemensClient,
-            WebRecomValDataProvider webRecomValDataProvider, CalcWebRecomValDataReporter calcWebRecomValDataReporter, ILoggerFactory loggerFactory, WebToControllerDataProvider webToControllerDataProvider,
-            DataReporter dataReporter, WebToCalculatorDataProvider webToCaclulatorDataProvider, CalcWebMeasurementReporter calcWebMeasurementReporter)
+        public void Configure(ILogger<Startup> logger, IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, WebDataProvider webDataProvider, WebNSPDataProvider webNSPDataProvider, CalcDataProvider calcDataProvider,CalcWebReporter calcReporter, CalcWebNSPReporter calcNspReporter, WebCalcDataReporter webCalcDataReporter,Emulator emu, MainCalc mainCalc, DataContext db, WebDataReporter webDataReporter, DataProvider dataProvider, CalcDataReporter calcDataReporter)
         {
-            if (!env.IsDevelopment())
-            {
-                //Лог будет сохраняться в текстовый файл
-                var path = Directory.GetCurrentDirectory();
-                loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
-            }
-            
             applicationLifetime.ApplicationStopped.Register(() =>
             {
                 //emu.Stop();
@@ -104,19 +89,11 @@ namespace GravityWebExt
                 calcDataReporter.Unsubscribe();
                 calcNspReporter.Unsubscribe();
                 webCalcDataReporter.Unsubscribe();
-                calcWebRecomValDataReporter.Unsubscribe();
-                dataReporter.Unsubscribe();
-                calcWebMeasurementReporter.Unsubscribe();
 
                 dataProvider.EndTransmission();
                 webDataProvider.EndTransmission();
                 webNSPDataProvider.EndTransmission();
                 calcDataProvider.EndTransmission();
-                webRecomValDataProvider.EndTransmission();
-                webToControllerDataProvider.EndTransmission();
-                webToCaclulatorDataProvider.EndTransmission();
-
-                siemensClient.Stop();
 
                 logger.LogInformation("Завершение работы...");
 
@@ -158,8 +135,6 @@ namespace GravityWebExt
             calcNspReporter.SetCalcFunc(mainCalc);
             calcWebRecomValDataReporter.SetCalcFunc(mainCalc);
             calcDataReporter.SetCalcFunc(mainCalc);
-            calcWebMeasurementReporter.SetCalcFunc(mainCalc);
-            dataReporter.SetControllerFunc(siemensClient);
             // подписки на получение данных
             calcReporter.Subscribe(webDataProvider);
             calcNspReporter.Subscribe(webNSPDataProvider);
@@ -167,11 +142,11 @@ namespace GravityWebExt
             webDataReporter.Subscribe(dataProvider);          
             calcDataReporter.Subscribe(dataProvider);
             webCalcDataReporter.Subscribe(calcDataProvider);
-            dataReporter.Subscribe(webToControllerDataProvider);
-            calcWebMeasurementReporter.Subscribe(webToCaclulatorDataProvider);
+            logger.LogInformation("Запуск подписчиков");
 
             webDataProvider.SendData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
-            //webNSPDataProvider.SendData(_dataNSPProvider.)
+           // webNSPDataProvider.SendData(db.NSP.ToList().ElementAt(0).SetDataForCalculate());
+            emu.SetPassportData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
 
             //emu.SetPassportData(db.Options.ToList().ElementAt(0).SetDataForCalculate());
             //emu.Start();

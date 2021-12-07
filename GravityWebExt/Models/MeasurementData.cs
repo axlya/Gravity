@@ -8,74 +8,49 @@ namespace GravityWebExt.Models
 {
     public class MeasurementData
     {
-        public ControlPanelDataWeb _controlPanel;
-        public CalculatedDataWeb _calculatedData;
-
+        public int Id { get; set; }
         /// <summary>
-        /// Запуск расчета
+        /// Угол равновесия в начальной зоне
         /// </summary>
-        public bool CalculationCalc { get; set; }
+        public double BeginBalanceAngle { get; set; }
         /// <summary>
-        /// Угол поворота платформы
+        /// Угол равновесия в средней зоне
         /// </summary>
-        public int Fi { get; set; }
-        public List<SelectListItem> Angles { set; get; }
+        public double MiddleBalanceAngle { get; set; }
         /// <summary>
-        /// Показание для КЦМ \ Массы 
+        /// Датчик дисбаланса в начальной зоне работы
         /// </summary>
-        public int CoordMass { get; set; }
+        public double BeginUnbalanceSensor { get; set; } // Получаем 6 раз, по 10 значений – с ma 0⁰/90⁰/180⁰/270⁰ и с mm 0⁰/90⁰
         /// <summary>
-        /// Контрольное приспособление
+        ///  Датчик дисбаланса в средней зоне работы
         /// </summary>
-        public bool KP { get; set; }
+        public double MiddleUnbalanceSensor { get; set; } // Получаем 6 раз, по 10 значений – с ma 0⁰/90⁰/180⁰/270⁰ и с mm 0⁰/90⁰
+        /// <summary>
+        /// Расстояния от оси поворота стола до известных координат центра тяжести груза
+        /// </summary>
+        public double K1 { get; set; }
+        /// <summary>
+        /// Расстояния от оси поворота стола до известных координат центра тяжести груза
+        /// </summary>
+        public double K2 { get; set; }
+        public double P1 { get; set; } // Какие-то датчики
+        public double P2 { get; set; } // Какие-то датчики
 
-        
-
-        public MeasurementData(ControlPanelDataWeb controlPanel, CalculatedDataWeb calculatedData)
-        {
-            _controlPanel = controlPanel;
-            _calculatedData = calculatedData;
-            
-
-            InitArrays();
-        }
         public MeasurementData()
         {
-            _controlPanel = null;
-            _calculatedData = null;
-
-            InitArrays();
         }
-        private void InitArrays()
+        public MeasurementData(ControllerData controllerData)
         {
-            Angles = new List<SelectListItem>
-            {
-                new SelectListItem {Text = "0", Value = "0"},
-                new SelectListItem {Text = "90", Value = "1"},
-                new SelectListItem {Text = "180", Value = "2"},
-                new SelectListItem {Text = "270", Value = "3"}
-            };
+            Id = 1;
+            BeginBalanceAngle = controllerData.BeginBalanceAngle;
+            MiddleBalanceAngle = controllerData.MiddleBalanceAngle;
+            BeginUnbalanceSensor = controllerData.BeginUnbalanceSensor;
+            MiddleUnbalanceSensor = controllerData.MiddleUnbalanceSensor;
+            K1 = controllerData.K1;
+            K2 = controllerData.K2;
+            P1 = controllerData.P1;
+            P2 = controllerData.P2;
         }
-        public GravityCalc.MeasurementDataOut SetDataForCalculate()
-        {
-            GravityCalc.MeasurementDataOut data = new();
-            data.Fi = Fi switch
-            {
-                0 => 0,
-                1 => 90,
-                2 => 180,
-                3 => 270,
-                _ => -1,//error
-            };
-            if (CoordMass == 0)
-                data.findCoordMass = true;
-            else
-                data.findCoordMass = false;
-
-            data.CalculationCalc = CalculationCalc;
-            data.KP = KP;
-            
-            return data;
-        }
+       
     }
 }
